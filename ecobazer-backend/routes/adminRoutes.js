@@ -4,9 +4,9 @@ const router = express.Router();
 
 const { getAdminStats } = require("../controlers/adminController");
 
-const secureMiddleWare = require("../middleware/secureMiddleWare");
+const secureMiddleware = require("../middleware/secureMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 
-router.get("/stats", secureMiddleWare, adminMiddleware, getAdminStats);
+router.get("/stats", secureMiddleware, adminMiddleware, getAdminStats);
 
 module.exports = router;

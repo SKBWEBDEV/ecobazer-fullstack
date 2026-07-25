@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const auth = require("../middleware/secureMiddleWare");
+const auth = require("../middleware/secureMiddleware");
 
 const {
   getMyOrders,

@@ -7,13 +7,13 @@ const {
   deleteReview,
 } = require("../controlers/reviewController");
 
-const secureMiddleWare = require("../middleware/secureMiddleware");
+const secureMiddleware = require("../middleware/secureMiddleware");
 
 
 // Create Review
 router.post(
   "/",
-  secureMiddleWare,
+  secureMiddleware,
   createReview
 );
 
@@ -28,7 +28,7 @@ router.get(
 // Delete Review
 router.delete(
   "/:id",
-  secureMiddleWare,
+  secureMiddleware,
   deleteReview
 );
 

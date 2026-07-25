@@ -50,7 +50,7 @@ const {
   paymentSuccess,
 } = require("./controlers/paymentControler");
 
-const secureMiddleWare = require("./middleware/secureMiddleWare");
+const secureMiddleware  = require("./middleware/secureMiddleware");
 
 // Rate Limit
 
@@ -94,15 +94,15 @@ app.post("/verify-email/:token", verifyemailControler);
 
 // ================= PRODUCT =================
 
-app.post("/products", secureMiddleWare, createProductController);
+app.post("/products", secureMiddleware, createProductController);
 
 app.get("/products", allPrduct);
 
 app.get("/products/:id", singleProduct);
 
-app.put("/products/:id", secureMiddleWare, updateProduct);
+app.put("/products/:id", secureMiddleware, updateProduct);
 
-app.delete("/products/:id", secureMiddleWare, deleteProduct);
+app.delete("/products/:id", secureMiddleware, deleteProduct);
 
 // ================= CART =================
 
@@ -116,19 +116,19 @@ app.delete("/cart/:id", proDelete);
 
 // ================= PAYMENT =================
 
-app.post("/payment", secureMiddleWare, paymentControler);
+app.post("/payment", secureMiddleware, paymentControler);
 
-app.post("/payment/success", secureMiddleWare, paymentSuccess);
+app.post("/payment/success", secureMiddleware, paymentSuccess);
 
 // ================= USER =================
 
-app.get("/users", secureMiddleWare, allUserControler);
+app.get("/users", secureMiddleware, allUserControler);
 
-app.get("/users/:id", secureMiddleWare, singleUserControler);
+app.get("/users/:id", secureMiddleware, singleUserControler);
 
-app.put("/users/:id", secureMiddleWare, updateUserControler);
+app.put("/users/:id", secureMiddleware, updateUserControler);
 
-app.delete("/users/:id", secureMiddleWare, deleteUserControler);
+app.delete("/users/:id", secureMiddleware, deleteUserControler);
 
 // ================= ORDERS =================
 

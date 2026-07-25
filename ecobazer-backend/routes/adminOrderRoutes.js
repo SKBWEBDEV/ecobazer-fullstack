@@ -2,7 +2,7 @@ const express = require("express");
 
 const router = express.Router();
 
-const secureMiddleWare = require("../middleware/secureMiddleware");
+const secureMiddleware = require("../middleware/secureMiddleware");
 
 const adminMiddleware = require("../middleware/adminMiddleware");
 
@@ -13,10 +13,10 @@ const {
 
 // Get all orders (Admin)
 
-router.get("/", secureMiddleWare, adminMiddleware, getAllOrders);
+router.get("/", secureMiddleware, adminMiddleware, getAllOrders);
 
 // Update order status (Admin)
 
-router.put("/:id", secureMiddleWare, adminMiddleware, updateOrderStatus);
+router.put("/:id", secureMiddleware, adminMiddleware, updateOrderStatus);
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
 
-const secureMiddleWare = (req, res, next) => {
+const secureMiddleware  = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization;
 
@@ -40,4 +40,4 @@ const secureMiddleWare = (req, res, next) => {
   }
 };
 
-module.exports = secureMiddleWare;
+module.exports = secureMiddleware ;
