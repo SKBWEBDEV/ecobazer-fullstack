@@ -8,11 +8,15 @@ import {
   Boxes,
   Hash,
 } from "lucide-react";
+
 import toast from "react-hot-toast";
 
 import { getProductById } from "../services/productService";
+import { addReview, getReviews } from "../services/reviewService";
+
 import { formatPrice } from "../utils/formatPrice";
 import { getErrorMessage } from "../utils/getErrorMessage";
+
 import { useCart } from "../hooks/useCart";
 
 import Loader from "../components/Loader";
@@ -34,6 +38,18 @@ const ProductDetails = () => {
 
   const [adding, setAdding] = useState(false);
 
+  // Review states
+
+  const [reviews, setReviews] = useState([]);
+
+  const [rating, setRating] = useState(0);
+
+  const [comment, setComment] = useState("");
+
+  const [reviewLoading, setReviewLoading] = useState(false);
+
+  // Load Product
+
   useEffect(() => {
     const loadProduct = async () => {
       try {
@@ -50,6 +66,24 @@ const ProductDetails = () => {
     };
 
     loadProduct();
+  }, [id]);
+
+  // Load Reviews
+
+  const loadReviews = async () => {
+    try {
+      const { data } = await getReviews(id);
+
+      setReviews(data?.reviews || []);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      loadReviews();
+    }
   }, [id]);
 
   if (loading) {
@@ -82,6 +116,40 @@ const ProductDetails = () => {
     setAdding(false);
   };
 
+  // Submit Review
+
+  const handleReviewSubmit = async () => {
+    try {
+      if (!rating || !comment.trim()) {
+        toast.error("Please give rating and comment");
+
+        return;
+      }
+
+      setReviewLoading(true);
+
+      await addReview({
+        product: product._id,
+
+        rating,
+
+        comment,
+      });
+
+      toast.success("Review added successfully");
+
+      setRating(0);
+
+      setComment("");
+
+      loadReviews();
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Could not add review"));
+    } finally {
+      setReviewLoading(false);
+    }
+  };
+
   return (
     <div className="container-app py-10">
       <Link
@@ -93,6 +161,8 @@ const ProductDetails = () => {
       </Link>
 
       <div className="grid gap-10 md:grid-cols-2">
+        {/* Product Image */}
+
         <div>
           <div className="aspect-square overflow-hidden rounded-2xl">
             <img
@@ -118,6 +188,8 @@ const ProductDetails = () => {
           )}
         </div>
 
+        {/* Product Details */}
+
         <div>
           {product.category && (
             <span className="badge bg-moss-50 text-moss-700">
@@ -127,11 +199,28 @@ const ProductDetails = () => {
 
           <h1 className="mt-3 text-3xl font-semibold">{product.title}</h1>
 
-          <div className="mt-2 flex items-center gap-1">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <Star key={i} size={15} />
+          {/* Rating Input */}
+
+          <div className="mt-4 flex gap-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <button key={star} onClick={() => setRating(star)}>
+                <Star
+                  size={22}
+                  className={
+                    star <= rating
+                      ? "fill-yellow-400 text-yellow-400"
+                      : "text-gray-400"
+                  }
+                />
+              </button>
             ))}
           </div>
+
+          {rating > 0 && (
+            <p className="mt-2 text-sm">Selected Rating: {rating}</p>
+          )}
+
+          {/* Price */}
 
           <div className="mt-5">
             {product.discountPrice > 0 ? (
@@ -157,29 +246,27 @@ const ProductDetails = () => {
               "No description provided for this product."}
           </p>
 
+          {/* Product Info */}
+
           <div className="mt-6 grid grid-cols-2 gap-3 text-sm">
             {product.sku && (
               <div>
                 <Hash size={15} />
-                SKU:
-                {product.sku}
+                SKU: {product.sku}
               </div>
             )}
 
             {product.brand && (
               <div>
                 <Tag size={15} />
-                Brand:
-                {product.brand}
+                Brand: {product.brand}
               </div>
             )}
 
             <div>
               <Boxes size={15} />
               Stock:
-              <span>
-                {inStock ? `${product.stock} available` : "Out of stock"}
-              </span>
+              {inStock ? `${product.stock} available` : "Out of stock"}
             </div>
           </div>
 
@@ -193,6 +280,78 @@ const ProductDetails = () => {
           >
             {inStock ? "Add to cart" : "Out of stock"}
           </Button>
+
+          {/* Write Review */}
+
+          <div className="mt-10 border-t pt-8">
+            <h2 className="text-xl font-semibold">Write a Review</h2>
+
+            <div className="mt-4 flex gap-2">
+              {[1, 2, 3, 4, 5].map((star) => (
+                <button key={star} onClick={() => setRating(star)}>
+                  <Star
+                    size={26}
+                    className={
+                      star <= rating
+                        ? "fill-yellow-400 text-yellow-400"
+                        : "text-gray-400"
+                    }
+                  />
+                </button>
+              ))}
+            </div>
+
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              placeholder="Write your review..."
+              className="input-field mt-4 min-h-32 w-full"
+            />
+
+            <Button
+              className="mt-4"
+              onClick={handleReviewSubmit}
+              loading={reviewLoading}
+            >
+              Submit Review
+            </Button>
+          </div>
+
+          {/* Customer Reviews */}
+
+          <div className="mt-10 border-t pt-8">
+            <h2 className="text-xl font-semibold">Customer Reviews</h2>
+
+            {reviews.length === 0 ? (
+              <p className="mt-4 text-sm text-gray-500">No reviews yet</p>
+            ) : (
+              <div className="mt-5 space-y-4">
+                {reviews.map((review) => (
+                  <div key={review._id} className="rounded-xl border p-4">
+                    <div className="flex gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <Star
+                          key={star}
+                          size={16}
+                          className={
+                            star <= review.rating
+                              ? "fill-yellow-400 text-yellow-400"
+                              : "text-gray-300"
+                          }
+                        />
+                      ))}
+                    </div>
+
+                    <p className="mt-3 text-sm">{review.comment}</p>
+
+                    <p className="mt-2 text-xs text-gray-500">
+                      By {review.user?.firstName || "User"}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

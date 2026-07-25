@@ -20,6 +20,7 @@ export const AuthProvider = ({ children }) => {
 
   const [loading, setLoading] = useState(false);
 
+  // Save token
   useEffect(() => {
     if (token) {
       localStorage.setItem(TOKEN_KEY, token);
@@ -28,6 +29,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token]);
 
+  // Save user
   useEffect(() => {
     if (user) {
       localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -47,7 +49,15 @@ export const AuthProvider = ({ children }) => {
       const nextUser = {
         id: data.user?.id || data.user?._id || null,
 
+        firstName: data.user?.firstName || "",
+
+        lastName: data.user?.lastName || "",
+
         email: data.user?.email || "",
+
+        phoneNumber: data.user?.phoneNumber || "",
+
+        profile: data.user?.profile || "",
 
         role: data.user?.role || "user",
       };
@@ -73,6 +83,18 @@ export const AuthProvider = ({ children }) => {
       setLoading(false);
     }
   }, []);
+
+  // Update user after profile edit
+
+  const updateUserData = (updatedData) => {
+    const newUser = {
+      ...user,
+
+      ...updatedData,
+    };
+
+    setUser(newUser);
+  };
 
   const logout = useCallback(() => {
     setToken(null);
@@ -102,6 +124,8 @@ export const AuthProvider = ({ children }) => {
         isAdmin,
 
         setUser,
+
+        updateUserData,
       }}
     >
       {children}

@@ -80,7 +80,7 @@ const Products = () => {
       </p>
 
       <div className="my-8 flex flex-col gap-4 sm:flex-row">
-        <div className="relative flex-1">
+        <div className="relative w-full sm:flex-1">
           <Search
             size={18}
             className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-900/40"
@@ -90,7 +90,6 @@ const Products = () => {
             value={search}
             onChange={(e) => {
               setSearch(e.target.value);
-
               setPage(1);
             }}
             placeholder="Search product..."
@@ -102,10 +101,9 @@ const Products = () => {
           value={category}
           onChange={(e) => {
             setCategory(e.target.value);
-
             setPage(1);
           }}
-          className="input-field"
+          className="input-field w-full sm:w-48"
         >
           {categories.map((cat) => (
             <option key={cat} value={cat}>

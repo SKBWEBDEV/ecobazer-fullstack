@@ -86,41 +86,45 @@ const deleteUserControler = async (req, res) => {
 
 // Update user
 
+// Update user
+
 const updateUserControler = async (req, res) => {
   try {
     const { id } = req.params;
 
+    if (req.user.id !== id && req.user.role !== "admin") {
+      return res.status(403).send({
+        success: false,
+        message: "You cannot update this profile",
+      });
+    }
+
     const userData = await User.findByIdAndUpdate(
       id,
-
       req.body,
-
       {
         new: true,
         runValidators: true,
-      },
+      }
     );
 
     if (!userData) {
       return res.status(404).send({
         success: false,
-
         message: "User not found",
       });
     }
 
     res.status(200).send({
       success: true,
-
       message: "User updated successfully",
-
       userData,
     });
+
   } catch (error) {
     res.status(500).send({
-      success: false,
-
-      message: error.message,
+      success:false,
+      message:error.message
     });
   }
 };

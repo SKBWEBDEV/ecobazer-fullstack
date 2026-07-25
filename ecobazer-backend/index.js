@@ -15,8 +15,13 @@ const adminOrderRoutes = require("./routes/adminOrderRoutes");
 
 const secureMiddleWare = require("./middleware/secureMiddleWare");
 const adminMiddleware = require("./middleware/adminMiddleware");
-
+const reviewRoute = require("./routes/reviewRoute");
 const adminRoutes = require("./routes/adminRoutes");
+
+const categoryRoute = require("./routes/categoryRoute");
+const adminRoute = require("./routes/adminRoutes");
+
+
 // Controllers
 
 const {
@@ -60,7 +65,7 @@ const {
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
 
-  limit: 100,
+  limit: 1000,
 
   standardHeaders: true,
 
@@ -79,6 +84,8 @@ app.use(
 );
 
 app.use(limiter);
+
+app.use("/categories", categoryRoute);
 
 // ================= AUTH =================
 
@@ -135,9 +142,9 @@ app.post("/payment/success", secureMiddleWare, paymentSuccess);
 
 app.get("/users", secureMiddleWare, adminMiddleware, allUserControler);
 
-app.get("/users/:id", secureMiddleWare, adminMiddleware, singleUserControler);
+app.get("/users/:id", secureMiddleWare, singleUserControler);
 
-app.put("/users/:id", secureMiddleWare, adminMiddleware, updateUserControler);
+app.put("/users/:id", secureMiddleWare, updateUserControler);
 
 app.delete(
   "/users/:id",
@@ -152,7 +159,11 @@ app.use("/api/orders", orderRoutes);
 
 app.use("/api/admin/orders", adminOrderRoutes);
 
-app.use("/admin", adminRoutes);
+app.use("/admin", adminRoute);
+// ==================review====================
+
+app.use("/api/reviews", reviewRoute);
+
 // ================= TEST =================
 
 app.get("/", (req, res) => {

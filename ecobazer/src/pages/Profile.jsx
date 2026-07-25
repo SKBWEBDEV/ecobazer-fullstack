@@ -14,9 +14,6 @@ import Loader from "../components/Loader";
 
 import { getMyOrders } from "../services/orderApi";
 
-
-
-
 const tabs = [
   {
     key: "profile",
@@ -31,7 +28,7 @@ const tabs = [
 ];
 
 const Profile = () => {
-  const { user } = useAuth();
+  const { user, updateUserData } = useAuth();
 
   const userId = user?.id || user?._id;
 
@@ -54,11 +51,12 @@ const Profile = () => {
     formState: { errors },
   } = useForm();
 
+  // Load Profile
+
   useEffect(() => {
     const loadProfile = async () => {
       if (!userId) {
         setLoading(false);
-
         return;
       }
 
@@ -92,6 +90,8 @@ const Profile = () => {
     loadProfile();
   }, [userId, reset]);
 
+  // Load Orders
+
   const loadOrders = async () => {
     try {
       setOrdersLoading(true);
@@ -106,23 +106,27 @@ const Profile = () => {
     }
   };
 
-  const onSubmit = async (values) => {
-    setSaving(true);
+  // Update Profile
 
-    try {
-      const { data } = await updateUser(userId, values);
+ const onSubmit = async (values) => {
+  setSaving(true);
 
-      const updatedUser = data?.user || data;
+  try {
+    const { data } = await updateUser(userId, values);
 
-      setProfile(updatedUser);
+    const updatedUser = data.userData;
 
-      toast.success("Profile updated");
-    } catch (error) {
-      toast.error(getErrorMessage(error, "Could not update profile"));
-    } finally {
-      setSaving(false);
-    }
-  };
+    setProfile(updatedUser);
+
+    updateUserData(updatedUser);
+
+    toast.success("Profile updated");
+  } catch (error) {
+    toast.error(getErrorMessage(error, "Could not update profile"));
+  } finally {
+    setSaving(false);
+  }
+};
 
   return (
     <div className="container-app py-10">
@@ -226,11 +230,13 @@ const Profile = () => {
                     </div>
                   ))}
                 </div>
+
                 <Link
-  to={`/orders/${order._id}`}
-  className="mt-4 inline-block rounded-lg bg-black px-5 py-2 text-white">
-  View Details
-</Link>
+                  to={`/orders/${order._id}`}
+                  className="mt-4 inline-block rounded-lg bg-black px-5 py-2 text-white"
+                >
+                  View Details
+                </Link>
               </div>
             ))
           )}

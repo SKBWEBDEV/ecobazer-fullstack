@@ -34,17 +34,14 @@ const AdminProducts = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
+  const [categoryFilter, setCategoryFilter] = useState("all");
+  const [stockFilter, setStockFilter] = useState("all");
   const [modalOpen, setModalOpen] = useState(false);
   const [editing, setEditing] = useState(null);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState(null);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm({
+  const { register, handleSubmit, reset } = useForm({
     defaultValues: emptyDefaults,
   });
 
@@ -55,6 +52,8 @@ const AdminProducts = () => {
       const response = await getProducts();
 
       const products = response.data?.data || [];
+
+      console.log(products[0]);
 
       setProducts(products);
     } catch (error) {
@@ -70,9 +69,7 @@ const AdminProducts = () => {
 
   const openCreate = () => {
     setEditing(null);
-
     reset(emptyDefaults);
-
     setModalOpen(true);
   };
 
@@ -81,23 +78,14 @@ const AdminProducts = () => {
 
     reset({
       title: product.title || "",
-
       price: product.price || "",
-
       discountPrice: product.discountPrice || "",
-
       category: product.category || "",
-
       brand: product.brand || "",
-
       stock: product.stock ?? "",
-
       sku: product.sku || "",
-
       image: product.images?.[0]?.url || "",
-
       shortDescription: product.shortDescription || "",
-
       description: product.description || "",
     });
 
@@ -173,9 +161,33 @@ const AdminProducts = () => {
     }
   };
 
-  const filtered = products.filter((product) =>
-    (product.title || "").toLowerCase().includes(search.toLowerCase()),
-  );
+  const categories = [
+    "all",
+    ...new Set(products.map((product) => product.category)),
+  ];
+
+  const filtered = products.filter((product) => {
+    const searchText = search.toLowerCase();
+
+    const matchSearch =
+      product.title?.toLowerCase().includes(searchText) ||
+      product.brand?.toLowerCase().includes(searchText) ||
+      product.category?.toLowerCase().includes(searchText) ||
+      product.sku?.toLowerCase().includes(searchText);
+
+    const matchCategory =
+      categoryFilter === "all" || product.category === categoryFilter;
+
+    const matchStock =
+      stockFilter === "all" ||
+      (stockFilter === "in-stock" && product.stock > 10) ||
+      (stockFilter === "low-stock" &&
+        product.stock > 0 &&
+        product.stock <= 10) ||
+      (stockFilter === "out-stock" && product.stock === 0);
+
+    return matchSearch && matchCategory && matchStock;
+  });
 
   return (
     <div>
@@ -207,18 +219,50 @@ const AdminProducts = () => {
         />
       </div>
 
+      <div className="mb-6">
+        <select
+          value={categoryFilter}
+          onChange={(e) => setCategoryFilter(e.target.value)}
+          className="input-field max-w-xs"
+        >
+          {categories.map((category) => (
+            <option key={category} value={category}>
+              {category === "all" ? "All Categories" : category}
+            </option>
+          ))}
+        </select>
+        <select
+          value={stockFilter}
+          onChange={(e) => setStockFilter(e.target.value)}
+          className="input-field max-w-xs">
+          <option value="all">All Stock</option>
+
+          <option value="in-stock">In Stock</option>
+
+          <option value="low-stock">Low Stock</option>
+
+          <option value="out-stock">Out of Stock</option>
+        </select>
+      </div>
+
       {loading ? (
         <Loader full />
       ) : (
         <div className="card-surface overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left text-sm">
+          <table className="w-full min-w-[850px] text-left text-sm">
             <thead className="border-b border-ink-900/8">
               <tr>
                 <th className="px-5 py-3">Product</th>
 
+                <th className="px-5 py-3">Brand</th>
+
                 <th className="px-5 py-3">Category</th>
 
+                <th className="px-5 py-3">SKU</th>
+
                 <th className="px-5 py-3">Price</th>
+
+                <th className="px-5 py-3">Discount Price</th>
 
                 <th className="px-5 py-3">Stock</th>
 
@@ -229,7 +273,7 @@ const AdminProducts = () => {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="text-center py-10">
+                  <td colSpan="8" className="text-center py-10">
                     No products found.
                   </td>
                 </tr>
@@ -239,24 +283,70 @@ const AdminProducts = () => {
 
                   return (
                     <tr key={id}>
-                      <td className="px-5 py-3">{product.title}</td>
+                      <td className="px-5 py-3">
+                        <div className="flex items-center gap-3">
+                          <img
+                            src={
+                              product.images?.[0]?.url ||
+                              "https://via.placeholder.com/50"
+                            }
+                            alt={product.title}
+                            className="h-10 w-10 rounded object-cover"
+                          />
 
-                      <td className="px-5 py-3">{product.category}</td>
+                          <span>{product.title}</span>
+                        </div>
+                      </td>
+
+                      <td className="px-5 py-3">{product.brand || "—"}</td>
+
+                      <td className="px-5 py-3">{product.category || "—"}</td>
+
+                      <td className="px-5 py-3">{product.sku || "—"}</td>
 
                       <td className="px-5 py-3">
                         {formatPrice(product.price)}
                       </td>
 
-                      <td className="px-5 py-3">{product.stock}</td>
+                      <td className="px-5 py-3">
+                        {product.discountPrice > 0
+                          ? formatPrice(product.discountPrice)
+                          : "—"}
+                      </td>
 
                       <td className="px-5 py-3">
-                        <button onClick={() => openEdit(product)}>
-                          <Pencil size={15} />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <span>{product.stock}</span>
 
-                        <button onClick={() => handleDelete(id)}>
-                          <Trash2 size={15} />
-                        </button>
+                          {product.stock === 0 ? (
+                            <span className="flex items-center gap-2 text-xs text-red-600">
+                              <span className="h-2 w-2 rounded-full bg-red-500"></span>
+                              Out of Stock
+                            </span>
+                          ) : product.stock <= 10 ? (
+                            <span className="flex items-center gap-2 text-xs text-yellow-600">
+                              <span className="h-2 w-2 rounded-full bg-yellow-500"></span>
+                              Low Stock
+                            </span>
+                          ) : (
+                            <span className="flex items-center gap-2 text-xs text-green-600">
+                              <span className="h-2 w-2 rounded-full bg-green-500"></span>
+                              In Stock
+                            </span>
+                          )}
+                        </div>
+                      </td>
+
+                      <td className="px-5 py-3">
+                        <div className="flex gap-3">
+                          <button onClick={() => openEdit(product)}>
+                            <Pencil size={15} />
+                          </button>
+
+                          <button onClick={() => handleDelete(id)}>
+                            <Trash2 size={15} />
+                          </button>
+                        </div>
                       </td>
                     </tr>
                   );
@@ -273,12 +363,7 @@ const AdminProducts = () => {
         title={editing ? "Edit product" : "Add product"}
       >
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <Input
-            label="Title"
-            {...register("title", {
-              required: true,
-            })}
-          />
+          <Input label="Title" {...register("title")} />
 
           <div className="grid sm:grid-cols-2 gap-4">
             <Input label="Price" type="number" {...register("price")} />
@@ -304,27 +389,19 @@ const AdminProducts = () => {
 
           <Input label="Image URL" {...register("image")} />
 
-          <div>
-            <label>Short Description</label>
+          <textarea
+            className="input-field w-full"
+            rows="3"
+            placeholder="Short Description"
+            {...register("shortDescription")}
+          />
 
-            <textarea
-              rows="2"
-              className="input-field w-full"
-              {...register("shortDescription", {
-                required: true,
-              })}
-            />
-          </div>
-
-          <div>
-            <label>Description</label>
-
-            <textarea
-              rows="4"
-              className="input-field w-full"
-              {...register("description")}
-            />
-          </div>
+          <textarea
+            className="input-field w-full"
+            rows="5"
+            placeholder="Description"
+            {...register("description")}
+          />
 
           <div className="flex justify-end gap-3">
             <Button
