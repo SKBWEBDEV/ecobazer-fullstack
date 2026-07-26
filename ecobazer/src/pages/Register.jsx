@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Link, useNavigate } from 'react-router-dom'
-import { Leaf, MailCheck } from 'lucide-react'
+import { Leaf, MailCheck, Eye, EyeOff } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { registerUser } from '../services/authService'
 import { getErrorMessage } from '../utils/getErrorMessage'
@@ -17,6 +17,8 @@ const Register = () => {
   } = useForm()
   const [submitting, setSubmitting] = useState(false)
   const [done, setDone] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+const [showConfirmPassword, setShowConfirmPassword] = useState(false)
   const navigate = useNavigate()
   const password = watch('password')
 
@@ -107,26 +109,57 @@ const onSubmit = async (values) => {
           />
 
           <Input
-            label="Password"
-            type="password"
-            placeholder="••••••••"
-            error={errors.password?.message}
-            {...register('password', {
-              required: 'Password is required',
-              minLength: { value: 6, message: 'At least 6 characters' },
-            })}
-          />
+  label="Password"
+  type={showPassword ? 'text' : 'password'}
+  placeholder="••••••••"
+  error={errors.password?.message}
+  rightIcon={
+    showPassword ? (
+      <EyeOff
+        size={20}
+        className="cursor-pointer"
+        onClick={() => setShowPassword(false)}
+      />
+    ) : (
+      <Eye
+        size={20}
+        className="cursor-pointer"
+        onClick={() => setShowPassword(true)}
+      />
+    )
+  }
+  {...register('password', {
+    required: 'Password is required',
+    minLength: { value: 6, message: 'At least 6 characters' },
+  })}
+/>
 
           <Input
-            label="Confirm password"
-            type="password"
-            placeholder="••••••••"
-            error={errors.confirmPassword?.message}
-            {...register('confirmPassword', {
-              required: 'Please confirm your password',
-              validate: (value) => value === password || 'Passwords do not match',
-            })}
-          />
+  label="Confirm password"
+  type={showConfirmPassword ? 'text' : 'password'}
+  placeholder="••••••••"
+  error={errors.confirmPassword?.message}
+  rightIcon={
+    showConfirmPassword ? (
+      <EyeOff
+        size={20}
+        className="cursor-pointer"
+        onClick={() => setShowConfirmPassword(false)}
+      />
+    ) : (
+      <Eye
+        size={20}
+        className="cursor-pointer"
+        onClick={() => setShowConfirmPassword(true)}
+      />
+    )
+  }
+  {...register('confirmPassword', {
+    required: 'Please confirm your password',
+    validate: (value) =>
+      value === password || 'Passwords do not match',
+  })}
+/>
 
           <label className="flex items-start gap-2 text-sm text-ink-900/65">
             <input
