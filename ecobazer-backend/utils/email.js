@@ -1,23 +1,28 @@
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
-  service: "gmail",
-
+  host: "smtp.gmail.com",
   port: 587,
-
   secure: false,
+  family: 4,
 
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
+  },
+
+  tls: {
+    rejectUnauthorized: false,
   },
 });
 
 // Email verification
 
 const mailVerifycation = async (email, token) => {
+  console.log("Trying to send verification email to:", email);
   try {
     const info = await transporter.sendMail({
+      
       from: process.env.EMAIL_USER,
 
       to: email,
@@ -69,15 +74,14 @@ Thank you.
 
 `,
     });
-
+    console.log("Email sent successfully");
     console.log("Verification email sent:", info.messageId);
 
     return true;
   } catch (error) {
-    console.log("Verification email error:", error.message);
-
-    return false;
-  }
+  console.log("Verification email error:", error);
+  throw error;
+}
 };
 
 // Reset password email

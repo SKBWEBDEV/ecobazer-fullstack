@@ -53,12 +53,12 @@ const registationControler = async (req, res) => {
       "1d",
     );
 
-    await mailVerifycation(email, token);
+  mailVerifycation(email, token);
 
-    res.status(201).send({
-      success: true,
-      message: "Registration successful. Please verify your email",
-    });
+res.status(201).send({
+  success: true,
+  message: "Registration successful. Please verify your email",
+});
   } catch (error) {
     res.status(500).send({
       success: false,
