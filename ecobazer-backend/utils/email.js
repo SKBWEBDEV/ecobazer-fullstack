@@ -1,15 +1,7 @@
-const nodemailer = require("nodemailer");
+const { Resend } = require("resend");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true,
+const resend = new Resend(process.env.RESEND_API_KEY);
 
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
 
 // Email verification
 
@@ -17,8 +9,9 @@ const mailVerifycation = async (email, token) => {
   console.log("Trying to send verification email to:", email);
 
   try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+    const data = await resend.emails.send({
+
+      from: "onboarding@resend.dev",
 
       to: email,
 
@@ -60,22 +53,31 @@ const mailVerifycation = async (email, token) => {
       `,
     });
 
-    console.log("Email sent successfully");
-    console.log("Verification email sent:", info.messageId);
+
+    console.log("Verification email sent:", data);
 
     return true;
+
+
   } catch (error) {
+
     console.log("Verification email error:", error.message);
+
     throw error;
   }
 };
 
+
+
 // Reset password email
 
 const resetPasswordEmail = async (email, token) => {
+
   try {
-    const info = await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+
+    const data = await resend.emails.send({
+
+      from: "onboarding@resend.dev",
 
       to: email,
 
@@ -97,7 +99,7 @@ const resetPasswordEmail = async (email, token) => {
               style="
                 background:#2563eb;
                 color:white;
-                padding:12px20px;
+                padding:12px 20px;
                 border-radius:6px;
                 text-decoration:none;
                 display:inline-block;
@@ -116,15 +118,22 @@ const resetPasswordEmail = async (email, token) => {
       `,
     });
 
-    console.log("Reset email sent:", info.messageId);
+
+    console.log("Reset email sent:", data);
 
     return true;
+
+
   } catch (error) {
+
     console.log("Reset email error:", error.message);
 
     return false;
+
   }
+
 };
+
 
 module.exports = {
   mailVerifycation,
