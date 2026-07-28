@@ -193,16 +193,32 @@ const AdminProducts = () => {
     <div>
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold text-ink-900">Products</h1>
+          <h1 className="text-3xl font-bold text-white">Products</h1>
 
-          <p className="mt-1 text-sm text-ink-900/55">
-            {products.length} products in your catalog
+          <p className="mt-1 text-sm text-gray-400">
+            Manage your EcoBazer product catalog.
           </p>
         </div>
 
-        <Button onClick={openCreate} icon={Plus}>
-          Add product
-        </Button>
+        <button
+          onClick={openCreate}
+          className="
+    flex
+    items-center
+    gap-2
+    px-4
+    py-2.5
+    rounded-xl
+    bg-purple-600
+    hover:bg-purple-700
+    text-white
+    font-medium
+    transition
+    "
+        >
+          <Plus size={18} />
+          Add Product
+        </button>
       </div>
 
       <div className="relative mb-6 max-w-sm">
@@ -215,7 +231,19 @@ const AdminProducts = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search products..."
-          className="input-field pl-10"
+          className="
+  w-full
+  bg-[#242529]
+  border
+  border-gray-800
+  rounded-xl
+  px-10
+  py-3
+  text-white
+  placeholder:text-gray-500
+  outline-none
+  focus:border-purple-500
+  "
         />
       </div>
 
@@ -234,7 +262,8 @@ const AdminProducts = () => {
         <select
           value={stockFilter}
           onChange={(e) => setStockFilter(e.target.value)}
-          className="input-field max-w-xs">
+          className="input-field max-w-xs"
+        >
           <option value="all">All Stock</option>
 
           <option value="in-stock">In Stock</option>
@@ -248,9 +277,33 @@ const AdminProducts = () => {
       {loading ? (
         <Loader full />
       ) : (
-        <div className="card-surface overflow-x-auto">
-          <table className="w-full min-w-[850px] text-left text-sm">
-            <thead className="border-b border-ink-900/8">
+        <div
+          className="
+bg-[#242529]
+rounded-2xl
+p-6
+border border-gray-800/60
+overflow-x-auto
+"
+        >
+          <table
+            className="
+w-full
+min-w-[850px]
+text-left
+text-sm
+text-gray-300
+"
+          >
+            <thead
+              className="
+text-xs
+uppercase
+text-gray-500
+border-b
+border-gray-800
+"
+            >
               <tr>
                 <th className="px-5 py-3">Product</th>
 
@@ -282,7 +335,15 @@ const AdminProducts = () => {
                   const id = product._id || product.id;
 
                   return (
-                    <tr key={id}>
+                    <tr
+                      key={id}
+                      className="
+border-b
+border-gray-800/50
+hover:bg-gray-800/30
+transition
+"
+                    >
                       <td className="px-5 py-3">
                         <div className="flex items-center gap-3">
                           <img

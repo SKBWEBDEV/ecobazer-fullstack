@@ -8,9 +8,16 @@ import {
   User,
   LogOut,
   LayoutDashboard,
+  Moon,
+  Sun,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
+
+import { useContext } from "react";
+import { ThemeContext } from "../context/ThemeContext";
+
+
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -22,6 +29,7 @@ const Navbar = () => {
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
   const { totalItems } = useCart();
   const navigate = useNavigate();
+  const { darkMode, setDarkMode } = useContext(ThemeContext);
 
   const handleLogout = () => {
     logout();
@@ -30,10 +38,14 @@ const Navbar = () => {
   };
 
   const linkClass = ({ isActive }) =>
-    `text-sm font-medium transition-colors ${isActive ? "text-moss-400" : "text-white/75 hover:text-white"}`;
+  `text-sm font-medium transition-colors ${
+    isActive
+      ? "text-moss-600 dark:text-moss-400"
+      : "text-ink-900/70 dark:text-white/75 hover:text-moss-600 dark:hover:text-white"
+  }`;
 
   return (
-    <header className="sticky top-0 z-40 bg-ink-900 text-white shadow-sm">
+    <header className="sticky top-0 z-40 bg-white dark:bg-ink-900 text-ink-900 dark:text-white shadow-sm">
       <div className="container-app flex h-16 items-center justify-between gap-4">
         <Link
           to="/"
@@ -64,9 +76,15 @@ const Navbar = () => {
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
+          <button
+  onClick={() => setDarkMode(!darkMode)}
+  className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition"
+>
+  {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+</button>
           <Link
             to="/cart"
-            className="relative flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-white/10"
+            className="relative flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-white/10"
             aria-label="Cart"
           >
             <ShoppingCart size={18} />
@@ -81,7 +99,7 @@ const Navbar = () => {
             <div className="flex items-center gap-2">
               <Link
                 to="/profile"
-                className="btn-ghost !text-white/85 hover:!bg-white/10"
+                className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10 flex-1"
                 title={user?.email}
               >
                 <User size={16} />
@@ -90,7 +108,7 @@ const Navbar = () => {
               </Link>
               <button
                 onClick={handleLogout}
-                className="btn-ghost !text-white/85 hover:!bg-white/10"
+                className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10 flex-1"
               >
                 <LogOut size={16} /> Logout
               </button>
@@ -120,7 +138,7 @@ const Navbar = () => {
       </div>
 
       {open && (
-        <div className="border-t border-white/10 bg-ink-900 px-4 pb-5 pt-3 md:hidden animate-fadeIn">
+        <div className="border-t border-white/10 bg-white dark:bg-ink-900 px-4 pb-5 pt-3 md:hidden animate-fadeIn">
           <div className="flex flex-col gap-3">
             {navLinks.map((link) => (
               <NavLink
@@ -147,7 +165,7 @@ const Navbar = () => {
             <Link
               to="/cart"
               onClick={() => setOpen(false)}
-              className="flex items-center gap-2 text-sm font-medium text-white/85"
+              className="flex items-center gap-2 text-sm font-medium text-ink-900/80 dark:text-white/85"
             >
               <ShoppingCart size={16} /> Cart{" "}
               {totalItems > 0 && `(${totalItems})`}
@@ -156,26 +174,25 @@ const Navbar = () => {
               {isAuthenticated ? (
                 <>
                   <Link
-                    to="/profile"
-                    onClick={() => setOpen(false)}
-                    className="btn-ghost !text-white/85 hover:!bg-white/10 flex-1"
-                  >
+  to="/profile"
+  className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
+  title={user?.email}
+>
                     Profile
                   </Link>
                   <button
-                    onClick={handleLogout}
-                    className="btn-ghost !text-white/85 hover:!bg-white/10 flex-1"
-                  >
+  onClick={handleLogout}
+  className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
+>
                     Logout
                   </button>
                 </>
               ) : (
                 <>
                   <Link
-                    to="/login"
-                    onClick={() => setOpen(false)}
-                    className="btn-outline !bg-transparent !text-white/85 flex-1"
-                  >
+  to="/login"
+  className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
+>
                     Log in
                   </Link>
                   <Link

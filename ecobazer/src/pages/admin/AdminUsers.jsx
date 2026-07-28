@@ -1,194 +1,255 @@
-import { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
-import { Search, Trash2, Pencil } from 'lucide-react'
-import { getUsers, updateUser, deleteUser } from '../../services/userService'
-import { getErrorMessage } from '../../utils/getErrorMessage'
-import Loader from '../../components/Loader'
-import Modal from '../../components/Modal'
-import Input from '../../components/Input'
-import Button from '../../components/Button'
+import { useEffect, useState } from "react";
+import { Search, Trash2, Pencil } from "lucide-react";
+import toast from "react-hot-toast";
+
+import { getUsers, updateUser, deleteUser } from "../../services/userService";
+
+import { getErrorMessage } from "../../utils/getErrorMessage";
+import Loader from "../../components/Loader";
+import Modal from "../../components/Modal";
+import Input from "../../components/Input";
+import Button from "../../components/Button";
 
 const AdminUsers = () => {
-  const [users, setUsers] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [search, setSearch] = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
-  const [editing, setEditing] = useState(null)
-  const [saving, setSaving] = useState(false)
-  const [deletingId, setDeletingId] = useState(null)
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm()
+  const [search, setSearch] = useState("");
+
+  const [modalOpen, setModalOpen] = useState(false);
+  const [editing, setEditing] = useState(null);
+
+  const [saving, setSaving] = useState(false);
+
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    role: "user",
+  });
 
   const loadUsers = async () => {
-    setLoading(true)
     try {
-      const { data } = await getUsers()
-      setUsers(Array.isArray(data) ? data : data?.users || [])
+      setLoading(true);
+
+      const { data } = await getUsers();
+
+      setUsers(data?.users || data || []);
     } catch (error) {
-      toast.error(getErrorMessage(error, 'Could not load users.'))
+      toast.error(getErrorMessage(error, "Failed to load users"));
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
-    loadUsers()
-  }, [])
+    loadUsers();
+  }, []);
 
-  const openEdit = (u) => {
-    setEditing(u)
-    reset({
-      firstName: u.firstName || '',
-      lastName: u.lastName || '',
-      email: u.email || '',
-      role: u.role || 'user',
-    })
-    setModalOpen(true)
-  }
+  const openEdit = (user) => {
+    setEditing(user);
 
-  const onSubmit = async (values) => {
-    setSaving(true)
+    setForm({
+      firstName: user.firstName || "",
+      lastName: user.lastName || "",
+      role: user.role || "user",
+    });
+
+    setModalOpen(true);
+  };
+
+  const updateHandler = async (e) => {
+    e.preventDefault();
+
     try {
-      await updateUser(editing._id || editing.id, values)
-      toast.success('User updated')
-      setModalOpen(false)
-      loadUsers()
-    } catch (error) {
-      toast.error(getErrorMessage(error, 'Could not update user.'))
-    } finally {
-      setSaving(false)
-    }
-  }
+      setSaving(true);
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this user account? This cannot be undone.')) return
-    setDeletingId(id)
+      await updateUser(editing._id, form);
+
+      toast.success("User updated");
+
+      setModalOpen(false);
+
+      loadUsers();
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Update failed"));
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const removeUser = async (id) => {
+    if (!confirm("Delete this user?")) return;
+
     try {
-      await deleteUser(id)
-      toast.success('User deleted')
-      setUsers((prev) => prev.filter((u) => (u._id || u.id) !== id))
-    } catch (error) {
-      toast.error(getErrorMessage(error, 'Could not delete user.'))
-    } finally {
-      setDeletingId(null)
-    }
-  }
+      await deleteUser(id);
 
-  const filtered = users.filter((u) =>
-    `${u.firstName || ''} ${u.lastName || ''} ${u.email || ''}`.toLowerCase().includes(search.toLowerCase())
-  )
+      toast.success("User deleted");
+
+      setUsers((prev) => prev.filter((user) => user._id !== id));
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Delete failed"));
+    }
+  };
+
+  const filteredUsers = users.filter((user) =>
+    `${user.firstName} ${user.lastName} ${user.email}`
+      .toLowerCase()
+      .includes(search.toLowerCase()),
+  );
 
   return (
-    <div>
-      <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-ink-900">Users</h1>
-        <p className="mt-1 text-sm text-ink-900/55">{users.length} registered accounts</p>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-white">Users</h1>
+
+        <p className="text-gray-400">Manage customer accounts</p>
       </div>
 
-      <div className="relative mb-6 max-w-sm">
-        <Search size={16} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-ink-900/35" />
+      <div className="relative max-w-sm">
+        <Search size={18} className="absolute left-3 top-3 text-gray-400" />
+
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Search users..."
-          className="input-field pl-10"
+          className="
+w-full
+bg-[#242529]
+border
+border-gray-800
+rounded-xl
+py-2.5
+pl-10
+text-white
+outline-none
+"
         />
       </div>
 
       {loading ? (
         <Loader full />
       ) : (
-        <div className="card-surface overflow-x-auto">
-          <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="border-b border-ink-900/8 text-xs uppercase tracking-wide text-ink-900/45">
+        <div
+          className="
+bg-[#242529]
+rounded-2xl
+border
+border-gray-800
+overflow-x-auto
+"
+        >
+          <table className="w-full text-left">
+            <thead className="border-b border-gray-800 text-gray-400 text-sm">
               <tr>
-                <th className="px-5 py-3 font-medium">Name</th>
-                <th className="px-5 py-3 font-medium">Email</th>
-                <th className="px-5 py-3 font-medium">Role</th>
-                <th className="px-5 py-3 font-medium text-right">Actions</th>
+                <th className="p-4">Name</th>
+
+                <th className="p-4">Email</th>
+
+                <th className="p-4">Role</th>
+
+                <th className="p-4">Action</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-ink-900/6">
-              {filtered.length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="px-5 py-10 text-center text-ink-900/45">
-                    No users found.
+
+            <tbody>
+              {filteredUsers.map((user) => (
+                <tr
+                  key={user._id}
+                  className="border-b border-gray-800 hover:bg-gray-800/30"
+                >
+                  <td className="p-4 text-white">
+                    {user.firstName} {user.lastName}
+                  </td>
+
+                  <td className="p-4 text-gray-400">{user.email}</td>
+
+                  <td className="p-4">
+                    <span
+                      className="
+px-3
+py-1
+rounded-full
+bg-purple-500/10
+text-purple-400
+text-xs
+"
+                    >
+                      {user.role}
+                    </span>
+                  </td>
+
+                  <td className="p-4">
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => openEdit(user)}
+                        className="text-blue-400"
+                      >
+                        <Pencil size={16} />
+                      </button>
+
+                      <button
+                        onClick={() => removeUser(user._id)}
+                        className="text-red-400"
+                      >
+                        <Trash2 size={16} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
-              ) : (
-                filtered.map((u) => {
-                  const id = u._id || u.id
-                  return (
-                    <tr key={id}>
-                      <td className="px-5 py-3 font-medium text-ink-900">
-                        {u.firstName} {u.lastName}
-                      </td>
-                      <td className="px-5 py-3 text-ink-900/65">{u.email}</td>
-                      <td className="px-5 py-3">
-                        <span className={`badge ${u.role === 'admin' ? 'bg-moss-50 text-moss-700' : 'bg-ink-900/5 text-ink-900/60'}`}>
-                          {u.role || 'user'}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3">
-                        <div className="flex justify-end gap-2">
-                          <button
-                            onClick={() => openEdit(u)}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-900/50 transition hover:bg-ink-900/5 hover:text-moss-700"
-                            aria-label="Edit user"
-                          >
-                            <Pencil size={15} />
-                          </button>
-                          <button
-                            onClick={() => handleDelete(id)}
-                            disabled={deletingId === id}
-                            className="flex h-8 w-8 items-center justify-center rounded-lg text-ink-900/50 transition hover:bg-red-50 hover:text-red-600"
-                            aria-label="Delete user"
-                          >
-                            <Trash2 size={15} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
+              ))}
             </tbody>
           </table>
         </div>
       )}
 
-      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="Edit user">
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <Input label="First name" error={errors.firstName?.message} {...register('firstName')} />
-            <Input label="Last name" error={errors.lastName?.message} {...register('lastName')} />
-          </div>
-          <Input label="Email address" type="email" {...register('email')} disabled className="opacity-60" />
-          <div className="w-full">
-            <label className="mb-1.5 block text-sm font-medium text-ink-900/80">Role</label>
-            <select className="input-field" {...register('role')}>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
-            </select>
-          </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <Button type="button" variant="outline" onClick={() => setModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button type="submit" loading={saving}>
-              Save changes
-            </Button>
-          </div>
+      <Modal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        title="Edit User"
+      >
+        <form onSubmit={updateHandler} className="space-y-4">
+          <Input
+            label="First Name"
+            value={form.firstName}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                firstName: e.target.value,
+              })
+            }
+          />
+
+          <Input
+            label="Last Name"
+            value={form.lastName}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                lastName: e.target.value,
+              })
+            }
+          />
+
+          <select
+            className="input-field"
+            value={form.role}
+            onChange={(e) =>
+              setForm({
+                ...form,
+                role: e.target.value,
+              })
+            }
+          >
+            <option value="user">User</option>
+
+            <option value="admin">Admin</option>
+          </select>
+
+          <Button loading={saving}>Save</Button>
         </form>
       </Modal>
     </div>
-  )
-}
+  );
+};
 
-export default AdminUsers
+export default AdminUsers;

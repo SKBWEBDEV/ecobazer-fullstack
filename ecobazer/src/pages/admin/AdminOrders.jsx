@@ -4,18 +4,11 @@ import api from "../../services/axios";
 
 const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
-
   const [loading, setLoading] = useState(true);
 
   const [search, setSearch] = useState("");
-
   const [status, setStatus] = useState("all");
-
   const [paymentStatus, setPaymentStatus] = useState("all");
-
-  const [fromDate, setFromDate] = useState("");
-
-  const [toDate, setToDate] = useState("");
 
   const loadOrders = async () => {
     try {
@@ -24,8 +17,6 @@ const AdminOrders = () => {
           search,
           status,
           paymentStatus,
-          fromDate,
-          toDate,
         },
       });
 
@@ -43,7 +34,7 @@ const AdminOrders = () => {
     }, 400);
 
     return () => clearTimeout(timer);
-  }, [search, status, paymentStatus, fromDate, toDate]);
+  }, [search, status, paymentStatus]);
 
   const updateStatus = async (id, newStatus) => {
     try {
@@ -55,139 +46,174 @@ const AdminOrders = () => {
 
       loadOrders();
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Update failed");
+      toast.error("Update failed");
     }
   };
 
-  const resetFilter = () => {
-    setSearch("");
-    setStatus("all");
-    setPaymentStatus("all");
-    setFromDate("");
-    setToDate("");
-  };
-
   if (loading) {
-    return <div className="p-5">Loading orders...</div>;
+    return <p className="text-gray-400">Loading orders...</p>;
   }
 
   return (
-    <div>
-      <h1 className="mb-6 text-2xl font-semibold">Orders</h1>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-3xl font-bold text-white">Orders</h1>
 
-      {/* Sticky Filter */}
+        <p className="text-gray-400">Manage customer orders</p>
+      </div>
 
-      <div className="sticky top-0 z-20 bg-sand py-3">
-        <div className="card-surface mb-6 p-5">
-          <div className="grid gap-4 md:grid-cols-5">
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search order, email, product..."
-              className="rounded border px-3 py-2"
-            />
+      <div
+        className="
+bg-[#242529]
+border
+border-gray-800
+rounded-2xl
+p-5
+"
+      >
+        <div className="grid md:grid-cols-3 gap-4">
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search order..."
+            className="
+bg-[#1a1b1f]
+border
+border-gray-700
+rounded-xl
+px-4
+py-2
+text-white
+"
+          />
 
-            <select
-              value={status}
-              onChange={(e) => setStatus(e.target.value)}
-              className="rounded border px-3 py-2"
-            >
-              <option value="all">All Status</option>
-
-              <option value="pending">Pending</option>
-
-              <option value="confirmed">Confirmed</option>
-
-              <option value="processing">Processing</option>
-
-              <option value="shipped">Shipped</option>
-
-              <option value="delivered">Delivered</option>
-
-              <option value="cancelled">Cancelled</option>
-            </select>
-
-            <select
-              value={paymentStatus}
-              onChange={(e) => setPaymentStatus(e.target.value)}
-              className="rounded border px-3 py-2"
-            >
-              <option value="all">All Payment</option>
-
-              <option value="pending">Pending</option>
-
-              <option value="paid">Paid</option>
-
-              <option value="failed">Failed</option>
-
-              <option value="refunded">Refunded</option>
-            </select>
-
-            <input
-              type="date"
-              value={fromDate}
-              onChange={(e) => setFromDate(e.target.value)}
-              className="rounded border px-3 py-2"
-            />
-
-            <input
-              type="date"
-              value={toDate}
-              onChange={(e) => setToDate(e.target.value)}
-              className="rounded border px-3 py-2"
-            />
-          </div>
-
-          <button
-            onClick={resetFilter}
-            className="mt-4 rounded bg-gray-200 px-4 py-2"
+          <select
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="
+bg-[#1a1b1f]
+border
+border-gray-700
+rounded-xl
+px-4
+py-2
+text-white
+"
           >
-            Reset Filter
-          </button>
+            <option value="all">All Status</option>
+
+            <option value="pending">Pending</option>
+
+            <option value="confirmed">Confirmed</option>
+
+            <option value="processing">Processing</option>
+
+            <option value="shipped">Shipped</option>
+
+            <option value="delivered">Delivered</option>
+
+            <option value="cancelled">Cancelled</option>
+          </select>
+
+          <select
+            value={paymentStatus}
+            onChange={(e) => setPaymentStatus(e.target.value)}
+            className="
+bg-[#1a1b1f]
+border
+border-gray-700
+rounded-xl
+px-4
+py-2
+text-white
+"
+          >
+            <option value="all">All Payment</option>
+
+            <option value="paid">Paid</option>
+
+            <option value="pending">Pending</option>
+
+            <option value="failed">Failed</option>
+          </select>
         </div>
       </div>
 
-      <p className="mb-4 text-sm text-gray-500">
-        Showing {orders.length} orders
-      </p>
+      <p className="text-gray-400">Showing {orders.length} orders</p>
 
       <div className="space-y-4">
         {orders.length === 0 ? (
-          <div className="card-surface p-6 text-center">No orders found</div>
+          <div
+            className="
+bg-[#242529]
+rounded-2xl
+p-6
+text-center
+text-gray-400
+"
+          >
+            No orders found
+          </div>
         ) : (
           orders.map((order) => (
-            <div key={order._id} className="card-surface p-5">
-              <div className="flex justify-between gap-4">
+            <div
+              key={order._id}
+              className="
+bg-[#242529]
+border
+border-gray-800
+rounded-2xl
+p-6
+"
+            >
+              <div
+                className="
+flex
+justify-between
+gap-5
+flex-wrap
+"
+              >
                 <div>
-                  <h2 className="font-semibold">
+                  <h2
+                    className="
+text-white
+font-semibold
+"
+                  >
                     Order #{order._id.slice(-8)}
                   </h2>
 
-                  <p className="text-sm text-gray-500">
-                    Customer: {order.user?.email}
+                  <p className="text-gray-400 text-sm">
+                    Customer: {order.user?.email || "Customer"}
                   </p>
 
-                  <p className="text-sm text-gray-500">
-                    Date: {new Date(order.createdAt).toLocaleDateString()}
+                  <p className="text-gray-400 text-sm">
+                    Date:{" "}
+                    {new Date(order.createdAt).toLocaleDateString("en-US")}
                   </p>
 
-                  <p className="text-sm text-gray-500">
-                    Total: ৳ {order.totalPrice}
+                  <p className="text-white mt-2">
+                    Total: ৳ {order.totalPrice?.toLocaleString("en-US")}
                   </p>
 
-                  <p className="text-sm text-gray-500">
+                  <p className="text-gray-400 text-sm">
                     Payment: {order.paymentStatus}
-                  </p>
-
-                  <p className="text-sm text-gray-500">
-                    Method: {order.paymentMethod}
                   </p>
                 </div>
 
                 <select
                   value={order.status}
                   onChange={(e) => updateStatus(order._id, e.target.value)}
-                  className="rounded border px-3 py-2"
+                  className="
+bg-[#1a1b1f]
+border
+border-gray-700
+rounded-xl
+px-3
+py-2
+text-white
+"
                 >
                   <option value="pending">Pending</option>
 
@@ -203,9 +229,17 @@ const AdminOrders = () => {
                 </select>
               </div>
 
-              <div className="mt-4 space-y-1">
+              <div
+                className="
+mt-5
+border-t
+border-gray-800
+pt-4
+space-y-2
+"
+              >
                 {order.products?.map((item, index) => (
-                  <p key={index}>
+                  <p key={index} className="text-gray-300 text-sm">
                     {item.title} × {item.quantity}
                   </p>
                 ))}

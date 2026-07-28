@@ -6,6 +6,13 @@ import { getProducts } from "../services/productService";
 import ProductCard from "../components/ProductCard";
 import Loader from "../components/Loader";
 
+import SaleBanner from "../components/home/SaleBanner";
+import ShopCTA from "../components/home/ShopCTA";
+import Sustainability from "../components/home/Sustainability";
+import WhyChoose from "../components/home/WhyChoose";
+
+
+
 const perks = [
   {
     icon: Leaf,
@@ -185,6 +192,10 @@ const Home = () => {
         </div>
       </section>
 
+      {/* {discount} */}
+
+      <SaleBanner />
+
       {/* New Arrivals */}
 
       <section className="container-app pb-16">
@@ -214,6 +225,15 @@ const Home = () => {
           </div>
         )}
       </section>
+
+      {/* {Sustainability} */}
+      <Sustainability />
+      {/* {WhyChoose} */}
+      <WhyChoose />
+      {/* {ShopCta} */}
+      <ShopCTA />
+
+
     </div>
   );
 };

@@ -15,6 +15,7 @@ import Register from "./pages/Register";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MailVerification from "./pages/MailVerification";
+import Offers from "./pages/Offers";
 
 // User Pages
 import Cart from "./pages/Cart";
@@ -58,6 +59,7 @@ function App() {
         <Route path="/resetpassword/:token" element={<ResetPassword />} />
 
         <Route path="/verify-email/:token" element={<MailVerification />} />
+        <Route path="/offers" element={<Offers />} />
 
         {/* Protected User Routes */}
 

@@ -320,14 +320,19 @@ const ProductDetails = () => {
           {/* Customer Reviews */}
 
           <div className="mt-10 border-t pt-8">
-            <h2 className="text-xl font-semibold">Customer Reviews</h2>
+            <h2 className="text-xl font-semibold">
+              Customer Reviews ({reviews.length})
+            </h2>
 
             {reviews.length === 0 ? (
               <p className="mt-4 text-sm text-gray-500">No reviews yet</p>
             ) : (
-              <div className="mt-5 space-y-4">
+              <div className="mt-5 max-h-[450px] overflow-y-auto space-y-4 pr-2">
                 {reviews.map((review) => (
-                  <div key={review._id} className="rounded-xl border p-4">
+                  <div
+                    key={review._id}
+                    className="rounded-xl border p-4 bg-white shadow-sm"
+                  >
                     <div className="flex gap-1">
                       {[1, 2, 3, 4, 5].map((star) => (
                         <Star

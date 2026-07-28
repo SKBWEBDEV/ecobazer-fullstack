@@ -12,23 +12,24 @@ const getAdminStats = async (req, res) => {
 
     const totalOrders = await Order.countDocuments();
 
-    const revenueData = await Order.aggregate([
-      {
-        $match: {
-          status: {
-            $in: ["paid", "confirmed", "processing", "shipped", "delivered"],
-          },
-        },
+const revenueData = await Order.aggregate([
+  {
+    $match: {
+      paymentStatus: "paid",
+      status: {
+        $ne: "cancelled",
       },
-      {
-        $group: {
-          _id: null,
-          totalRevenue: {
-            $sum: "$totalPrice",
-          },
-        },
+    },
+  },
+  {
+    $group: {
+      _id: null,
+      totalRevenue: {
+        $sum: "$totalPrice",
       },
-    ]);
+    },
+  },
+]);
 
     const totalRevenue = revenueData[0]?.totalRevenue || 0;
 

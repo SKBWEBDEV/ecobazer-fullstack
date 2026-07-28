@@ -144,10 +144,10 @@ const Profile = () => {
               }
             }}
             className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium ${
-              tab === key
-                ? "border-moss-600 text-moss-700"
-                : "border-transparent text-ink-900/50"
-            }`}
+  tab === key
+    ? "border-moss-600 text-moss-700 dark:text-emerald-400"
+    : "border-transparent text-ink-900/50 dark:text-white/60"
+}`}
           >
             <Icon size={16} />
 
@@ -200,7 +200,7 @@ const Profile = () => {
               <div key={order._id} className="card-surface p-5">
                 <div className="flex justify-between">
                   <div>
-                    <p className="font-semibold">
+                    <p className="font-semibold ">
                       Order #{order._id.slice(-8)}
                     </p>
 
