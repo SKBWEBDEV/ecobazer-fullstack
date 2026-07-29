@@ -1,8 +1,15 @@
-import { forwardRef } from "react";
+import { forwardRef, useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const Input = forwardRef(
-  ({ label, error, className = "", id, rightIcon, ...props }, ref) => {
+  (
+    { label, error, className = "", id, rightIcon, type = "text", ...props },
+    ref,
+  ) => {
+    const [showPassword, setShowPassword] = useState(false);
+
     const inputId = id || props.name;
+    const isPassword = type === "password";
 
     return (
       <div className="w-full">
@@ -19,7 +26,8 @@ const Input = forwardRef(
           <input
             id={inputId}
             ref={ref}
-            className={`input-field ${rightIcon ? "pr-12" : ""} ${
+            type={isPassword && showPassword ? "text" : type}
+            className={`input-field ${isPassword || rightIcon ? "pr-12" : ""} ${
               error
                 ? "border-red-400 focus:border-red-500 focus:ring-red-500/25"
                 : ""
@@ -27,13 +35,23 @@ const Input = forwardRef(
             {...props}
           />
 
-          {rightIcon && (
+          {isPassword ? (
             <button
               type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-moss-600"
             >
-              {rightIcon}
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+          ) : (
+            rightIcon && (
+              <button
+                type="button"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-moss-600"
+              >
+                {rightIcon}
+              </button>
+            )
           )}
         </div>
 
