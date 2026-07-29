@@ -156,12 +156,12 @@ const forgotPasswordControler = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-    if (!user) {
-      return res.status(404).send({
-        success: false,
-        message: "Email not found",
-      });
-    }
+if (!user) {
+  return res.send({
+    success: true,
+    message: "If the email exists, a password reset link has been sent.",
+  });
+}
 
     const token = tokenGenerator(
       {
