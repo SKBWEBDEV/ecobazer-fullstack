@@ -15,7 +15,7 @@ const dbConection = require("./config/dbCoection");
 const orderRoutes = require("./routes/orderRoutes");
 const adminOrderRoutes = require("./routes/adminOrderRoutes");
 
-const secureMiddleware  = require("./middleware/secureMiddleware");
+const secureMiddleware = require("./middleware/secureMiddleware");
 const adminMiddleware = require("./middleware/adminMiddleware");
 const reviewRoute = require("./routes/reviewRoute");
 const adminRoutes = require("./routes/adminRoutes");
@@ -26,7 +26,6 @@ const adminRoute = require("./routes/adminRoutes");
 const wishlistRoutes = require("./routes/wishlistRoutes");
 
 const notificationRoutes = require("./routes/notificationRoutes");
-
 
 // Controllers
 
@@ -84,13 +83,15 @@ app.use(express.json());
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://ecobazer-fullstack.vercel.app"
+  "https://ecobazer-fullstack.vercel.app",
 ];
 
-app.use(cors({
-  origin: allowedOrigins,
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }),
+);
 app.use(limiter);
 
 app.use("/categories", categoryRoute);
@@ -115,7 +116,7 @@ app.post("/verify-email/:token", verifyemailControler);
 
 app.post(
   "/products",
-  secureMiddleware ,
+  secureMiddleware,
   adminMiddleware,
   createProductController,
 );
@@ -124,9 +125,9 @@ app.get("/products", allPrduct);
 
 app.get("/products/:id", singleProduct);
 
-app.put("/products/:id", secureMiddleware , adminMiddleware, updateProduct);
+app.put("/products/:id", secureMiddleware, adminMiddleware, updateProduct);
 
-app.delete("/products/:id", secureMiddleware , adminMiddleware, deleteProduct);
+app.delete("/products/:id", secureMiddleware, adminMiddleware, deleteProduct);
 
 // ================= CART =================
 
@@ -140,23 +141,23 @@ app.delete("/cart/:id", proDelete);
 
 // ================= PAYMENT =================
 
-app.post("/payment", secureMiddleware , paymentControler);
+app.post("/payment", secureMiddleware, paymentControler);
 
-app.post("/payment/success", secureMiddleware , paymentSuccess);
+app.post("/payment/success", secureMiddleware, paymentSuccess);
 
 // ================= USER =================
 
 // Admin only
 
-app.get("/users", secureMiddleware , adminMiddleware, allUserControler);
+app.get("/users", secureMiddleware, adminMiddleware, allUserControler);
 
-app.get("/users/:id", secureMiddleware , singleUserControler);
+app.get("/users/:id", secureMiddleware, singleUserControler);
 
-app.put("/users/:id", secureMiddleware , updateUserControler);
+app.put("/users/:id", secureMiddleware, updateUserControler);
 
 app.delete(
   "/users/:id",
-  secureMiddleware ,
+  secureMiddleware,
   adminMiddleware,
   deleteUserControler,
 );
@@ -171,17 +172,11 @@ app.use("/admin", adminRoute);
 
 // ================= NOTIFICATION =================
 
-app.use(
-  "/api/notifications",
-  notificationRoutes
-);
+app.use("/api/notifications", notificationRoutes);
 
 // ================= WISHLIST =================
 
-app.use(
-  "/api/wishlist",
-  wishlistRoutes
-);
+app.use("/api/wishlist", wishlistRoutes);
 
 // ==================review====================
 

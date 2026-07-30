@@ -19,7 +19,10 @@ import { useCart } from "../hooks/useCart";
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 
-import { getNotifications } from "../services/notificationService";
+import {
+  getNotifications,
+  markNotificationsAsRead,
+} from "../services/notificationService";
 import { useEffect } from "react";
 
 const navLinks = [
@@ -120,40 +123,55 @@ const Navbar = () => {
 
           <div className="relative">
             <button
-              onClick={() => {
+              onClick={async () => {
                 setShowNotification(!showNotification);
 
-                setUnreadCount(0);
+                if (unreadCount > 0) {
+                  try {
+                    await markNotificationsAsRead();
+
+                    setNotifications((prev) =>
+                      prev.map((item) => ({
+                        ...item,
+                        isRead: true,
+                      })),
+                    );
+
+                    setUnreadCount(0);
+                  } catch (error) {
+                    console.log(error);
+                  }
+                }
               }}
               className="
-flex
-h-9
-w-9
-items-center
-justify-center
-rounded-full
-hover:bg-gray-100
-dark:hover:bg-white/10
-"
+      flex
+      h-9
+      w-9
+      items-center
+      justify-center
+      rounded-full
+      hover:bg-gray-100
+      dark:hover:bg-white/10
+    "
             >
               <Bell size={18} />
 
               {unreadCount > 0 && (
                 <span
                   className="
-absolute
--right-1
--top-1
-flex
-h-4
-w-4
-items-center
-justify-center
-rounded-full
-bg-red-500
-text-[10px]
-text-white
-"
+          absolute
+          -right-1
+          -top-1
+          flex
+          h-4
+          w-4
+          items-center
+          justify-center
+          rounded-full
+          bg-red-500
+          text-[10px]
+          text-white
+        "
                 >
                   {unreadCount}
                 </span>
@@ -163,16 +181,16 @@ text-white
             {showNotification && (
               <div
                 className="
-absolute
-right-0
-mt-3
-w-80
-rounded-xl
-bg-white
-dark:bg-gray-800
-shadow-lg
-p-4
-"
+        absolute
+        right-0
+        mt-3
+        w-80
+        rounded-xl
+        bg-white
+        dark:bg-gray-800
+        shadow-lg
+        p-4
+      "
               >
                 <h3 className="font-semibold mb-3">Notifications</h3>
 
@@ -180,14 +198,7 @@ p-4
                   <p className="text-sm text-gray-500">No notification</p>
                 ) : (
                   notifications.map((item) => (
-                    <div
-                      key={item._id}
-                      className="
-                        border-b
-                        py-2
-                        text-sm
-                        "
-                    >
+                    <div key={item._id} className="border-b py-2 text-sm">
                       {item.message}
                     </div>
                   ))

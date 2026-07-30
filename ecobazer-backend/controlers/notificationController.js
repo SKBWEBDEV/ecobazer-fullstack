@@ -21,25 +21,26 @@ const getNotifications = async (req, res) => {
   }
 };
 
-// Mark notification as read
+// Mark all notifications as read
 const markAsRead = async (req, res) => {
   try {
-    const notification = await Notification.findById(req.params.id);
+    const userId = req.user.id;
 
-    if (!notification) {
-      return res.status(404).json({
-        success: false,
-        message: "Notification not found",
-      });
-    }
-
-    notification.isRead = true;
-
-    await notification.save();
+    await Notification.updateMany(
+      {
+        user: userId,
+        isRead: false,
+      },
+      {
+        $set: {
+          isRead: true,
+        },
+      },
+    );
 
     res.status(200).json({
       success: true,
-      message: "Notification marked as read",
+      message: "All notifications marked as read",
     });
   } catch (error) {
     res.status(500).json({
@@ -48,7 +49,6 @@ const markAsRead = async (req, res) => {
     });
   }
 };
-
 module.exports = {
   getNotifications,
   markAsRead,
