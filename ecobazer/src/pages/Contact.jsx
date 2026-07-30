@@ -3,19 +3,22 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 import api from "../services/axios";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+const [formData, setFormData] = useState({
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+});
 
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+   setFormData({
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+});
   };
 
   const handleSubmit = async (e) => {
@@ -132,14 +135,14 @@ const Contact = () => {
             />
 
             <input
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              type="email"
-              placeholder="Email Address"
-              required
-              className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
-            />
+  name="subject"
+  value={formData.subject}
+  onChange={handleChange}
+  type="text"
+  placeholder="Subject"
+  required
+  className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
+/>
 
             <textarea
               name="message"
