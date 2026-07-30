@@ -79,23 +79,25 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const handleDeleteNotification = async (id) => {
+const handleDeleteNotification = async (id) => {
   try {
+    console.log("Deleting:", id);
+
     await deleteNotification(id);
 
     setNotifications((prev) =>
-      prev.filter((item) => item._id !== id)
-    );
-
-    setUnreadCount((prev) =>
-      prev > 0 ? prev - 1 : 0
+      prev.filter(
+        (item) => item._id !== id
+      )
     );
 
   } catch (error) {
-    console.log(error);
+    console.log(
+      "Delete error:",
+      error.response?.data || error.message
+    );
   }
 };
-
   const linkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors ${
       isActive

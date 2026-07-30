@@ -5,14 +5,17 @@ export const getNotifications = async () => {
   return data;
 };
 
-// Mark all read
-
 export const markNotificationsAsRead = async () => {
   const { data } = await api.patch("/api/notifications/read");
   return data;
 };
 
+export const deleteNotification = async (id) => {
+  console.log("DELETE ID:", id);
 
+  const { data } = await api.delete(
+    `/api/notifications/${id}`
+  );
 
-export const deleteNotification = (id) =>
-  api.delete(`/notifications/${id}`);
+  return data;
+};
