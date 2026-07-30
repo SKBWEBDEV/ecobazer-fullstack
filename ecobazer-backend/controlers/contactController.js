@@ -109,10 +109,46 @@ const markContactAsRead = async (req, res) => {
   }
 };
 
+// Contact statistics (Admin)
+const getContactStats = async (req, res) => {
+  try {
+
+    const totalMessages = await Contact.countDocuments();
+
+    const unreadMessages = await Contact.countDocuments({
+      status: "unread",
+    });
+
+    const readMessages = await Contact.countDocuments({
+      status: "read",
+    });
+
+
+    res.status(200).json({
+      success: true,
+      stats: {
+        totalMessages,
+        unreadMessages,
+        readMessages,
+      },
+    });
+
+
+  } catch (error) {
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
+  }
+};
+
 
 module.exports = {
   createContact,
   getAllContacts,
   deleteContact,
   markContactAsRead,
+  getContactStats,
 };

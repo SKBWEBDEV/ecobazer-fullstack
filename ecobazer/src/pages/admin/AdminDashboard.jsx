@@ -6,6 +6,9 @@ import {
   DollarSign,
   AlertCircle,
   ArrowLeft,
+  MessageSquare,
+  MailCheck,
+  MailOpen,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -19,12 +22,15 @@ import OrdersChart from "../../components/admin/OrdersChart";
 import RevenueChart from "../../components/admin/RevenueChart";
 import OrderTable from "../../components/admin/OrderTable";
 import ActivityCard from "../../components/admin/ActivityCard";
+import { getContactStats } from "../../services/contactService";
 
 import { Link } from "react-router-dom";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [contactStats, setContactStats] = useState(null);
+
 
   useEffect(() => {
     const loadStats = async () => {
@@ -32,6 +38,8 @@ const AdminDashboard = () => {
         const { data } = await api.get("/admin/stats");
 
         setStats(data.data);
+        const contactData = await getContactStats();
+        setContactStats(contactData.stats);
       } catch (error) {
         toast.error(getErrorMessage(error, "Could not load dashboard"));
       } finally {
@@ -145,6 +153,46 @@ const AdminDashboard = () => {
           iconColor="text-rose-400"
         />
       </div>
+
+      {/* Contact Stats */}
+
+<div
+  className="
+  grid
+  grid-cols-1
+  sm:grid-cols-3
+  gap-6
+  "
+>
+
+<StatCard
+  title="Total Messages"
+  value={contactStats?.totalMessages || 0}
+  icon={MessageSquare}
+  iconBg="bg-cyan-500/10"
+  iconColor="text-cyan-400"
+/>
+
+
+<StatCard
+  title="Unread Messages"
+  value={contactStats?.unreadMessages || 0}
+  icon={MailOpen}
+  iconBg="bg-red-500/10"
+  iconColor="text-red-400"
+/>
+
+
+<StatCard
+  title="Read Messages"
+  value={contactStats?.readMessages || 0}
+  icon={MailCheck}
+  iconBg="bg-green-500/10"
+  iconColor="text-green-400"
+/>
+
+
+</div>
 
       {/* Charts */}
 

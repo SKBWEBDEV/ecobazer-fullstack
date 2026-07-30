@@ -7,21 +7,35 @@ const {
   getAllContacts,
   deleteContact,
   markContactAsRead,
+  getContactStats,
 } = require("../controlers/contactController");
 
 const secureMiddleware = require("../middleware/secureMiddleware");
 const adminMiddleware = require("../middleware/adminMiddleware");
 
-// User send contact message
 router.post("/", createContact);
 
-// Admin get all messages
+router.get(
+  "/stats",
+  secureMiddleware,
+  adminMiddleware,
+  getContactStats
+);
+
 router.get("/", secureMiddleware, adminMiddleware, getAllContacts);
 
-// Admin delete message
-router.delete("/:id", secureMiddleware, adminMiddleware, deleteContact);
+router.patch(
+  "/:id/read",
+  secureMiddleware,
+  adminMiddleware,
+  markContactAsRead
+);
 
-// Admin mark message as read
-router.patch("/:id/read", secureMiddleware, adminMiddleware, markContactAsRead);
+router.delete(
+  "/:id",
+  secureMiddleware,
+  adminMiddleware,
+  deleteContact
+);
 
 module.exports = router;

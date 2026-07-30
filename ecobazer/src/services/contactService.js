@@ -23,3 +23,12 @@ export const markContactAsRead = async (id) => {
 
   return data;
 };
+
+
+export const getContactStats = async () => {
+  const { data } = await api.get(
+    "/api/contact/stats"
+  );
+
+  return data;
+};
