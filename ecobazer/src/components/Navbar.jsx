@@ -22,6 +22,7 @@ import {
   getNotifications,
   markNotificationsAsRead,
   deleteNotification,
+  clearAllNotifications,
 } from "../services/notificationService";
 
 
@@ -45,9 +46,16 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useContext(ThemeContext);
 
-  const clearAll = () => {
-  setNotifications([]);
-  setUnreadCount(0);
+const clearAll = async () => {
+  try {
+    await clearAllNotifications();
+
+    setNotifications([]);
+    setUnreadCount(0);
+
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 

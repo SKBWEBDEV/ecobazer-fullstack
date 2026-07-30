@@ -19,3 +19,12 @@ export const deleteNotification = async (id) => {
 
   return data;
 };
+
+
+export const clearAllNotifications = async () => {
+  const { data } = await api.delete(
+    "/api/notifications/clear/all"
+  );
+
+  return data;
+};

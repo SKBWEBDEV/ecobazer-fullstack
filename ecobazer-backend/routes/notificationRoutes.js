@@ -6,17 +6,32 @@ const {
   getNotifications,
   markAsRead,
   deleteNotification,
+  clearAllNotifications,
 } = require("../controlers/notificationController");
 
 const secureMiddleware = require("../middleware/secureMiddleware");
 
-// Get user notifications
+
 router.get("/", secureMiddleware, getNotifications);
 
-// Mark all notifications as read
+
 router.patch("/read", secureMiddleware, markAsRead);
 
-// Delete single notification
-router.delete("/:id", secureMiddleware, deleteNotification);
+
+// IMPORTANT: clear route আগে হবে
+router.delete(
+  "/clear/all",
+  secureMiddleware,
+  clearAllNotifications
+);
+
+
+// single delete পরে হবে
+router.delete(
+  "/:id",
+  secureMiddleware,
+  deleteNotification
+);
+
 
 module.exports = router;
