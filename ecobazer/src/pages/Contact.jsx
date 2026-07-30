@@ -37,10 +37,17 @@ const [formData, setFormData] = useState({
         message: "",
       });
     } catch (error) {
-      console.log("Contact error:", error.response?.data || error.message);
+  console.log("FULL ERROR:", error);
 
-      alert("Failed to send message");
-    } finally {
+  console.log(
+    "SERVER RESPONSE:",
+    error.response?.data
+  );
+
+  alert(
+    error.response?.data?.message || "Failed to send message"
+  );
+} finally {
       setLoading(false);
     }
   };
