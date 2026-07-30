@@ -1,8 +1,11 @@
 import { Link } from "react-router-dom";
-import { ShoppingCart, Star, PackageX } from "lucide-react";
+import { ShoppingCart, Star, PackageX, Heart } from "lucide-react";
 
 import { formatPrice } from "../utils/formatPrice";
 import { useCart } from "../hooks/useCart";
+import { addToWishlist } from "../services/wishlistService";
+
+
 
 const FALLBACK_IMG =
   "https://images.unsplash.com/photo-1595246140520-2ea3f0a1e1e9?w=500&q=60&auto=format&fit=crop";
@@ -26,6 +29,22 @@ const ProductCard = ({ product }) => {
 
     addToCart(id);
   };
+
+const handleWishlist = async (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  try {
+    await addToWishlist(id);
+
+    alert("Added to wishlist ❤️");
+  } catch (error) {
+    console.log(error.response?.data);
+    console.log(error);
+
+    alert(error.response?.data?.message || "Something went wrong");
+  }
+};
 
   return (
     <Link
@@ -93,7 +112,6 @@ const ProductCard = ({ product }) => {
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
-
         {product.brand && (
           <span
             className="
@@ -131,9 +149,7 @@ const ProductCard = ({ product }) => {
           ))}
         </div>
 
-
         <div className="mt-auto pt-2 flex items-center justify-between">
-
           <div>
             {product.discountPrice > 0 ? (
               <>
@@ -173,6 +189,24 @@ const ProductCard = ({ product }) => {
             )}
           </div>
 
+          <button
+  onClick={handleWishlist}
+  className="
+    h-9
+    w-9
+    rounded-full
+    flex
+    items-center
+    justify-center
+    bg-red-500/10
+    text-red-500
+    hover:bg-red-500
+    hover:text-white
+    transition
+  "
+>
+  <Heart size={16}/>
+</button>
 
           <button
             onClick={handleAdd}
@@ -188,9 +222,7 @@ const ProductCard = ({ product }) => {
           >
             <ShoppingCart size={16} />
           </button>
-
         </div>
-
       </div>
     </Link>
   );

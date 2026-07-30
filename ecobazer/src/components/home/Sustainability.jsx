@@ -2,7 +2,7 @@ import { Leaf, Recycle, HeartHandshake } from "lucide-react";
 
 export default function Sustainability() {
   return (
-    <section className="px-6 py-10">
+    <section id="sustainability" className="px-6 py-10">
       <div
         className="
         max-w-7xl

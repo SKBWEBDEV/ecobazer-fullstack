@@ -92,10 +92,15 @@ const userSchema = new Schema({
 
     country:String
 
-  }
-
-
+  },
+  wishlist: [
+  {
+    type: Schema.Types.ObjectId,
+    ref: "Product",
+  },
+]
 },
+
 {
  timestamps:true
 });

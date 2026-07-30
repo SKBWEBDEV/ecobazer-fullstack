@@ -16,6 +16,8 @@ import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import MailVerification from "./pages/MailVerification";
 import Offers from "./pages/Offers";
+import About from "./pages/About";
+import Wishlist from "./pages/Wishlist";
 
 // User Pages
 import Cart from "./pages/Cart";
@@ -59,7 +61,12 @@ function App() {
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         <Route path="/verify-email/:token" element={<MailVerification />} />
+
         <Route path="/offers" element={<Offers />} />
+
+        <Route path="/about" element={<About />} />
+
+        <Route path="/wishlist" element={<Wishlist />} />
 
         {/* Protected User Routes */}
 

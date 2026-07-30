@@ -5,6 +5,7 @@ import {
   Menu,
   X,
   ShoppingCart,
+  Heart,
   User,
   LogOut,
   LayoutDashboard,
@@ -22,6 +23,7 @@ import { ThemeContext } from "../context/ThemeContext";
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Shop" },
+  { to: "/about", label: "About" },
 ];
 
 const Navbar = () => {
@@ -82,11 +84,18 @@ const Navbar = () => {
 >
   {darkMode ? <Sun size={18} /> : <Moon size={18} />}
 </button>
+         
+         <Link
+  to="/wishlist"
+  className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-white/10"
+  aria-label="Wishlist">
+  <Heart size={18} />
+</Link>
+
           <Link
             to="/cart"
             className="relative flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-white/10"
-            aria-label="Cart"
-          >
+            aria-label="Cart">
             <ShoppingCart size={18} />
             {totalItems > 0 && (
               <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-moss-500 text-[10px] font-semibold">

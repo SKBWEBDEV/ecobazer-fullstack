@@ -7,6 +7,8 @@ const api = axios.create({
   },
 });
 
+console.log("API URL:", api.defaults.baseURL);
+
 // Attach JWT token
 api.interceptors.request.use(
   (config) => {
@@ -16,20 +18,31 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
+    console.log(
+      "REQUEST:",
+      config.method?.toUpperCase(),
+      config.baseURL + config.url,
+    );
+
     return config;
   },
 
-  (error) => Promise.reject(error),
+  (error) => {
+    return Promise.reject(error);
+  },
 );
 
 // Handle unauthorized
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
 
   (error) => {
-    if (error?.response?.status === 401) {
-      localStorage.removeItem("ecobazer_token");
+    console.log("API ERROR:", error.response?.data || error.message);
 
+    if (error.response?.status === 401) {
+      localStorage.removeItem("ecobazer_token");
       localStorage.removeItem("ecobazer_user");
 
       if (!window.location.pathname.startsWith("/login")) {

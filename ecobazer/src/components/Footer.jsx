@@ -1,5 +1,5 @@
 import { Leaf, Instagram, Twitter, Facebook } from "lucide-react";
-
+import { Link } from "react-router-dom";
 const Footer = () => {
   return (
     <footer className="mt-20 border-t border-ink-900/8 dark:border-white/10 bg-white dark:bg-ink-900 transition-colors duration-300">
@@ -102,9 +102,11 @@ const Footer = () => {
               </a>
             </li>
             <li>
-              <a href="#" className="transition hover:text-moss-700">
-                Sustainability
-              </a>
+             <Link
+  to="/about"
+  className="transition hover:text-moss-700">
+  About
+</Link>
             </li>
             <li>
               <a href="#" className="transition hover:text-moss-700">
