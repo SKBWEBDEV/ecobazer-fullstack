@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import {
   Leaf,
@@ -13,19 +13,17 @@ import {
   Sun,
   Bell,
 } from "lucide-react";
+
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
-
-import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 
 import {
   getNotifications,
   markNotificationsAsRead,
 } from "../services/notificationService";
-import { useEffect } from "react";
 
-import { useNotification } from "../hooks/useNotification";
+
 
 // --------------------------------------------------------------------------------------
 
@@ -45,10 +43,17 @@ const Navbar = () => {
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useContext(ThemeContext);
 
-  const { notifications, removeNotification, clearAll, markAllRead } =
-    useNotification();
+  const clearAll = () => {
+  setNotifications([]);
+  setUnreadCount(0);
+};
 
-  const unreadCount = notifications.filter((item) => !item.read).length;
+
+const removeNotification = (id) => {
+  setNotifications((prev) =>
+    prev.filter((item) => item._id !== id)
+  );
+};
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -203,12 +208,12 @@ const Navbar = () => {
                 ) : (
                   notifications.map((item) => (
                     <div
-                      key={item.id}
+                      key={item._id}
                       className="flex justify-between border-b py-2"
                     >
                       <p className="text-sm">{item.message}</p>
 
-                      <button onClick={() => removeNotification(item.id)}>
+                      <button onClick={() => removeNotification(item._id)}>
                         ❌
                       </button>
                     </div>
