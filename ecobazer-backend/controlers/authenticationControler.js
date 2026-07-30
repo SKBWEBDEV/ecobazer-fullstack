@@ -8,6 +8,7 @@ const jwt = require("jsonwebtoken");
 // Registration
 
 const registationControler = async (req, res) => {
+  console.log("REGISTER API HIT")
   try {
     const { email, password, confirmPassword, terms } = req.body;
 
@@ -53,12 +54,12 @@ const registationControler = async (req, res) => {
       "1d",
     );
 
-  mailVerifycation(email, token);
+    mailVerifycation(email, token);
 
-res.status(201).send({
-  success: true,
-  message: "Registration successful. Please verify your email",
-});
+    res.status(201).send({
+      success: true,
+      message: "Registration successful. Please verify your email",
+    });
   } catch (error) {
     res.status(500).send({
       success: false,
@@ -99,11 +100,11 @@ const loginControler = async (req, res) => {
     }
 
     if (!existingUser.isVerify) {
-  return res.status(403).send({
-    success: false,
-    message: "Please verify your email first",
-  });
-}
+      return res.status(403).send({
+        success: false,
+        message: "Please verify your email first",
+      });
+    }
 
     const token = tokenGenerator(
       {
@@ -156,12 +157,12 @@ const forgotPasswordControler = async (req, res) => {
 
     const user = await User.findOne({ email });
 
-if (!user) {
-  return res.send({
-    success: true,
-    message: "If the email exists, a password reset link has been sent.",
-  });
-}
+    if (!user) {
+      return res.send({
+        success: true,
+        message: "If the email exists, a password reset link has been sent.",
+      });
+    }
 
     const token = tokenGenerator(
       {
