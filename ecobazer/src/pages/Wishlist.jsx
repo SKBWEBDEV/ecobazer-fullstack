@@ -2,9 +2,14 @@ import { useEffect, useState } from "react";
 import { Heart, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 
-import { getWishlist } from "../services/wishlistService";
+import { 
+  getWishlist,
+  removeFromWishlist 
+} from "../services/wishlistService";
+import { useCart } from "../hooks/useCart";
 
 const Wishlist = () => {
+  const { addToCart } = useCart();
   const [wishlistItems, setWishlistItems] = useState([]);
 
   useEffect(() => {
@@ -22,6 +27,22 @@ const Wishlist = () => {
 
     fetchWishlist();
   }, []);
+
+  const handleRemove = async (id) => {
+  try {
+
+    await removeFromWishlist(id);
+
+    setWishlistItems((prev) =>
+      prev.filter((item) => item._id !== id)
+    );
+
+  } catch(error) {
+
+    console.log(error);
+
+  }
+};
 
   return (
     <div className="min-h-screen bg-white dark:bg-[#111827] px-6 py-12">
@@ -91,18 +112,35 @@ const Wishlist = () => {
 
                 <p className="mt-2">BDT {product.price}</p>
 
-                <button
-                  className="
-                  mt-4
-                  w-full
-                  py-2
-                  rounded-xl
-                  bg-emerald-500
-                  text-white
-                  "
-                >
-                  Add To Cart
-                </button>
+               <button
+  onClick={async () => {
+    await addToCart(product._id);
+    await handleRemove(product._id);
+  }}
+  className="
+  mt-4
+  w-full
+  py-2
+  rounded-xl
+  bg-emerald-500
+  text-white
+  "
+>
+  Add To Cart
+</button>
+<button
+  onClick={() => handleRemove(product._id)}
+  className="
+  mt-3
+  w-full
+  py-2
+  rounded-xl
+  bg-red-500
+  text-white
+  "
+>
+  Remove
+</button>
               </div>
             ))}
           </div>
