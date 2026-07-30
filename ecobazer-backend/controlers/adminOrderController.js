@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const Order = require("../model/orderModel");
-
+const Notification = require("../model/notificationModel");
 // ================= GET ALL ORDERS (ADMIN) =================
 
 const getAllOrders = async (req, res) => {
@@ -48,19 +48,14 @@ const getAllOrders = async (req, res) => {
       const keyword = search.trim().toLowerCase();
 
       orders = orders.filter((order) => {
-        const idMatch = order._id
-          .toString()
-          .toLowerCase()
-          .includes(keyword);
+        const idMatch = order._id.toString().toLowerCase().includes(keyword);
 
         const emailMatch =
-          order.user?.email
-            ?.toLowerCase()
-            .includes(keyword) || false;
+          order.user?.email?.toLowerCase().includes(keyword) || false;
 
         const productMatch =
           order.products?.some((item) =>
-            item.title.toLowerCase().includes(keyword)
+            item.title.toLowerCase().includes(keyword),
           ) || false;
 
         return idMatch || emailMatch || productMatch;
@@ -114,20 +109,36 @@ const updateOrderStatus = async (req, res) => {
       updateData.paymentStatus = "paid";
     }
 
-    const updatedOrder = await Order.findByIdAndUpdate(
-      req.params.id,
-      updateData,
-      {
-        new: true,
-        runValidators: true,
-      }
-    );
+const updatedOrder = await Order.findByIdAndUpdate(
+  req.params.id,
+  updateData,
+  {
+    new: true,
+    runValidators: true,
+  },
+);
 
-    res.status(200).json({
-      success: true,
-      message: "Order updated successfully",
-      order: updatedOrder,
-    });
+
+// ================= CREATE NOTIFICATION =================
+
+if (status) {
+
+  await Notification.create({
+    user: order.user,
+    title: "Order Status Updated",
+    message: `Your order status is now ${status}`,
+    type: "order",
+    order: order._id,
+  });
+
+}
+
+
+res.status(200).json({
+  success: true,
+  message: "Order updated successfully",
+  order: updatedOrder,
+});
   } catch (error) {
     res.status(500).json({
       success: false,
