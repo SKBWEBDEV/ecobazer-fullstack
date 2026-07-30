@@ -12,6 +12,7 @@ const secureMiddleware = require("../middleware/secureMiddleware");
 
 console.log("Wishlist routes loaded");
 
+// Test route
 router.get("/test", (req, res) => {
   res.json({
     success: true,
@@ -19,17 +20,13 @@ router.get("/test", (req, res) => {
   });
 });
 
-router.post("/add/:productId", (req, res) => {
-  console.log("POST ADD WISHLIST HIT");
+// Add wishlist
+router.post("/add/:productId", secureMiddleware, addToWishlist);
 
-  res.json({
-    success: true,
-    productId: req.params.productId,
-  });
-});
-
+// Get wishlist
 router.get("/", secureMiddleware, getWishlist);
 
+// Remove wishlist
 router.delete("/remove/:productId", secureMiddleware, removeFromWishlist);
 
 module.exports = router;
