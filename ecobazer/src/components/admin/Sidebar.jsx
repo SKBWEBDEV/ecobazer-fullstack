@@ -4,6 +4,7 @@ import {
   Package,
   Users,
   ShoppingBag,
+  MessageSquare,
   X,
   Store,
   ArrowLeft,
@@ -32,7 +33,14 @@ const navItems = [
     path: "/admin/orders",
     icon: ShoppingBag,
   },
+    {
+    name: "Contacts",
+    path: "/admin/contacts",
+    icon: MessageSquare,
+  },
 ];
+
+
 
 export default function Sidebar({ isOpen, setIsOpen }) {
   return (
