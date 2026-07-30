@@ -32,6 +32,7 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [unreadCount, setUnreadCount] = useState(0);
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
   const { totalItems } = useCart();
   const navigate = useNavigate();
@@ -44,7 +45,11 @@ const Navbar = () => {
       try {
         const data = await getNotifications();
 
-        setNotifications(data.notifications || []);
+        const list = data.notifications || [];
+
+        setNotifications(list);
+
+        setUnreadCount(list.filter((item) => !item.isRead).length);
       } catch (error) {
         console.log(error);
       }
@@ -115,7 +120,11 @@ const Navbar = () => {
 
           <div className="relative">
             <button
-              onClick={() => setShowNotification(!showNotification)}
+              onClick={() => {
+                setShowNotification(!showNotification);
+
+                setUnreadCount(0);
+              }}
               className="
 flex
 h-9
@@ -129,7 +138,7 @@ dark:hover:bg-white/10
             >
               <Bell size={18} />
 
-              {notifications.length > 0 && (
+              {unreadCount > 0 && (
                 <span
                   className="
 absolute
@@ -146,7 +155,7 @@ text-[10px]
 text-white
 "
                 >
-                  {notifications.length}
+                  {unreadCount}
                 </span>
               )}
             </button>
