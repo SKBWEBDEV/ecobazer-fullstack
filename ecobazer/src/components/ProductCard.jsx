@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { ShoppingCart, Star, PackageX } from "lucide-react";
+
 import { formatPrice } from "../utils/formatPrice";
 import { useCart } from "../hooks/useCart";
 
@@ -21,7 +22,6 @@ const ProductCard = ({ product }) => {
 
   const handleAdd = (e) => {
     e.preventDefault();
-
     e.stopPropagation();
 
     addToCart(id);
@@ -31,43 +31,45 @@ const ProductCard = ({ product }) => {
     <Link
       to={`/products/${id}`}
       className="
-group 
-card-surface 
-flex 
-flex-col 
-overflow-hidden 
-transition 
-duration-300 
-hover:-translate-y-1 
-hover:shadow-soft
-"
+      group
+      card-surface
+      flex
+      flex-col
+      overflow-hidden
+      transition
+      duration-300
+      hover:-translate-y-1
+      hover:shadow-soft
+      "
     >
-      <div className="relative aspect-square overflow-hidden bg-moss-50">
+      <div className="relative aspect-square overflow-hidden bg-moss-50 dark:bg-ink-700">
         <img
           src={image}
           alt={product.title}
           loading="lazy"
           className="
-h-full 
-w-full 
-object-cover 
-transition 
-duration-500 
-group-hover:scale-105
-"
+          h-full
+          w-full
+          object-cover
+          transition
+          duration-500
+          group-hover:scale-105
+          "
           onError={(e) => (e.currentTarget.src = FALLBACK_IMG)}
         />
 
         {product.category && (
           <span
             className="
-badge 
-absolute 
-left-3 
-top-3 
-bg-white/90 
-text-ink-900
-"
+            badge
+            absolute
+            left-3
+            top-3
+            bg-white/90
+            dark:bg-ink-800/90
+            text-ink-900
+            dark:text-white
+            "
           >
             {product.category}
           </span>
@@ -76,13 +78,13 @@ text-ink-900
         {!inStock && (
           <span
             className="
-badge 
-absolute 
-right-3 
-top-3 
-bg-red-600 
-text-white
-"
+            badge
+            absolute
+            right-3
+            top-3
+            bg-red-600
+            text-white
+            "
           >
             <PackageX size={12} />
             Out of stock
@@ -91,15 +93,17 @@ text-white
       </div>
 
       <div className="flex flex-1 flex-col gap-2 p-4">
+
         {product.brand && (
           <span
             className="
-text-[11px]
-font-medium
-uppercase
-tracking-wide
-text-moss-700
-"
+            text-[11px]
+            font-medium
+            uppercase
+            tracking-wide
+            text-moss-700
+            dark:text-moss-400
+            "
           >
             {product.brand}
           </span>
@@ -107,19 +111,18 @@ text-moss-700
 
         <h3
           className="
-line-clamp-2
-text-sm
-font-semibold
-text-ink-900
-"
+          line-clamp-2
+          text-sm
+          font-semibold
+          text-ink-900
+          dark:text-white
+          "
         >
           {product.title}
         </h3>
 
         <div className="flex items-center gap-1 text-clay-500">
-          {Array.from({
-            length: 5,
-          }).map((_, i) => (
+          {Array.from({ length: 5 }).map((_, i) => (
             <Star
               key={i}
               size={13}
@@ -128,26 +131,30 @@ text-ink-900
           ))}
         </div>
 
+
         <div className="mt-auto pt-2 flex items-center justify-between">
+
           <div>
             {product.discountPrice > 0 ? (
               <>
                 <p
                   className="
-text-xs 
-line-through 
-text-ink-900/40
-"
+                  text-xs
+                  line-through
+                  text-ink-900/40
+                  dark:text-white/40
+                  "
                 >
                   {formatPrice(product.price)}
                 </p>
 
                 <p
                   className="
-text-lg 
-font-semibold 
-text-ink-900
-"
+                  text-lg
+                  font-semibold
+                  text-ink-900
+                  dark:text-white
+                  "
                 >
                   {formatPrice(product.discountPrice)}
                 </p>
@@ -155,31 +162,35 @@ text-ink-900
             ) : (
               <p
                 className="
-text-lg 
-font-semibold
-text-ink-900
-"
+                text-lg
+                font-semibold
+                text-ink-900
+                dark:text-white
+                "
               >
                 {formatPrice(product.price)}
               </p>
             )}
           </div>
 
+
           <button
             onClick={handleAdd}
             disabled={!inStock}
             className="
-btn-primary
-h-9
-w-9
-rounded-full
-p-0
-disabled:opacity-50
-"
+            btn-primary
+            h-9
+            w-9
+            rounded-full
+            p-0
+            disabled:opacity-50
+            "
           >
             <ShoppingCart size={16} />
           </button>
+
         </div>
+
       </div>
     </Link>
   );

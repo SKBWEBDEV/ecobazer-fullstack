@@ -5,6 +5,7 @@ import {
   ShoppingBag,
   DollarSign,
   AlertCircle,
+  ArrowLeft,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -20,7 +21,6 @@ import OrderTable from "../../components/admin/OrderTable";
 import ActivityCard from "../../components/admin/ActivityCard";
 
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -74,53 +74,13 @@ const AdminDashboard = () => {
       </p>
     </div>
 
-    {/* Back to Store Button */}
-    <Link
-      to="/"
-      className="
-        inline-flex
-        items-center
-        gap-2
-        px-4
-        py-2
-        rounded-xl
-        bg-purple-500/10
-        text-purple-400
-        border border-purple-500/20
-        hover:bg-purple-500/20
-        transition
-      "
-    >
-      <ArrowLeft size={18} />
-      Back to Store
-    </Link>
+
   </div>
 </div>
 
-  {/* Back to Store Button */}
 <div>
 
-  <div className="mt-4">
-    <Link
-      to="/"
-      className="
-        inline-flex
-        items-center
-        gap-2
-        px-4
-        py-2
-        rounded-xl
-        bg-purple-500/10
-        text-purple-400
-        border border-purple-500/20
-        hover:bg-purple-500/20
-        transition
-      "
-    >
-      <ArrowLeft size={18} />
-      Back to Store
-    </Link>
-  </div>
+
 
 </div>
 

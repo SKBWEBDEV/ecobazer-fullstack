@@ -4,12 +4,11 @@ import {
   Package,
   Users,
   ShoppingBag,
-  BarChart3,
-  Settings,
   X,
   Store,
+  ArrowLeft,
 } from "lucide-react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 
 const navItems = [
   {
@@ -47,14 +46,15 @@ export default function Sidebar({ isOpen, setIsOpen }) {
 
       <aside
         className={`
-fixed lg:static inset-y-0 left-0 z-50
-w-64 bg-[#1a1b1f]
-border-r border-gray-800
-flex flex-col p-6
-transition-transform duration-300
-${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
-`}
+          fixed lg:static inset-y-0 left-0 z-50
+          w-64 bg-[#1a1b1f]
+          border-r border-gray-800
+          flex flex-col p-6
+          transition-transform duration-300
+          ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
+        `}
       >
+        {/* Logo */}
         <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-xl bg-emerald-500/10 text-emerald-400">
@@ -74,6 +74,7 @@ ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
           </button>
         </div>
 
+        {/* Menu */}
         <nav className="space-y-2">
           {navItems.map(({ name, path, icon: Icon, end }) => (
             <NavLink
@@ -82,22 +83,42 @@ ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
               end={end}
               className={({ isActive }) =>
                 `
-flex items-center gap-3 px-4 py-3 rounded-xl
-text-sm font-medium transition
-${
-  isActive
-    ? "bg-purple-600 text-white"
-    : "text-gray-400 hover:bg-gray-800 hover:text-white"
-}
-`
+                flex items-center gap-3 px-4 py-3 rounded-xl
+                text-sm font-medium transition
+                ${
+                  isActive
+                    ? "bg-purple-600 text-white"
+                    : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                }
+                `
               }
             >
               <Icon size={20} />
-
               {name}
             </NavLink>
           ))}
         </nav>
+
+        {/* Bottom Button */}
+        <div className="mt-auto pt-6">
+          <Link
+            to="/"
+            className="
+              flex items-center gap-3
+              px-4 py-3
+              rounded-xl
+              text-sm font-medium
+              text-purple-400
+              bg-purple-500/10
+              border border-purple-500/20
+              hover:bg-purple-500/20
+              transition
+            "
+          >
+            <ArrowLeft size={20} />
+            Back to Store
+          </Link>
+        </div>
       </aside>
     </>
   );

@@ -198,46 +198,51 @@ const Profile = () => {
           ) : (
             orders.map((order) => (
               <div key={order._id} className="card-surface p-5">
-                <div className="flex justify-between">
-                  <div>
-                    <p className="font-semibold ">
-                      Order #{order._id.slice(-8)}
-                    </p>
+  <div className="flex justify-between">
+    <div>
+      <p className="font-semibold text-ink-900 dark:text-white">
+        Order #{order._id.slice(-8)}
+      </p>
 
-                    <p className="text-sm text-ink-900/50">
-                      Payment: {order.paymentStatus}
-                    </p>
+      <p className="text-sm text-ink-900/50 dark:text-white/60">
+        Payment: {order.paymentStatus || "pending"}
+      </p>
 
-                    <p className="text-sm text-ink-900/50">
-                      Status: {order.status}
-                    </p>
-                  </div>
+      <p className="text-sm text-ink-900/50 dark:text-white/60">
+        Status: {order.status}
+      </p>
+    </div>
 
-                  <p className="font-bold">৳ {order.totalPrice}</p>
-                </div>
+    <p className="font-bold text-ink-900 dark:text-white">
+      ৳ {order.totalPrice}
+    </p>
+  </div>
 
-                <div className="mt-4 space-y-2">
-                  {order.products.map((item) => (
-                    <div
-                      key={item.product._id}
-                      className="flex justify-between border-b py-2"
-                    >
-                      <span>
-                        {item.title} × {item.quantity}
-                      </span>
 
-                      <span>৳ {item.totalPrice}</span>
-                    </div>
-                  ))}
-                </div>
+  <div className="mt-4 space-y-2">
+    {order.products.map((item) => (
+      <div
+        key={item.product?._id || item._id}
+        className="flex justify-between border-b border-ink-900/10 dark:border-white/10 py-2"
+      >
+        <span className="text-ink-900 dark:text-white">
+          {item.title} × {item.quantity}
+        </span>
 
-                <Link
-                  to={`/orders/${order._id}`}
-                  className="mt-4 inline-block rounded-lg bg-black px-5 py-2 text-white"
-                >
-                  View Details
-                </Link>
-              </div>
+        <span className="text-ink-900 dark:text-white">
+          ৳ {item.totalPrice}
+        </span>
+      </div>
+    ))}
+  </div>
+
+  <Link
+    to={`/orders/${order._id}`}
+    className="mt-4 inline-block rounded-lg bg-black dark:bg-white px-5 py-2 text-white dark:text-black"
+  >
+    View Details
+  </Link>
+</div>
             ))
           )}
         </div>

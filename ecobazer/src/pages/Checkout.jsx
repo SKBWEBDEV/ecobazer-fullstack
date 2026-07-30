@@ -90,14 +90,14 @@ const Checkout = () => {
 
   return (
     <div className="container-app py-10">
-      <h1 className="mb-8 text-2xl font-semibold text-ink-900">Checkout</h1>
+      <h1 className="mb-8 text-2xl font-semibold text-ink-900 dark:text-white">Checkout</h1>
 
       <div className="grid gap-8 lg:grid-cols-3">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="card-surface space-y-4 p-6 lg:col-span-2"
         >
-          <h2 className="text-lg font-semibold text-ink-900">
+          <h2 className="text-lg font-semibold text-ink-900 dark:text-white">
             Shipping details
           </h2>
 
@@ -169,9 +169,9 @@ const Checkout = () => {
           {/* Payment Method */}
 
           <div className="mt-6">
-            <h3 className="mb-3 font-semibold">Payment Method</h3>
+            <h3 className="mb-3 font-semibold text-ink-900 dark:text-white">Payment Method</h3>
 
-            <label className="flex items-center gap-2 mb-3">
+            <label className="flex items-center gap-2 mb-3 text-ink-900 dark:text-white">
               <input
                 type="radio"
                 value="AamarPay"
@@ -182,7 +182,7 @@ const Checkout = () => {
               AamarPay
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-2 text-ink-900 dark:text-white">
               <input
                 type="radio"
                 value="COD"
@@ -208,38 +208,44 @@ const Checkout = () => {
 
         {/* Summary */}
 
-        <div className="card-surface h-fit p-6">
-          <h2 className="mb-4 text-lg font-semibold">Order summary</h2>
+<div className="card-surface h-fit p-6 text-ink-900 dark:text-white">
 
-          <div className="max-h-64 space-y-3 overflow-y-auto">
-            {items.map((item) => {
-              const product = item.product || item;
+  <h2 className="mb-4 text-lg font-semibold text-ink-900 dark:text-white">
+    Order summary
+  </h2>
 
-              const qty = item.quantity || item.qty || 1;
+  <div className="max-h-64 space-y-3 overflow-y-auto ">
 
-              return (
-                <div
-                  key={item._id || item.id}
-                  className="flex justify-between text-sm"
-                >
-                  <span>
-                    {product.title || product.name} × {qty}
-                  </span>
+    {items.map((item) => {
+      const product = item.product || item;
 
-                  <span>
-                    {formatPrice((product.price ?? item.price ?? 0) * qty)}
-                  </span>
-                </div>
-              );
-            })}
-          </div>
+      const qty = item.quantity || item.qty || 1;
 
-          <div className="mt-4 flex justify-between border-t pt-4 font-semibold">
-            <span>Total</span>
+      return (
+        <div
+          key={item._id || item.id}
+          className="flex justify-between text-sm"
+        >
+          <span className="text-ink-900 dark:text-white">
+            {product.title || product.name} × {qty}
+          </span>
 
-            <span>{formatPrice(totalPrice)}</span>
-          </div>
+          <span className="text-ink-900 dark:text-white">
+            {formatPrice((product.price ?? item.price ?? 0) * qty)}
+          </span>
         </div>
+      );
+    })}
+  </div>
+
+<div className="mt-4 flex justify-between border-t pt-4 font-semibold text-ink-900 dark:text-white">
+  <span>Total</span>
+
+  <span>{formatPrice(totalPrice)}</span>
+</div>
+</div>
+
+        
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ const Input = forwardRef(
         {label && (
           <label
             htmlFor={inputId}
-            className="mb-1.5 block text-sm font-medium text-ink-900/80"
+            className="mb-1.5 block text-sm font-medium text-ink-900 dark:text-white"
           >
             {label}
           </label>
@@ -39,7 +39,11 @@ const Input = forwardRef(
             <button
               type="button"
               onClick={() => setShowPassword((prev) => !prev)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-moss-600"
+              className="
+                absolute right-3 top-1/2 -translate-y-1/2
+                text-gray-500 dark:text-gray-300
+                hover:text-moss-600
+              "
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
@@ -47,7 +51,11 @@ const Input = forwardRef(
             rightIcon && (
               <button
                 type="button"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-moss-600"
+                className="
+                  absolute right-3 top-1/2 -translate-y-1/2
+                  text-gray-500 dark:text-gray-300
+                  hover:text-moss-600
+                "
               >
                 {rightIcon}
               </button>
