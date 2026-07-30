@@ -18,7 +18,7 @@ import MailVerification from "./pages/MailVerification";
 import Offers from "./pages/Offers";
 import About from "./pages/About";
 import Wishlist from "./pages/Wishlist";
-
+import Blog from "./pages/Blog";
 // User Pages
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -28,6 +28,7 @@ import PaymentCancel from "./pages/PaymentCancel";
 import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
+import Contact from "./pages/Contact";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -67,6 +68,10 @@ function App() {
         <Route path="/about" element={<About />} />
 
         <Route path="/wishlist" element={<Wishlist />} />
+
+        <Route path="/blog" element={<Blog />} />
+
+        <Route path="/contact" element={<Contact />} />
 
         {/* Protected User Routes */}
 

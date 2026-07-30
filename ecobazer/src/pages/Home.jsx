@@ -130,21 +130,27 @@ const Home = () => {
 
       {/* Perks */}
 
-      <section className="container-app -mt-10 relative z-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {perks.map(({ icon: Icon, title, desc }) => (
-          <div key={title} className="card-surface flex gap-3 p-5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-moss-50 text-moss-700">
-              <Icon size={19} />
-            </div>
+<section className="container-app -mt-10 relative z-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+  {perks.map(({ icon: Icon, title, desc }) => (
+    <div key={title} className="card-surface flex gap-3 p-5">
 
-            <div>
-              <p className="font-semibold text-sm">{title}</p>
+      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-moss-50 text-moss-700">
+        <Icon size={19} />
+      </div>
 
-              <p className="text-xs text-ink-900/55">{desc}</p>
-            </div>
-          </div>
-        ))}
-      </section>
+      <div>
+        <p className="font-semibold text-sm text-gray-900 dark:text-white">
+          {title}
+        </p>
+
+        <p className="text-xs text-ink-900/55 dark:text-gray-300">
+          {desc}
+        </p>
+      </div>
+
+    </div>
+  ))}
+</section>
 
       {/* Featured Products */}
 

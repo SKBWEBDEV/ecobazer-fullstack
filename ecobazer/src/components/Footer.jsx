@@ -108,11 +108,12 @@ const Footer = () => {
   About
 </Link>
             </li>
-            <li>
-              <a href="#" className="transition hover:text-moss-700">
-                Contact
-              </a>
-            </li>
+  <li>
+  <Link to="/contact"
+    className="transition hover:text-moss-700 dark:hover:text-moss-400">
+    Contact
+  </Link>
+</li>
           </ul>
         </div>
       </div>

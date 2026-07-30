@@ -27,6 +27,7 @@ const wishlistRoutes = require("./routes/wishlistRoutes");
 
 const notificationRoutes = require("./routes/notificationRoutes");
 
+const contactRoute = require("./routes/contactRoute");
 // Controllers
 
 const {
@@ -181,6 +182,9 @@ app.use("/api/wishlist", wishlistRoutes);
 // ==================review====================
 
 app.use("/api/reviews", reviewRoute);
+
+// ==================contact==========================
+app.use("/api/contact", contactRoute);
 
 // ================= TEST =================
 
