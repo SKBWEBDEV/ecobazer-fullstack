@@ -1,43 +1,51 @@
-// Add product to wishlist
 exports.addToWishlist = async (req, res) => {
   try {
+
+    console.log("ADD WISHLIST HIT");
+
     const userId = req.user.id;
     const { productId } = req.params;
 
-    // Check product exists
-    const product = await Product.findById(productId);
+    console.log("USER ID:", userId);
+    console.log("PRODUCT ID:", productId);
 
-    if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
 
     const user = await User.findById(userId);
 
-    // Already added check
-    if (user.wishlist.includes(productId)) {
-      return res.status(400).json({
-        success: false,
-        message: "Product already in wishlist",
+    console.log("USER:", user);
+
+
+    if (!user) {
+      return res.status(404).json({
+        success:false,
+        message:"User not found"
       });
     }
 
-    // Add product
+
     user.wishlist.push(productId);
 
     await user.save();
 
-    res.status(200).json({
-      success: true,
-      message: "Added to wishlist ❤️",
-      wishlist: user.wishlist,
+
+    console.log("WISHLIST SAVED:", user.wishlist);
+
+
+    res.json({
+      success:true,
+      message:"Added to wishlist",
+      wishlist:user.wishlist
     });
-  } catch (error) {
+
+
+  } catch(error){
+
+    console.log("WISHLIST ERROR:", error);
+
     res.status(500).json({
-      success: false,
-      message: error.message,
+      success:false,
+      message:error.message
     });
+
   }
 };
