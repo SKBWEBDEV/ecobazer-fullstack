@@ -13,3 +13,13 @@ export const deleteContact = async (id) => {
 
   return data;
 };
+
+
+// Mark contact message as read
+export const markContactAsRead = async (id) => {
+  const { data } = await api.patch(
+    `/api/contact/${id}/read`
+  );
+
+  return data;
+};

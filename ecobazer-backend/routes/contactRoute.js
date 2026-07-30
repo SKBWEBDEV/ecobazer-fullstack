@@ -6,6 +6,7 @@ const {
   createContact,
   getAllContacts,
   deleteContact,
+  markContactAsRead,
 } = require("../controlers/contactController");
 
 const secureMiddleware = require("../middleware/secureMiddleware");
@@ -19,5 +20,8 @@ router.get("/", secureMiddleware, adminMiddleware, getAllContacts);
 
 // Admin delete message
 router.delete("/:id", secureMiddleware, adminMiddleware, deleteContact);
+
+// Admin mark message as read
+router.patch("/:id/read", secureMiddleware, adminMiddleware, markContactAsRead);
 
 module.exports = router;

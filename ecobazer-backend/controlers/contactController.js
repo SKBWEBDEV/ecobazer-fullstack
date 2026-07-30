@@ -73,8 +73,46 @@ const deleteContact = async (req, res) => {
   }
 };
 
+
+
+// Mark contact message as read (Admin)
+const markContactAsRead = async (req, res) => {
+  try {
+    const contact = await Contact.findByIdAndUpdate(
+      req.params.id,
+      {
+        status: "read",
+      },
+      {
+        new: true,
+      }
+    );
+
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: "Message not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Message marked as read",
+      contact,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
 module.exports = {
   createContact,
   getAllContacts,
   deleteContact,
+  markContactAsRead,
 };
