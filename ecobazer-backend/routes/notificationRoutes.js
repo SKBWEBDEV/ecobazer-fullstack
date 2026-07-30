@@ -1,3 +1,10 @@
+const {
+  getNotifications,
+  markAsRead,
+  deleteNotification,
+} = require("../controlers/notificationController");
+
+
 const express = require("express");
 
 const router = express.Router();
@@ -9,10 +16,10 @@ const {
 
 const secureMiddleware = require("../middleware/secureMiddleware");
 
-// Get user notifications
 router.get("/", secureMiddleware, getNotifications);
 
-// Mark all notifications as read
 router.patch("/read", secureMiddleware, markAsRead);
+
+router.delete("/:id", secureMiddleware, deleteNotification);
 
 module.exports = router;

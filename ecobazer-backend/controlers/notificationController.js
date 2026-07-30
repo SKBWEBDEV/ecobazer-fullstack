@@ -49,7 +49,44 @@ const markAsRead = async (req, res) => {
     });
   }
 };
+
+// Delete single notification
+const deleteNotification = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    const notificationId = req.params.id;
+
+    const notification = await Notification.findOne({
+      _id: notificationId,
+      user: userId,
+    });
+
+    if (!notification) {
+      return res.status(404).json({
+        success: false,
+        message: "Notification not found",
+      });
+    }
+
+    await Notification.findByIdAndDelete(notificationId);
+
+    res.status(200).json({
+      success: true,
+      message: "Notification deleted successfully",
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+
+
 module.exports = {
   getNotifications,
   markAsRead,
+  deleteNotification,
 };

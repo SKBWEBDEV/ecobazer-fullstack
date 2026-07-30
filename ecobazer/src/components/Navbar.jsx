@@ -21,7 +21,9 @@ import { ThemeContext } from "../context/ThemeContext";
 import {
   getNotifications,
   markNotificationsAsRead,
+  deleteNotification,
 } from "../services/notificationService";
+
 
 
 
@@ -49,11 +51,7 @@ const Navbar = () => {
 };
 
 
-const removeNotification = (id) => {
-  setNotifications((prev) =>
-    prev.filter((item) => item._id !== id)
-  );
-};
+
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -80,6 +78,23 @@ const removeNotification = (id) => {
     setOpen(false);
     navigate("/login");
   };
+
+  const handleDeleteNotification = async (id) => {
+  try {
+    await deleteNotification(id);
+
+    setNotifications((prev) =>
+      prev.filter((item) => item._id !== id)
+    );
+
+    setUnreadCount((prev) =>
+      prev > 0 ? prev - 1 : 0
+    );
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const linkClass = ({ isActive }) =>
     `text-sm font-medium transition-colors ${
@@ -213,9 +228,7 @@ const removeNotification = (id) => {
                     >
                       <p className="text-sm">{item.message}</p>
 
-                      <button onClick={() => removeNotification(item._id)}>
-                        ❌
-                      </button>
+                      <button onClick={() => handleDeleteNotification(item._id)}>❌</button>
                     </div>
                   ))
                 )}
