@@ -25,6 +25,10 @@ import {
 } from "../services/notificationService";
 import { useEffect } from "react";
 
+import { useNotification } from "../hooks/useNotification";
+
+// --------------------------------------------------------------------------------------
+
 const navLinks = [
   { to: "/", label: "Home" },
   { to: "/products", label: "Shop" },
@@ -40,6 +44,11 @@ const Navbar = () => {
   const { totalItems } = useCart();
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useContext(ThemeContext);
+
+  const { notifications, removeNotification, clearAll, markAllRead } =
+    useNotification();
+
+  const unreadCount = notifications.filter((item) => !item.read).length;
 
   useEffect(() => {
     if (!isAuthenticated) return;
@@ -152,6 +161,7 @@ const Navbar = () => {
       rounded-full
       hover:bg-gray-100
       dark:hover:bg-white/10
+      relative
     "
             >
               <Bell size={18} />
@@ -179,27 +189,28 @@ const Navbar = () => {
             </button>
 
             {showNotification && (
-              <div
-                className="
-        absolute
-        right-0
-        mt-3
-        w-80
-        rounded-xl
-        bg-white
-        dark:bg-gray-800
-        shadow-lg
-        p-4
-      "
-              >
-                <h3 className="font-semibold mb-3">Notifications</h3>
+              <div className="absolute right-0 mt-3 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3">
+                <div className="flex justify-between mb-3">
+                  <h3 className="font-semibold">Notifications</h3>
+
+                  <button onClick={clearAll} className="text-sm text-red-500">
+                    Clear All
+                  </button>
+                </div>
 
                 {notifications.length === 0 ? (
-                  <p className="text-sm text-gray-500">No notification</p>
+                  <p className="text-sm">No notifications</p>
                 ) : (
                   notifications.map((item) => (
-                    <div key={item._id} className="border-b py-2 text-sm">
-                      {item.message}
+                    <div
+                      key={item.id}
+                      className="flex justify-between border-b py-2"
+                    >
+                      <p className="text-sm">{item.message}</p>
+
+                      <button onClick={() => removeNotification(item.id)}>
+                        ❌
+                      </button>
                     </div>
                   ))
                 )}
