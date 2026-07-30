@@ -3,22 +3,20 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 import api from "../services/axios";
 
 const Contact = () => {
-const [formData, setFormData] = useState({
-  name: "",
-  email: "",
-  subject: "",
-  message: "",
-});
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
 
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-   setFormData({
-  name: "",
-  email: "",
-  subject: "",
-  message: "",
-});
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -34,20 +32,14 @@ const [formData, setFormData] = useState({
       setFormData({
         name: "",
         email: "",
+        subject: "",
         message: "",
       });
     } catch (error) {
-  console.log("FULL ERROR:", error);
+      console.log("CONTACT ERROR:", error.response?.data || error.message);
 
-  console.log(
-    "SERVER RESPONSE:",
-    error.response?.data
-  );
-
-  alert(
-    error.response?.data?.message || "Failed to send message"
-  );
-} finally {
+      alert(error.response?.data?.message || "Failed to send message");
+    } finally {
       setLoading(false);
     }
   };
@@ -142,14 +134,24 @@ const [formData, setFormData] = useState({
             />
 
             <input
-  name="subject"
-  value={formData.subject}
-  onChange={handleChange}
-  type="text"
-  placeholder="Subject"
-  required
-  className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
-/>
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              type="email"
+              placeholder="Email Address"
+              required
+              className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
+            />
+
+            <input
+              name="subject"
+              value={formData.subject}
+              onChange={handleChange}
+              type="text"
+              placeholder="Subject"
+              required
+              className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
+            />
 
             <textarea
               name="message"
