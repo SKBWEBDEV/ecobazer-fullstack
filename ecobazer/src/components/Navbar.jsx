@@ -11,6 +11,7 @@ import {
   LayoutDashboard,
   Moon,
   Sun,
+  Bell,
 } from "lucide-react";
 import { useAuth } from "../hooks/useAuth";
 import { useCart } from "../hooks/useCart";
@@ -18,7 +19,8 @@ import { useCart } from "../hooks/useCart";
 import { useContext } from "react";
 import { ThemeContext } from "../context/ThemeContext";
 
-
+import { getNotifications } from "../services/notificationService";
+import { useEffect } from "react";
 
 const navLinks = [
   { to: "/", label: "Home" },
@@ -28,10 +30,28 @@ const navLinks = [
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [showNotification, setShowNotification] = useState(false);
   const { isAuthenticated, isAdmin, logout, user } = useAuth();
   const { totalItems } = useCart();
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useContext(ThemeContext);
+
+  useEffect(() => {
+    if (!isAuthenticated) return;
+
+    const fetchNotifications = async () => {
+      try {
+        const data = await getNotifications();
+
+        setNotifications(data.notifications || []);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchNotifications();
+  }, [isAuthenticated]);
 
   const handleLogout = () => {
     logout();
@@ -40,11 +60,11 @@ const Navbar = () => {
   };
 
   const linkClass = ({ isActive }) =>
-  `text-sm font-medium transition-colors ${
-    isActive
-      ? "text-moss-600 dark:text-moss-400"
-      : "text-ink-900/70 dark:text-white/75 hover:text-moss-600 dark:hover:text-white"
-  }`;
+    `text-sm font-medium transition-colors ${
+      isActive
+        ? "text-moss-600 dark:text-moss-400"
+        : "text-ink-900/70 dark:text-white/75 hover:text-moss-600 dark:hover:text-white"
+    }`;
 
   return (
     <header className="sticky top-0 z-40 bg-white dark:bg-ink-900 text-ink-900 dark:text-white shadow-sm">
@@ -79,23 +99,99 @@ const Navbar = () => {
 
         <div className="hidden items-center gap-3 md:flex">
           <button
-  onClick={() => setDarkMode(!darkMode)}
-  className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition"
->
-  {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-</button>
-         
-         <Link
-  to="/wishlist"
-  className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-white/10"
-  aria-label="Wishlist">
-  <Heart size={18} />
-</Link>
+            onClick={() => setDarkMode(!darkMode)}
+            className="flex h-9 w-9 items-center justify-center rounded-full hover:bg-gray-100 dark:hover:bg-white/10 transition"
+          >
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          </button>
+
+          <Link
+            to="/wishlist"
+            className="flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-white/10"
+            aria-label="Wishlist"
+          >
+            <Heart size={18} />
+          </Link>
+
+          <div className="relative">
+            <button
+              onClick={() => setShowNotification(!showNotification)}
+              className="
+flex
+h-9
+w-9
+items-center
+justify-center
+rounded-full
+hover:bg-gray-100
+dark:hover:bg-white/10
+"
+            >
+              <Bell size={18} />
+
+              {notifications.length > 0 && (
+                <span
+                  className="
+absolute
+-right-1
+-top-1
+flex
+h-4
+w-4
+items-center
+justify-center
+rounded-full
+bg-red-500
+text-[10px]
+text-white
+"
+                >
+                  {notifications.length}
+                </span>
+              )}
+            </button>
+
+            {showNotification && (
+              <div
+                className="
+absolute
+right-0
+mt-3
+w-80
+rounded-xl
+bg-white
+dark:bg-gray-800
+shadow-lg
+p-4
+"
+              >
+                <h3 className="font-semibold mb-3">Notifications</h3>
+
+                {notifications.length === 0 ? (
+                  <p className="text-sm text-gray-500">No notification</p>
+                ) : (
+                  notifications.map((item) => (
+                    <div
+                      key={item._id}
+                      className="
+                        border-b
+                        py-2
+                        text-sm
+                        "
+                    >
+                      {item.message}
+                    </div>
+                  ))
+                )}
+              </div>
+            )}
+          </div>
 
           <Link
             to="/cart"
             className="relative flex h-9 w-9 items-center justify-center rounded-full transition hover:bg-gray-100 dark:hover:bg-white/10"
-            aria-label="Cart">
+            aria-label="Cart"
+          >
             <ShoppingCart size={18} />
             {totalItems > 0 && (
               <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-moss-500 text-[10px] font-semibold">
@@ -183,25 +279,25 @@ const Navbar = () => {
               {isAuthenticated ? (
                 <>
                   <Link
-  to="/profile"
-  className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
-  title={user?.email}
->
+                    to="/profile"
+                    className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
+                    title={user?.email}
+                  >
                     Profile
                   </Link>
                   <button
-  onClick={handleLogout}
-  className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
->
+                    onClick={handleLogout}
+                    className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
+                  >
                     Logout
                   </button>
                 </>
               ) : (
                 <>
                   <Link
-  to="/login"
-  className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
->
+                    to="/login"
+                    className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
+                  >
                     Log in
                   </Link>
                   <Link
