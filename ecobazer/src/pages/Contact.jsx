@@ -1,6 +1,47 @@
+import { useState } from "react";
 import { Mail, Phone, MapPin, Send } from "lucide-react";
+import api from "../services/axios";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      setLoading(true);
+
+      await api.post("/api/contact", formData);
+
+      alert("Message sent successfully!");
+
+      setFormData({
+        name: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      console.log("Contact error:", error.response?.data || error.message);
+
+      alert("Failed to send message");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="container-app py-16">
       {/* Header */}
@@ -79,30 +120,44 @@ const Contact = () => {
             Send Message
           </h2>
 
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <input
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
               type="text"
               placeholder="Your Name"
+              required
               className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
             />
 
             <input
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
               type="email"
               placeholder="Email Address"
+              required
               className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
             />
 
             <textarea
+              name="message"
+              value={formData.message}
+              onChange={handleChange}
               rows="5"
               placeholder="Your Message"
+              required
               className="w-full rounded-xl border border-gray-200 dark:border-white/10 bg-transparent px-4 py-3 text-ink-900 dark:text-white"
             />
 
             <button
-              type="button"
+              type="submit"
+              disabled={loading}
               className="btn-primary flex items-center gap-2"
             >
-              Send Message
+              {loading ? "Sending..." : "Send Message"}
+
               <Send size={16} />
             </button>
           </form>
