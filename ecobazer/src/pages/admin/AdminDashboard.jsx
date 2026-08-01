@@ -52,7 +52,7 @@ const AdminDashboard = () => {
         setSalesReport(reportData.report);
 
         const reviewData = await getReviewStats();
-        setReviewStats(reviewData.stats);
+        setReviewStats(reviewData.data.stats);
       } catch (error) {
         toast.error(getErrorMessage(error, "Could not load dashboard"));
       } finally {
