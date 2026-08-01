@@ -8,6 +8,8 @@ const {
   deleteContact,
   markContactAsRead,
   getContactStats,
+  replyContact,
+  getMyContacts,
 } = require("../controlers/contactController");
 
 const secureMiddleware = require("../middleware/secureMiddleware");
@@ -29,6 +31,19 @@ router.patch(
   secureMiddleware,
   adminMiddleware,
   markContactAsRead
+);
+
+router.put(
+  "/:id/reply",
+  secureMiddleware,
+  adminMiddleware,
+  replyContact
+);
+
+router.get(
+  "/my",
+  secureMiddleware,
+  getMyContacts
 );
 
 router.delete(

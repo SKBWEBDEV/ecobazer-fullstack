@@ -32,3 +32,22 @@ export const getContactStats = async () => {
 
   return data;
 };
+
+
+export const replyContact = async (id, reply) => {
+  const { data } = await api.put(
+    `/api/contact/${id}/reply`,
+    {
+      reply,
+    }
+  );
+
+  return data;
+};
+
+
+export const getMyContacts = async () => {
+  const { data } = await api.get("/api/contact/my");
+
+  return data;
+};

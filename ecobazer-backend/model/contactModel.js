@@ -28,6 +28,15 @@ const contactSchema = new Schema(
       trim: true,
     },
 
+    reply: {
+      type: String,
+      default: "",
+    },
+
+    repliedAt: {
+      type: Date,
+    },
+
     status: {
       type: String,
       enum: ["unread", "read", "replied"],

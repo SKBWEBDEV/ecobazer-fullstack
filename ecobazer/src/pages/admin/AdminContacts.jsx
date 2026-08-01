@@ -5,6 +5,7 @@ import {
   getAllContacts,
   deleteContact,
   markContactAsRead,
+  replyContact,
 } from "../../services/contactService";
 
 const AdminContacts = () => {
@@ -12,6 +13,9 @@ const AdminContacts = () => {
   const [loading, setLoading] = useState(true);
 
   const [selectedContact, setSelectedContact] = useState(null);
+
+  const [reply, setReply] = useState("");
+  const [replyLoading, setReplyLoading] = useState(false);
 
   const fetchContacts = async () => {
     try {
@@ -41,10 +45,6 @@ const AdminContacts = () => {
     }
   };
 
-  if (loading) {
-    return <div className="p-6">Loading...</div>;
-  }
-
   const handleViewDetails = async (item) => {
     try {
       if (item.status === "unread") {
@@ -63,10 +63,47 @@ const AdminContacts = () => {
       }
 
       setSelectedContact(item);
+
+      // Load existing reply
+      setReply(item.reply || "");
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleReply = async () => {
+    try {
+      if (!reply.trim()) {
+        toast.error("Please write a reply");
+
+        return;
+      }
+
+      setReplyLoading(true);
+
+      const data = await replyContact(selectedContact._id, reply);
+
+      setContacts((prev) =>
+        prev.map((item) =>
+          item._id === selectedContact._id ? data.contact : item,
+        ),
+      );
+
+      setSelectedContact(data.contact);
+
+      setReply(data.contact.reply || "");
+
+      toast.success("Reply sent successfully");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Reply failed");
+    } finally {
+      setReplyLoading(false);
+    }
+  };
+
+  if (loading) {
+    return <div className="p-6">Loading...</div>;
+  }
 
   return (
     <div className="p-6">
@@ -85,7 +122,15 @@ const AdminContacts = () => {
                   <p className="text-sm opacity-70">{item.email}</p>
                 </div>
 
-                <span className="text-xs bg-red-100 text-red-600 px-3 py-1 rounded-full">
+                <span
+                  className={`text-xs px-3 py-1 rounded-full ${
+                    item.status === "replied"
+                      ? "bg-green-100 text-green-600"
+                      : item.status === "read"
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-red-100 text-red-600"
+                  }`}
+                >
                   {item.status}
                 </span>
               </div>
@@ -120,12 +165,27 @@ const AdminContacts = () => {
         </div>
       )}
 
-      {/* Details Modal */}
-
       {selectedContact && (
         <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-[#1a1b1f] rounded-2xl p-6 w-full max-w-lg">
-            <h2 className="text-xl font-semibold mb-5 text-ink-900 dark:text-white">
+          <div
+            className="
+              bg-white
+              dark:bg-[#1a1b1f]
+              rounded-2xl
+              p-6
+              w-full
+              max-w-lg
+            "
+          >
+            <h2
+              className="
+                text-xl
+                font-semibold
+                mb-5
+                text-ink-900
+                dark:text-white
+              "
+            >
               Contact Details
             </h2>
 
@@ -147,11 +207,60 @@ const AdminContacts = () => {
               </p>
 
               <p className="opacity-80">{selectedContact.message}</p>
+
+              {selectedContact.reply && (
+                <div className="mt-5">
+                  <p>
+                    <strong>Admin Reply:</strong>
+                  </p>
+
+                  <p className="opacity-80 mt-2">{selectedContact.reply}</p>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-6">
+              <p className="font-medium mb-2">Reply</p>
+
+              <textarea
+                value={reply}
+                onChange={(e) => setReply(e.target.value)}
+                placeholder="Write reply..."
+                className="
+                    w-full
+                    border
+                    rounded-xl
+                    p-3
+                    dark:bg-[#111]
+                  "
+              />
+
+              <button
+                onClick={handleReply}
+                disabled={replyLoading}
+                className="
+                    mt-3
+                    px-5
+                    py-2
+                    rounded-xl
+                    bg-purple-600
+                    text-white
+                  "
+              >
+                {replyLoading ? "Sending..." : "Send Reply"}
+              </button>
             </div>
 
             <button
               onClick={() => setSelectedContact(null)}
-              className="mt-6 px-5 py-2 rounded-xl bg-purple-600 text-white"
+              className="
+                  mt-6
+                  px-5
+                  py-2
+                  rounded-xl
+                  bg-purple-600
+                  text-white
+                "
             >
               Close
             </button>

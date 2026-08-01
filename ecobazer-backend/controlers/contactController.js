@@ -1,4 +1,6 @@
 const Contact = require("../model/contactModel");
+const User = require("../model/userModel");
+const Notification = require("../model/notificationModel");
 
 // Create contact message
 const createContact = async (req, res) => {
@@ -73,8 +75,6 @@ const deleteContact = async (req, res) => {
   }
 };
 
-
-
 // Mark contact message as read (Admin)
 const markContactAsRead = async (req, res) => {
   try {
@@ -85,7 +85,7 @@ const markContactAsRead = async (req, res) => {
       },
       {
         new: true,
-      }
+      },
     );
 
     if (!contact) {
@@ -100,7 +100,6 @@ const markContactAsRead = async (req, res) => {
       message: "Message marked as read",
       contact,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -112,7 +111,6 @@ const markContactAsRead = async (req, res) => {
 // Contact statistics (Admin)
 const getContactStats = async (req, res) => {
   try {
-
     const totalMessages = await Contact.countDocuments();
 
     const unreadMessages = await Contact.countDocuments({
@@ -123,7 +121,6 @@ const getContactStats = async (req, res) => {
       status: "read",
     });
 
-
     res.status(200).json({
       success: true,
       stats: {
@@ -132,23 +129,111 @@ const getContactStats = async (req, res) => {
         readMessages,
       },
     });
-
-
   } catch (error) {
-
     res.status(500).json({
       success: false,
       message: error.message,
     });
-
   }
 };
 
+// Admin reply contact message
 
+const replyContact = async (req, res) => {
+  try {
+    const { reply } = req.body;
+
+    if (!reply) {
+      return res.status(400).json({
+        success: false,
+        message: "Reply is required",
+      });
+    }
+
+    const contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+        message: "Message not found",
+      });
+    }
+
+    contact.reply = reply;
+
+    contact.status = "replied";
+
+    contact.repliedAt = new Date();
+
+    await contact.save();
+
+    // Find registered user by email
+
+    const user = await User.findOne({
+      email: contact.email,
+    });
+
+    // Send notification
+
+    if (user) {
+      await Notification.create({
+        user: user._id,
+
+        title: "Support Reply",
+
+        message: "EcoBazer Support replied to your message.",
+
+        type: "system",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+
+      message: "Reply sent successfully",
+
+      contact,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
+};
+
+// Get user's support messages
+
+const getMyContacts = async (req, res) => {
+  try {
+    const contacts = await Contact.find({
+      email: req.user.email,
+    }).sort({
+      createdAt: -1,
+    });
+
+    res.status(200).json({
+      success: true,
+
+      contacts,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
+};
+
+// ================================================
 module.exports = {
   createContact,
   getAllContacts,
   deleteContact,
   markContactAsRead,
   getContactStats,
+  replyContact,
+  getMyContacts,
 };

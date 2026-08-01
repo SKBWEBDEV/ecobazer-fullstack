@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { User, Package, Save } from "lucide-react";
+import { User, Package, Save, MessageCircle } from "lucide-react";
 
 import { useAuth } from "../hooks/useAuth";
 import { getUserById, updateUser } from "../services/userService";
@@ -25,9 +25,16 @@ const tabs = [
     label: "Orders",
     icon: Package,
   },
+  {
+    key: "support",
+    label: "Support Messages",
+    icon: MessageCircle,
+  },
 ];
 
 const Profile = () => {
+  const navigate = useNavigate();
+
   const { user, updateUserData } = useAuth();
 
   const userId = user?.id || user?._id;
@@ -108,25 +115,25 @@ const Profile = () => {
 
   // Update Profile
 
- const onSubmit = async (values) => {
-  setSaving(true);
+  const onSubmit = async (values) => {
+    setSaving(true);
 
-  try {
-    const { data } = await updateUser(userId, values);
+    try {
+      const { data } = await updateUser(userId, values);
 
-    const updatedUser = data.userData;
+      const updatedUser = data.userData;
 
-    setProfile(updatedUser);
+      setProfile(updatedUser);
 
-    updateUserData(updatedUser);
+      updateUserData(updatedUser);
 
-    toast.success("Profile updated");
-  } catch (error) {
-    toast.error(getErrorMessage(error, "Could not update profile"));
-  } finally {
-    setSaving(false);
-  }
-};
+      toast.success("Profile updated");
+    } catch (error) {
+      toast.error(getErrorMessage(error, "Could not update profile"));
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="container-app py-10">
@@ -137,6 +144,11 @@ const Profile = () => {
           <button
             key={key}
             onClick={() => {
+              if (key === "support") {
+                navigate("/support-messages");
+                return;
+              }
+
               setTab(key);
 
               if (key === "orders") {
@@ -144,10 +156,10 @@ const Profile = () => {
               }
             }}
             className={`flex items-center gap-2 border-b-2 px-4 py-3 text-sm font-medium ${
-  tab === key
-    ? "border-moss-600 text-moss-700 dark:text-emerald-400"
-    : "border-transparent text-ink-900/50 dark:text-white/60"
-}`}
+              tab === key
+                ? "border-moss-600 text-moss-700 dark:text-emerald-400"
+                : "border-transparent text-ink-900/50 dark:text-white/60"
+            }`}
           >
             <Icon size={16} />
 
@@ -198,51 +210,50 @@ const Profile = () => {
           ) : (
             orders.map((order) => (
               <div key={order._id} className="card-surface p-5">
-  <div className="flex justify-between">
-    <div>
-      <p className="font-semibold text-ink-900 dark:text-white">
-        Order #{order._id.slice(-8)}
-      </p>
+                <div className="flex justify-between">
+                  <div>
+                    <p className="font-semibold text-ink-900 dark:text-white">
+                      Order #{order._id.slice(-8)}
+                    </p>
 
-      <p className="text-sm text-ink-900/50 dark:text-white/60">
-        Payment: {order.paymentStatus || "pending"}
-      </p>
+                    <p className="text-sm text-ink-900/50 dark:text-white/60">
+                      Payment: {order.paymentStatus || "pending"}
+                    </p>
 
-      <p className="text-sm text-ink-900/50 dark:text-white/60">
-        Status: {order.status}
-      </p>
-    </div>
+                    <p className="text-sm text-ink-900/50 dark:text-white/60">
+                      Status: {order.status}
+                    </p>
+                  </div>
 
-    <p className="font-bold text-ink-900 dark:text-white">
-      ৳ {order.totalPrice}
-    </p>
-  </div>
+                  <p className="font-bold text-ink-900 dark:text-white">
+                    ৳ {order.totalPrice}
+                  </p>
+                </div>
 
+                <div className="mt-4 space-y-2">
+                  {order.products.map((item) => (
+                    <div
+                      key={item.product?._id || item._id}
+                      className="flex justify-between border-b border-ink-900/10 dark:border-white/10 py-2"
+                    >
+                      <span className="text-ink-900 dark:text-white">
+                        {item.title} × {item.quantity}
+                      </span>
 
-  <div className="mt-4 space-y-2">
-    {order.products.map((item) => (
-      <div
-        key={item.product?._id || item._id}
-        className="flex justify-between border-b border-ink-900/10 dark:border-white/10 py-2"
-      >
-        <span className="text-ink-900 dark:text-white">
-          {item.title} × {item.quantity}
-        </span>
+                      <span className="text-ink-900 dark:text-white">
+                        ৳ {item.totalPrice}
+                      </span>
+                    </div>
+                  ))}
+                </div>
 
-        <span className="text-ink-900 dark:text-white">
-          ৳ {item.totalPrice}
-        </span>
-      </div>
-    ))}
-  </div>
-
-  <Link
-    to={`/orders/${order._id}`}
-    className="mt-4 inline-block rounded-lg bg-black dark:bg-white px-5 py-2 text-white dark:text-black"
-  >
-    View Details
-  </Link>
-</div>
+                <Link
+                  to={`/orders/${order._id}`}
+                  className="mt-4 inline-block rounded-lg bg-black dark:bg-white px-5 py-2 text-white dark:text-black"
+                >
+                  View Details
+                </Link>
+              </div>
             ))
           )}
         </div>

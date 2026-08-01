@@ -19,6 +19,7 @@ import Offers from "./pages/Offers";
 import About from "./pages/About";
 import Wishlist from "./pages/Wishlist";
 import Blog from "./pages/Blog";
+
 // User Pages
 import Cart from "./pages/Cart";
 import Checkout from "./pages/Checkout";
@@ -29,6 +30,7 @@ import Profile from "./pages/Profile";
 import Orders from "./pages/Orders";
 import OrderDetails from "./pages/OrderDetails";
 import Contact from "./pages/Contact";
+import SupportMessages from "./pages/SupportMessages";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -36,6 +38,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminContacts from "./pages/admin/AdminContacts";
+
 // 404
 import NotFound from "./pages/NotFound";
 
@@ -91,6 +94,10 @@ function App() {
           <Route path="/orders" element={<Orders />} />
 
           <Route path="/orders/:id" element={<OrderDetails />} />
+
+          {/* Support Messages */}
+
+          <Route path="/support-messages" element={<SupportMessages />} />
         </Route>
       </Route>
 
