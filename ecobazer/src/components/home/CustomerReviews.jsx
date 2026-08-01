@@ -23,17 +23,19 @@ const CustomerReviews = ({ reviews }) => {
       ) : (
         <Swiper
           modules={[Autoplay]}
+          loop={true}
           spaceBetween={20}
           slidesPerView={1}
+          speed={1000}
           autoplay={{
-            delay: 3000,
+            delay: 2500,
             disableOnInteraction: false,
+            pauseOnMouseEnter: true,
           }}
           breakpoints={{
             640: {
               slidesPerView: 2,
             },
-
             1024: {
               slidesPerView: 3,
             },
@@ -43,8 +45,8 @@ const CustomerReviews = ({ reviews }) => {
             <SwiperSlide key={review._id}>
               <div className="card-surface p-6 h-full">
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="h-10 w-10 rounded-full bg-moss-100 flex items-center justify-center font-semibold">
-                    {review.user?.firstName?.charAt(0)}
+                  <div className="h-10 w-10 rounded-full bg-moss-100 flex items-center justify-center font-semibold text-moss-700">
+                    {review.user?.firstName?.charAt(0)?.toUpperCase()}
                   </div>
 
                   <div>
@@ -52,7 +54,7 @@ const CustomerReviews = ({ reviews }) => {
                       {review.user?.firstName} {review.user?.lastName}
                     </h3>
 
-                    <div className="flex">
+                    <div className="flex gap-1 mt-1">
                       {[...Array(5)].map((_, index) => (
                         <Star
                           key={index}
@@ -68,7 +70,7 @@ const CustomerReviews = ({ reviews }) => {
                   </div>
                 </div>
 
-                <p className="text-sm text-gray-600 dark:text-gray-300">
+                <p className="text-sm leading-6 text-gray-600 dark:text-gray-300">
                   "{review.comment}"
                 </p>
               </div>
