@@ -38,27 +38,46 @@ const AdminReports = () => {
   const exportPDF = () => {
     const doc = new jsPDF();
 
-    doc.text("EcoBazer Sales Report", 14, 20);
+    doc.text("EcoBazer Monthly Sales Report", 14, 20);
 
-    doc.text(`Total Orders: ${report.totalOrders}`, 14, 35);
+    let y = 35;
 
-    doc.text(`Total Revenue: ৳ ${report.totalRevenue}`, 14, 45);
+    report.monthlySales?.forEach((month) => {
+      // Month Title
 
-    doc.text(`Delivered Orders: ${report.deliveredOrders}`, 14, 55);
+      doc.setFontSize(14);
 
-    doc.text(`Pending Orders: ${report.pendingOrders}`, 14, 65);
+      doc.text(month.month, 14, y);
 
-    autoTable(doc, {
-      startY: 80,
+      y += 10;
 
-      head: [["Product", "Sold Quantity"]],
+      // Month Summary
 
-      body: report.topProducts.map((product) => [product.name, product.sold]),
+      doc.setFontSize(11);
+
+      doc.text(`Total Orders: ${month.totalOrders}`, 14, y);
+
+      y += 8;
+
+      doc.text(`Total Revenue: ৳ ${month.totalRevenue}`, 14, y);
+
+      y += 10;
+
+      // Products Table
+
+      autoTable(doc, {
+        startY: y,
+
+        head: [["Product", "Sold Quantity"]],
+
+        body: month.products.map((product) => [product.name, product.sold]),
+      });
+
+      y = doc.lastAutoTable.finalY + 15;
     });
 
-    doc.save("EcoBazer-Sales-Report.pdf");
+    doc.save("EcoBazer-Monthly-Sales-Report.pdf");
   };
-
   // ===========================================EXAL FUNCTION===============================================
   const exportExcel = () => {
     const excelData = [
@@ -112,9 +131,9 @@ const AdminReports = () => {
     XLSX.writeFile(workbook, "EcoBazer-Sales-Report.xlsx");
   };
 
- if (loading || !report) {
-  return <Loader />;
-}
+  if (loading || !report) {
+    return <Loader />;
+  }
 
   return (
     <div className="p-6">
@@ -124,14 +143,16 @@ const AdminReports = () => {
         <div className="flex gap-3">
           <button
             onClick={exportPDF}
-            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg">
+            className="flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-5 py-2 rounded-lg"
+          >
             <FileDown size={20} />
             Export PDF
           </button>
 
           <button
             onClick={exportExcel}
-            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg">
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2 rounded-lg"
+          >
             <FileDown size={20} />
             Export Excel
           </button>
@@ -180,32 +201,18 @@ const AdminReports = () => {
         <h2 className="text-xl font-bold mb-4">Top Selling Products</h2>
 
         <div className="space-y-3">
+          {!report.topProducts?.length && <p>No products found</p>}
 
-  {!report.topProducts?.length && (
-    <p>No products found</p>
-  )}
+          {report.topProducts?.map((product, index) => (
+            <div key={index} className="flex justify-between border-b pb-2">
+              <span>
+                {index + 1}. {product.name}
+              </span>
 
-
-  {report.topProducts?.map((product, index) => (
-
-    <div
-      key={index}
-      className="flex justify-between border-b pb-2"
-    >
-
-      <span>
-        {index + 1}. {product.name}
-      </span>
-
-      <span className="font-semibold">
-        {product.sold} Sold
-      </span>
-
-    </div>
-
-  ))}
-
-</div>
+              <span className="font-semibold">{product.sold} Sold</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

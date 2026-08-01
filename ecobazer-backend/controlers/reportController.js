@@ -30,6 +30,7 @@ exports.getSalesReport = async (req, res) => {
     ).length;
 
     // Top Selling Products
+
     const productSales = {};
 
     orders.forEach((order) => {
@@ -52,21 +53,81 @@ exports.getSalesReport = async (req, res) => {
       .sort((a, b) => b.sold - a.sold)
       .slice(0, 5);
 
+    // Monthly Sales Report
+
+    const monthlyReports = {};
+
+    orders.forEach((order) => {
+      const date = new Date(order.createdAt);
+
+      const month = date.toLocaleString("default", {
+        month: "long",
+        year: "numeric",
+      });
+
+      if (!monthlyReports[month]) {
+        monthlyReports[month] = {
+          month,
+
+          totalOrders: 0,
+
+          totalRevenue: 0,
+
+          products: {},
+        };
+      }
+
+      monthlyReports[month].totalOrders += 1;
+
+      monthlyReports[month].totalRevenue += order.totalPrice;
+
+      order.products.forEach((item) => {
+        const productName = item.title;
+
+        if (!monthlyReports[month].products[productName]) {
+          monthlyReports[month].products[productName] = 0;
+        }
+
+        monthlyReports[month].products[productName] += item.quantity;
+      });
+    });
+
+    const monthlySales = Object.values(monthlyReports).map((month) => ({
+      month: month.month,
+
+      totalOrders: month.totalOrders,
+
+      totalRevenue: month.totalRevenue,
+
+      products: Object.entries(month.products).map(([name, sold]) => ({
+        name,
+        sold,
+      })),
+    }));
+
     res.status(200).json({
       success: true,
 
       report: {
         totalOrders,
+
         totalRevenue,
+
         deliveredOrders,
+
         pendingOrders,
+
         cancelledOrders,
+
         topProducts,
+
+        monthlySales,
       },
     });
   } catch (error) {
     res.status(500).json({
       success: false,
+
       message: error.message,
     });
   }
