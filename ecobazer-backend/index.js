@@ -176,7 +176,6 @@ app.use("/admin", adminRoute);
 
 app.use("/api/admin/reviews", adminReviewRoute);
 
-
 // ================= NOTIFICATION =================
 
 app.use("/api/notifications", notificationRoutes);

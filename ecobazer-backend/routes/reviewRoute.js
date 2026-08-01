@@ -19,7 +19,7 @@ router.post(
 );
 
 
-// Home Featured Reviews
+// Featured Reviews
 router.get(
   "/featured",
   getFeaturedReviews
