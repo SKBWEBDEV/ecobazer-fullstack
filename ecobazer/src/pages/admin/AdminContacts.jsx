@@ -45,31 +45,29 @@ const AdminContacts = () => {
     }
   };
 
-  const handleViewDetails = async (item) => {
-    try {
-      if (item.status === "unread") {
-        await markContactAsRead(item._id);
+ const handleViewDetails = async (item) => {
+  try {
+    const data = await getAllContacts();
 
-        setContacts((prev) =>
-          prev.map((contact) =>
-            contact._id === item._id
-              ? {
-                  ...contact,
-                  status: "read",
-                }
-              : contact,
-          ),
-        );
-      }
+    const latestContact = data.contacts.find(
+      (contact) => contact._id === item._id,
+    );
 
-      setSelectedContact(item);
+    if (!latestContact) return;
 
-      // Load existing reply
-      setReply(item.reply || "");
-    } catch (error) {
-      console.log(error);
+    if (latestContact.status === "unread") {
+      await markContactAsRead(latestContact._id);
+
+      latestContact.status = "read";
     }
-  };
+
+    setSelectedContact(latestContact);
+
+    setReply("");
+  } catch (error) {
+    console.log(error);
+  }
+};
 
   const handleReply = async () => {
     try {
