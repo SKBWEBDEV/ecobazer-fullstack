@@ -35,6 +35,7 @@ const navLinks = [
   { to: "/products", label: "Shop" },
   { to: "/about", label: "About" },
   { to: "/blog", label: "Blog" },
+  { to: "/contact", label: "Contact" },
 ];
 
 const Navbar = () => {
