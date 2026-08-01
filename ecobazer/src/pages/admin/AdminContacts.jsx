@@ -45,29 +45,29 @@ const AdminContacts = () => {
     }
   };
 
- const handleViewDetails = async (item) => {
-  try {
-    const data = await getAllContacts();
+  const handleViewDetails = async (item) => {
+    try {
+      const data = await getAllContacts();
 
-    const latestContact = data.contacts.find(
-      (contact) => contact._id === item._id,
-    );
+      const latestContact = data.contacts.find(
+        (contact) => contact._id === item._id,
+      );
 
-    if (!latestContact) return;
+      if (!latestContact) return;
 
-    if (latestContact.status === "unread") {
-      await markContactAsRead(latestContact._id);
+      if (latestContact.status === "unread") {
+        await markContactAsRead(latestContact._id);
 
-      latestContact.status = "read";
+        latestContact.status = "read";
+      }
+
+      setSelectedContact(latestContact);
+
+      setReply("");
+    } catch (error) {
+      console.log(error);
     }
-
-    setSelectedContact(latestContact);
-
-    setReply("");
-  } catch (error) {
-    console.log(error);
-  }
-};
+  };
 
   const handleReply = async () => {
     try {
@@ -168,11 +168,13 @@ const AdminContacts = () => {
           <div
             className="
               bg-white
-              dark:bg-[#1a1b1f]
-              rounded-2xl
-              p-6
-              w-full
-              max-w-lg
+    dark:bg-[#1a1b1f]
+    rounded-2xl
+    p-6
+    w-full
+    max-w-lg
+    max-h-[90vh]
+    overflow-y-auto
             "
           >
             <h2
@@ -206,25 +208,34 @@ const AdminContacts = () => {
 
               <p className="opacity-80">{selectedContact.message}</p>
 
-              <div className="mt-5 space-y-3">
-                <p className="font-semibold">Conversation:</p>
+              <div className="mt-5">
+                <p className="font-semibold mb-3">Conversation:</p>
 
-                {selectedContact.messages?.map((msg, index) => (
-                  <div
-                    key={index}
-                    className={`p-3 rounded-xl ${
-                      msg.sender === "admin"
-                        ? "bg-purple-100 dark:bg-purple-900"
-                        : "bg-gray-100 dark:bg-gray-800"
-                    }`}
-                  >
-                    <p className="text-xs font-semibold mb-1">
-                      {msg.sender === "admin" ? "Admin" : "User"}
-                    </p>
+                <div
+                  className="
+      max-h-80
+      overflow-y-auto
+      space-y-3
+      pr-2
+    "
+                >
+                  {selectedContact.messages?.map((msg, index) => (
+                    <div
+                      key={index}
+                      className={`p-3 rounded-xl ${
+                        msg.sender === "admin"
+                          ? "bg-purple-100 dark:bg-purple-900"
+                          : "bg-gray-100 dark:bg-gray-800"
+                      }`}
+                    >
+                      <p className="text-xs font-semibold mb-1">
+                        {msg.sender === "admin" ? "Admin" : "User"}
+                      </p>
 
-                    <p>{msg.text}</p>
-                  </div>
-                ))}
+                      <p>{msg.text}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
 

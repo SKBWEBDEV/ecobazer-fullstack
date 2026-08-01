@@ -95,19 +95,31 @@ const SupportMessages = () => {
               <div className="mt-5 space-y-3">
                 {item.messages?.map((msg, index) => (
                   <div
-                    key={index}
-                    className={`
-                    p-3
-                    rounded-xl
-                    ${msg.sender === "admin" ? "bg-purple-100" : "bg-gray-100"}
-                    `}
-                  >
-                    <p className="text-sm font-medium">
-                      {msg.sender === "admin" ? "Admin" : "You"}
-                    </p>
+  className="
+    mt-5
+    max-h-80
+    overflow-y-auto
+    space-y-3
+    pr-2
+  "
+>
+  {item.messages?.map((msg, index) => (
+    <div
+      key={index}
+      className={`
+        p-3
+        rounded-xl
+        ${msg.sender === "admin" ? "bg-purple-100" : "bg-gray-100"}
+      `}
+    >
+      <p className="text-sm font-medium">
+        {msg.sender === "admin" ? "Admin" : "You"}
+      </p>
 
-                    <p className="mt-1">{msg.text}</p>
-                  </div>
+      <p className="mt-1">{msg.text}</p>
+    </div>
+  ))}
+</div>
                 ))}
               </div>
 
