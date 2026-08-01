@@ -2,6 +2,30 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
+const messageSchema = new Schema(
+  {
+    sender: {
+      type: String,
+      enum: ["user", "admin"],
+      required: true,
+    },
+
+    text: {
+      type: String,
+      required: true,
+      trim: true,
+    },
+
+    createdAt: {
+      type: Date,
+      default: Date.now,
+    },
+  },
+  {
+    _id: false,
+  },
+);
+
 const contactSchema = new Schema(
   {
     name: {
@@ -14,6 +38,7 @@ const contactSchema = new Schema(
       type: String,
       required: true,
       trim: true,
+      lowercase: true,
     },
 
     subject: {
@@ -28,14 +53,7 @@ const contactSchema = new Schema(
       trim: true,
     },
 
-    reply: {
-      type: String,
-      default: "",
-    },
-
-    repliedAt: {
-      type: Date,
-    },
+    messages: [messageSchema],
 
     status: {
       type: String,

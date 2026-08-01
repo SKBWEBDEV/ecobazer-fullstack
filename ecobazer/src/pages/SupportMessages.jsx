@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
-import { getMyContacts } from "../services/contactService";
+import { getMyContacts, userReplyContact } from "../services/contactService";
 
 const SupportMessages = () => {
   const [messages, setMessages] = useState([]);
+
   const [loading, setLoading] = useState(true);
+
+  const [replyText, setReplyText] = useState("");
+
+  const [sendingId, setSendingId] = useState(null);
 
   const fetchMessages = async () => {
     try {
@@ -23,6 +28,32 @@ const SupportMessages = () => {
     fetchMessages();
   }, []);
 
+  const handleReply = async (id) => {
+    if (!replyText.trim()) {
+      toast.error("Write something");
+
+      return;
+    }
+
+    try {
+      setSendingId(id);
+
+      const data = await userReplyContact(id, replyText);
+
+      setMessages((prev) =>
+        prev.map((item) => (item._id === id ? data.contact : item)),
+      );
+
+      setReplyText("");
+
+      toast.success("Reply sent");
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Reply failed");
+    } finally {
+      setSendingId(null);
+    }
+  };
+
   if (loading) {
     return <div className="p-6">Loading...</div>;
   }
@@ -39,42 +70,76 @@ const SupportMessages = () => {
             <div
               key={item._id}
               className="
-                  card-surface
-                  p-5
-                  rounded-2xl
-                  "
+                card-surface
+                p-5
+                rounded-2xl
+                "
             >
               <div className="flex justify-between">
                 <h2 className="font-semibold">{item.subject}</h2>
 
                 <span
-                  className={`text-xs px-3 py-1 rounded-full ${
-                    item.status === "replied"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-yellow-100 text-yellow-600"
-                  }`}
+                  className="
+                text-xs
+                px-3
+                py-1
+                rounded-full
+                bg-green-100
+                text-green-600
+                "
                 >
                   {item.status}
                 </span>
               </div>
 
-              <div className="mt-4">
-                <p className="font-medium">Your Message:</p>
+              <div className="mt-5 space-y-3">
+                {item.messages?.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`
+                    p-3
+                    rounded-xl
+                    ${msg.sender === "admin" ? "bg-purple-100" : "bg-gray-100"}
+                    `}
+                  >
+                    <p className="text-sm font-medium">
+                      {msg.sender === "admin" ? "Admin" : "You"}
+                    </p>
 
-                <p className="opacity-80 mt-1">{item.message}</p>
+                    <p className="mt-1">{msg.text}</p>
+                  </div>
+                ))}
               </div>
 
-              {item.reply && (
-                <div className="mt-5">
-                  <p className="font-medium">Admin Reply:</p>
+              <div className="mt-5">
+                <textarea
+                  value={replyText}
+                  onChange={(e) => setReplyText(e.target.value)}
+                  placeholder="Write your reply..."
+                  className="
+                  w-full
+                  border
+                  rounded-xl
+                  p-3
+                  dark:bg-[#111]
+                  "
+                />
 
-                  <p className="opacity-80 mt-1">{item.reply}</p>
-
-                  <p className="text-xs opacity-60 mt-2">
-                    {new Date(item.repliedAt).toLocaleDateString()}
-                  </p>
-                </div>
-              )}
+                <button
+                  onClick={() => handleReply(item._id)}
+                  disabled={sendingId === item._id}
+                  className="
+                  mt-3
+                  px-5
+                  py-2
+                  rounded-xl
+                  bg-purple-600
+                  text-white
+                  "
+                >
+                  {sendingId === item._id ? "Sending..." : "Send Reply"}
+                </button>
+              </div>
             </div>
           ))}
         </div>

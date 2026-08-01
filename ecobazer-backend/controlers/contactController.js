@@ -16,42 +16,61 @@ const createContact = async (req, res) => {
 
     const contact = await Contact.create({
       name,
+
       email,
+
       subject,
+
       message,
+
+      messages: [
+        {
+          sender: "user",
+          text: message,
+        },
+      ],
     });
 
     res.status(201).json({
       success: true,
+
       message: "Message sent successfully",
+
       contact,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
+
       message: error.message,
     });
   }
 };
 
-// Get all contact messages (Admin)
+// Get all contacts (Admin)
+
 const getAllContacts = async (req, res) => {
   try {
-    const contacts = await Contact.find().sort({ createdAt: -1 });
+    const contacts = await Contact.find().sort({
+      createdAt: -1,
+    });
 
     res.status(200).json({
       success: true,
+
       contacts,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
+
       message: error.message,
     });
   }
 };
 
-// Delete contact message (Admin)
+// Delete contact
+
 const deleteContact = async (req, res) => {
   try {
     const contact = await Contact.findByIdAndDelete(req.params.id);
@@ -59,56 +78,57 @@ const deleteContact = async (req, res) => {
     if (!contact) {
       return res.status(404).json({
         success: false,
+
         message: "Message not found",
       });
     }
 
     res.status(200).json({
       success: true,
+
       message: "Message deleted successfully",
     });
   } catch (error) {
     res.status(500).json({
       success: false,
+
       message: error.message,
     });
   }
 };
 
-// Mark contact message as read (Admin)
+// Mark as read
+
 const markContactAsRead = async (req, res) => {
   try {
     const contact = await Contact.findByIdAndUpdate(
       req.params.id,
+
       {
         status: "read",
       },
+
       {
         new: true,
       },
     );
 
-    if (!contact) {
-      return res.status(404).json({
-        success: false,
-        message: "Message not found",
-      });
-    }
-
     res.status(200).json({
       success: true,
-      message: "Message marked as read",
+
       contact,
     });
   } catch (error) {
     res.status(500).json({
       success: false,
+
       message: error.message,
     });
   }
 };
 
-// Contact statistics (Admin)
+// Contact stats
+
 const getContactStats = async (req, res) => {
   try {
     const totalMessages = await Contact.countDocuments();
@@ -123,6 +143,7 @@ const getContactStats = async (req, res) => {
 
     res.status(200).json({
       success: true,
+
       stats: {
         totalMessages,
         unreadMessages,
@@ -132,12 +153,13 @@ const getContactStats = async (req, res) => {
   } catch (error) {
     res.status(500).json({
       success: false,
+
       message: error.message,
     });
   }
 };
 
-// Admin reply contact message
+// Admin reply
 
 const replyContact = async (req, res) => {
   try {
@@ -146,6 +168,7 @@ const replyContact = async (req, res) => {
     if (!reply) {
       return res.status(400).json({
         success: false,
+
         message: "Reply is required",
       });
     }
@@ -155,25 +178,24 @@ const replyContact = async (req, res) => {
     if (!contact) {
       return res.status(404).json({
         success: false,
+
         message: "Message not found",
       });
     }
 
-    contact.reply = reply;
+    contact.messages.push({
+      sender: "admin",
+
+      text: reply,
+    });
 
     contact.status = "replied";
 
-    contact.repliedAt = new Date();
-
     await contact.save();
-
-    // Find registered user by email
 
     const user = await User.findOne({
       email: contact.email,
     });
-
-    // Send notification
 
     if (user) {
       await Notification.create({
@@ -203,7 +225,7 @@ const replyContact = async (req, res) => {
   }
 };
 
-// Get user's support messages
+// User support messages
 
 const getMyContacts = async (req, res) => {
   try {
@@ -227,7 +249,56 @@ const getMyContacts = async (req, res) => {
   }
 };
 
-// ================================================
+// User reply
+
+const userReplyContact = async (req, res) => {
+  try {
+    const { message } = req.body;
+
+    if (!message) {
+      return res.status(400).json({
+        success: false,
+
+        message: "Message required",
+      });
+    }
+
+    const contact = await Contact.findById(req.params.id);
+
+    if (!contact) {
+      return res.status(404).json({
+        success: false,
+
+        message: "Contact not found",
+      });
+    }
+
+    contact.messages.push({
+      sender: "user",
+
+      text: message,
+    });
+
+    contact.status = "read";
+
+    await contact.save();
+
+    res.status(200).json({
+      success: true,
+
+      message: "Reply sent",
+
+      contact,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+
+      message: error.message,
+    });
+  }
+};
+
 module.exports = {
   createContact,
   getAllContacts,
@@ -236,4 +307,5 @@ module.exports = {
   getContactStats,
   replyContact,
   getMyContacts,
+  userReplyContact,
 };
