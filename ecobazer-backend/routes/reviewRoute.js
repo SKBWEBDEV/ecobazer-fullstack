@@ -5,6 +5,7 @@ const {
   createReview,
   getProductReviews,
   deleteReview,
+  getFeaturedReviews,
 } = require("../controlers/reviewController");
 
 const secureMiddleware = require("../middleware/secureMiddleware");
@@ -18,7 +19,14 @@ router.post(
 );
 
 
-// Get Product Reviews
+// Home Featured Reviews
+router.get(
+  "/featured",
+  getFeaturedReviews
+);
+
+
+// Product Reviews
 router.get(
   "/:productId",
   getProductReviews

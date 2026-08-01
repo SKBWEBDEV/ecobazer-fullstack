@@ -109,7 +109,11 @@ const SupportMessages = () => {
       className={`
         p-3
         rounded-xl
-        ${msg.sender === "admin" ? "bg-purple-100" : "bg-gray-100"}
+         ${
+      msg.sender === "admin"
+        ? "bg-purple-100 dark:bg-purple-900"
+        : "bg-gray-100 dark:bg-gray-800"
+    }
       `}
     >
       <p className="text-sm font-medium">

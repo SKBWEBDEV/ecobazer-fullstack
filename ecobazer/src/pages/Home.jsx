@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { ArrowRight, Leaf, Truck, ShieldCheck, RotateCcw } from "lucide-react";
+import { ArrowRight, Leaf, Truck, ShieldCheck, RotateCcw, Star } from "lucide-react";
 
 import { getProducts } from "../services/productService";
 import ProductCard from "../components/ProductCard";
@@ -11,7 +11,9 @@ import ShopCTA from "../components/home/ShopCTA";
 import Sustainability from "../components/home/Sustainability";
 import WhyChoose from "../components/home/WhyChoose";
 
+import { getFeaturedReviews } from "../services/reviewService";
 
+import CustomerReviews from "../components/home/CustomerReviews";
 
 const perks = [
   {
@@ -49,6 +51,7 @@ const Home = () => {
   const [products, setProducts] = useState([]);
   const [newArrivals, setNewArrivals] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [featuredReviews, setFeaturedReviews] = useState([]);
 
   useEffect(() => {
     const loadProducts = async () => {
@@ -77,6 +80,24 @@ const Home = () => {
 
     loadProducts();
   }, []);
+
+
+  
+  useEffect(() => {
+  const loadReviews = async () => {
+    try {
+      const response = await getFeaturedReviews();
+
+      setFeaturedReviews(response.data.reviews || []);
+
+    } catch (error) {
+      console.log("Review loading error:", error);
+    }
+  };
+
+  loadReviews();
+
+}, []);
 
   return (
     <div>
@@ -232,10 +253,19 @@ const Home = () => {
         )}
       </section>
 
+      
+
       {/* {Sustainability} */}
       <Sustainability />
+      
+      {/* {CustomerReviews} */}
+      <CustomerReviews reviews={featuredReviews} />
+
+
       {/* {WhyChoose} */}
       <WhyChoose />
+
+
       {/* {ShopCta} */}
       <ShopCTA />
 

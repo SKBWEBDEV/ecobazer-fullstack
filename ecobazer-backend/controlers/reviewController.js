@@ -99,3 +99,29 @@ exports.deleteReview = async (req, res) => {
     });
   }
 };
+
+// Get Featured Reviews for Home Page
+exports.getFeaturedReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find({
+      approved: true,
+      rating: { $gte: 4 },
+    })
+      .populate("user", "firstName lastName profile")
+      .sort({
+        createdAt: -1,
+      })
+      .limit(10);
+
+    res.status(200).json({
+      success: true,
+      reviews,
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};

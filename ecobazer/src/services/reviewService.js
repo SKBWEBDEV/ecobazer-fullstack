@@ -7,3 +7,8 @@ export const addReview = (payload) => {
 export const getReviews = (productId) => {
   return api.get(`/api/reviews/${productId}`);
 };
+
+
+export const getFeaturedReviews = () => {
+  return api.get("/api/reviews/featured");
+};
