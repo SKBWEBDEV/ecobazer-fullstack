@@ -39,6 +39,8 @@ import AdminUsers from "./pages/admin/AdminUsers";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminContacts from "./pages/admin/AdminContacts";
 import AdminReviews from "./pages/admin/AdminReviews";
+import AdminReports from "./pages/admin/AdminReports";
+
 // 404
 import NotFound from "./pages/NotFound";
 
@@ -117,7 +119,8 @@ function App() {
     <Route path="/admin/contacts" element={<AdminContacts />} />
 
     <Route path="/admin/reviews" element={<AdminReviews />} />
-
+    
+    <Route path="/admin/reports" element={<AdminReports />}/>
   </Route>
 </Route>
 

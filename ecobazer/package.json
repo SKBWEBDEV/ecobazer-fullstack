@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "axios": "^1.7.9",
+    "jspdf": "^4.2.1",
+    "jspdf-autotable": "^5.0.8",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
@@ -19,7 +21,8 @@
     "react-router-dom": "^6.28.1",
     "recharts": "^3.10.1",
     "sweetalert2": "^11.14.5",
-    "swiper": "^14.0.7"
+    "swiper": "^14.0.7",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/react": "^18.3.18",

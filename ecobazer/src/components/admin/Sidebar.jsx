@@ -13,6 +13,8 @@ import {
   ArrowLeft,
 } from "lucide-react";
 
+import { FileText } from "lucide-react";
+
 import { NavLink, Link } from "react-router-dom";
 
 const navItems = [
@@ -47,6 +49,11 @@ const navItems = [
   path: "/admin/reviews",
   icon: Star,
 },
+{
+  name: "Reports",
+  path: "/admin/reports",
+  icon: FileText,
+}
 ];
 
 
