@@ -208,15 +208,26 @@ const AdminContacts = () => {
 
               <p className="opacity-80">{selectedContact.message}</p>
 
-              {selectedContact.reply && (
-                <div className="mt-5">
-                  <p>
-                    <strong>Admin Reply:</strong>
-                  </p>
+              <div className="mt-5 space-y-3">
+                <p className="font-semibold">Conversation:</p>
 
-                  <p className="opacity-80 mt-2">{selectedContact.reply}</p>
-                </div>
-              )}
+                {selectedContact.messages?.map((msg, index) => (
+                  <div
+                    key={index}
+                    className={`p-3 rounded-xl ${
+                      msg.sender === "admin"
+                        ? "bg-purple-100 dark:bg-purple-900"
+                        : "bg-gray-100 dark:bg-gray-800"
+                    }`}
+                  >
+                    <p className="text-xs font-semibold mb-1">
+                      {msg.sender === "admin" ? "Admin" : "User"}
+                    </p>
+
+                    <p>{msg.text}</p>
+                  </div>
+                ))}
+              </div>
             </div>
 
             <div className="mt-6">
