@@ -80,55 +80,65 @@ const AdminReports = () => {
   };
   // ===========================================EXAL FUNCTION===============================================
   const exportExcel = () => {
-    const excelData = [
-      {
-        Report: "EcoBazer Sales Report",
+    const excelData = [];
+
+    report.monthlySales?.forEach((month) => {
+      // Month Name
+
+      excelData.push({
+        Report: month.month,
         Value: "",
-      },
+      });
 
-      {
+      // Summary
+
+      excelData.push({
         Report: "Total Orders",
-        Value: report.totalOrders,
-      },
+        Value: month.totalOrders,
+      });
 
-      {
+      excelData.push({
         Report: "Total Revenue",
-        Value: `৳ ${report.totalRevenue}`,
-      },
+        Value: `৳ ${month.totalRevenue}`,
+      });
 
-      {
-        Report: "Delivered Orders",
-        Value: report.deliveredOrders,
-      },
-
-      {
-        Report: "Pending Orders",
-        Value: report.pendingOrders,
-      },
-
-      {
+      excelData.push({
         Report: "",
         Value: "",
-      },
+      });
 
-      {
-        Report: "Top Selling Products",
+      // Product Header
+
+      excelData.push({
+        Report: "Product",
+        Value: "Sold Quantity",
+      });
+
+      // Products
+
+      month.products.forEach((product) => {
+        excelData.push({
+          Report: product.name,
+
+          Value: product.sold,
+        });
+      });
+
+      // Space
+
+      excelData.push({
+        Report: "",
         Value: "",
-      },
-
-      ...report.topProducts.map((product) => ({
-        Report: product.name,
-        Value: `${product.sold} Sold`,
-      })),
-    ];
+      });
+    });
 
     const worksheet = XLSX.utils.json_to_sheet(excelData);
 
     const workbook = XLSX.utils.book_new();
 
-    XLSX.utils.book_append_sheet(workbook, worksheet, "Sales Report");
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Monthly Sales");
 
-    XLSX.writeFile(workbook, "EcoBazer-Sales-Report.xlsx");
+    XLSX.writeFile(workbook, "EcoBazer-Monthly-Sales-Report.xlsx");
   };
 
   if (loading || !report) {
