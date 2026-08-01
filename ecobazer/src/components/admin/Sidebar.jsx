@@ -5,11 +5,11 @@ import {
   Users,
   ShoppingBag,
   MessageSquare,
+  Star,
   X,
   Store,
   ArrowLeft,
 } from "lucide-react";
-import { NavLink, Link } from "react-router-dom";
 
 const navItems = [
   {
@@ -38,6 +38,11 @@ const navItems = [
     path: "/admin/contacts",
     icon: MessageSquare,
   },
+  {
+  name: "Reviews",
+  path: "/admin/reviews",
+  icon: Star,
+},
 ];
 
 

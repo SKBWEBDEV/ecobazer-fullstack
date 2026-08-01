@@ -38,7 +38,7 @@ import AdminProducts from "./pages/admin/AdminProducts";
 import AdminUsers from "./pages/admin/AdminUsers";
 import AdminOrders from "./pages/admin/AdminOrders";
 import AdminContacts from "./pages/admin/AdminContacts";
-
+import AdminReviews from "./pages/admin/AdminReviews";
 // 404
 import NotFound from "./pages/NotFound";
 
@@ -104,18 +104,22 @@ function App() {
       {/* Admin Panel */}
 
       <Route element={<AdminRoute />}>
-        <Route element={<AdminLayout />}>
-          <Route path="/admin" element={<AdminDashboard />} />
+  <Route element={<AdminLayout />}>
 
-          <Route path="/admin/products" element={<AdminProducts />} />
+    <Route path="/admin" element={<AdminDashboard />} />
 
-          <Route path="/admin/users" element={<AdminUsers />} />
+    <Route path="/admin/products" element={<AdminProducts />} />
 
-          <Route path="/admin/orders" element={<AdminOrders />} />
+    <Route path="/admin/users" element={<AdminUsers />} />
 
-          <Route path="/admin/contacts" element={<AdminContacts />} />
-        </Route>
-      </Route>
+    <Route path="/admin/orders" element={<AdminOrders />} />
+
+    <Route path="/admin/contacts" element={<AdminContacts />} />
+
+    <Route path="/admin/reviews" element={<AdminReviews />} />
+
+  </Route>
+</Route>
 
       {/* Not Found */}
 
