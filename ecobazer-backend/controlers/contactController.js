@@ -138,8 +138,10 @@ const getContactStats = async (req, res) => {
     });
 
     const readMessages = await Contact.countDocuments({
-      status: "read",
-    });
+  status: {
+    $in: ["read", "replied"],
+  },
+});
 
     res.status(200).json({
       success: true,
