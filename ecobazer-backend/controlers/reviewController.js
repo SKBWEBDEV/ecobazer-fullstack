@@ -117,7 +117,61 @@ exports.getFeaturedReviews = async (req, res) => {
       success: true,
       reviews,
     });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+  }
+};
 
+// Admin Review Statistics
+
+exports.getReviewStats = async (req, res) => {
+  try {
+    const Review = require("../model/Review");
+
+    const totalReviews = await Review.countDocuments();
+
+    const approvedReviews = await Review.countDocuments({
+      approved: true,
+    });
+
+    const pendingReviews = await Review.countDocuments({
+      approved: false,
+    });
+
+    const ratingData = await Review.aggregate([
+      {
+        $match: {
+          approved: true,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          averageRating: {
+            $avg: "$rating",
+          },
+        },
+      },
+    ]);
+
+    const averageRating =
+      ratingData.length > 0
+        ? Number(ratingData[0].averageRating.toFixed(1))
+        : 0;
+
+    res.status(200).json({
+      success: true,
+
+      stats: {
+        totalReviews,
+        approvedReviews,
+        pendingReviews,
+        averageRating,
+      },
+    });
   } catch (error) {
     res.status(500).json({
       success: false,

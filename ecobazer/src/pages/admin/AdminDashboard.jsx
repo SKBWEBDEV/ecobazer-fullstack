@@ -10,7 +10,8 @@ import {
   MailCheck,
   MailOpen,
   Star,
-  Trophy,
+  CheckCircle,
+  Clock,
 } from "lucide-react";
 import toast from "react-hot-toast";
 
@@ -26,6 +27,7 @@ import OrderTable from "../../components/admin/OrderTable";
 import ActivityCard from "../../components/admin/ActivityCard";
 import { getContactStats } from "../../services/contactService";
 import { getSalesReport } from "../../services/reportService";
+import { getReviewStats } from "../../services/reviewService";
 
 import { Link } from "react-router-dom";
 
@@ -33,6 +35,7 @@ const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
   const [contactStats, setContactStats] = useState(null);
+  const [reviewStats, setReviewStats] = useState(null);
   const [salesReport, setSalesReport] = useState(null);
 
   useEffect(() => {
@@ -41,11 +44,15 @@ const AdminDashboard = () => {
         const { data } = await api.get("/admin/stats");
 
         setStats(data.data);
+
         const contactData = await getContactStats();
         setContactStats(contactData.stats);
 
         const reportData = await getSalesReport();
         setSalesReport(reportData.report);
+
+        const reviewData = await getReviewStats();
+        setReviewStats(reviewData.stats);
       } catch (error) {
         toast.error(getErrorMessage(error, "Could not load dashboard"));
       } finally {
@@ -165,28 +172,85 @@ const AdminDashboard = () => {
   "
       >
         <StatCard
-          title="Total Messages"
-          value={contactStats?.totalMessages || 0}
-          icon={MessageSquare}
-          iconBg="bg-cyan-500/10"
-          iconColor="text-cyan-400"
-        />
+  title="Total Messages"
+  value={contactStats?.totalMessages || 0}
+  icon={MessageSquare}
+  cardBg="bg-cyan-50 dark:bg-cyan-500/10"
+  iconBg="bg-cyan-100 dark:bg-cyan-500/20"
+  iconColor="text-cyan-600 dark:text-cyan-400"
+/>
 
-        <StatCard
-          title="Unread Messages"
-          value={contactStats?.unreadMessages || 0}
-          icon={MailOpen}
-          iconBg="bg-red-500/10"
-          iconColor="text-red-400"
-        />
 
-        <StatCard
-          title="Read Messages"
-          value={contactStats?.readMessages || 0}
-          icon={MailCheck}
-          iconBg="bg-green-500/10"
-          iconColor="text-green-400"
-        />
+<StatCard
+  title="Unread Messages"
+  value={contactStats?.unreadMessages || 0}
+  icon={MailOpen}
+  cardBg="bg-red-50 dark:bg-red-500/10"
+  iconBg="bg-red-100 dark:bg-red-500/20"
+  iconColor="text-red-600 dark:text-red-400"
+/>
+
+
+<StatCard
+  title="Read Messages"
+  value={contactStats?.readMessages || 0}
+  icon={MailCheck}
+  cardBg="bg-green-50 dark:bg-green-500/10"
+  iconBg="bg-green-100 dark:bg-green-500/20"
+  iconColor="text-green-600 dark:text-green-400"
+/>
+      </div>
+
+      {/* Review Stats */}
+
+      <div
+        className="
+grid
+grid-cols-1
+sm:grid-cols-2
+xl:grid-cols-4
+gap-6
+"
+      >
+
+<StatCard
+  title="Total Reviews"
+  value={reviewStats?.totalReviews || 0}
+  icon={Star}
+  cardBg="bg-yellow-50 dark:bg-yellow-500/10"
+  iconBg="bg-yellow-100 dark:bg-yellow-500/20"
+  iconColor="text-yellow-600 dark:text-yellow-400"
+/>
+
+
+<StatCard
+  title="Approved Reviews"
+  value={reviewStats?.approvedReviews || 0}
+  icon={CheckCircle}
+  cardBg="bg-emerald-50 dark:bg-emerald-500/10"
+  iconBg="bg-emerald-100 dark:bg-emerald-500/20"
+  iconColor="text-emerald-600 dark:text-emerald-400"
+/>
+
+
+<StatCard
+  title="Pending Reviews"
+  value={reviewStats?.pendingReviews || 0}
+  icon={Clock}
+  cardBg="bg-orange-50 dark:bg-orange-500/10"
+  iconBg="bg-orange-100 dark:bg-orange-500/20"
+  iconColor="text-orange-600 dark:text-orange-400"
+/>
+
+
+<StatCard
+  title="Average Rating"
+  value={`⭐ ${reviewStats?.averageRating || 0}`}
+  icon={Star}
+  cardBg="bg-purple-50 dark:bg-purple-500/10"
+  iconBg="bg-purple-100 dark:bg-purple-500/20"
+  iconColor="text-purple-600 dark:text-purple-400"
+/>
       </div>
 
       {/* Charts */}

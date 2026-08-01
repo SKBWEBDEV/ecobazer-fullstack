@@ -9,16 +9,18 @@ const StatCard = ({
   icon: Icon,
   iconBg = "bg-white/10",
   iconColor = "text-white",
+  cardBg = "bg-[#242529]",
 }) => {
   return (
     <div
-      className="
-      bg-[#242529]
+      className={`
+      ${cardBg}
       rounded-2xl
       p-6
       border
       border-gray-800/60
-      "
+      shadow-lg
+      `}
     >
       <div className="flex items-center justify-between mb-5">
         <div
