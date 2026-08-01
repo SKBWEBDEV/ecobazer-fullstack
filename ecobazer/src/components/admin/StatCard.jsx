@@ -52,8 +52,8 @@ const StatCard = ({
 
             ${
               isPositive
-                ? "bg-emerald-500/10 text-emerald-400"
-                : "bg-rose-500/10 text-rose-400"
+? "bg-emerald-100 dark:bg-emerald-500/10 text-emerald-700 dark:text-emerald-400"
+: "bg-rose-100 dark:bg-rose-500/10 text-rose-700 dark:text-rose-400"
             }
             `}
           >
@@ -66,20 +66,22 @@ const StatCard = ({
 
       <h2
         className="
-        text-3xl
-        font-bold
-        text-white
-        "
+  text-3xl
+  font-bold
+  text-gray-900
+  dark:text-white
+  "
       >
         {value}
       </h2>
 
       <p
         className="
-        mt-2
-        text-sm
-        text-gray-400
-        "
+  mt-2
+  text-sm
+  text-gray-900
+  dark:text-gray-50
+  "
       >
         {title}
       </p>

@@ -111,54 +111,60 @@ const AdminDashboard = () => {
         "
       >
         <StatCard
-          title="Total Products"
-          value={stats?.totalProducts || 0}
-          change="+12%"
-          isPositive
-          icon={Package}
-          iconBg="bg-blue-500/10"
-          iconColor="text-blue-400"
-        />
+  title="Total Products"
+  value={stats?.totalProducts || 0}
+  change="+12%"
+  isPositive
+  icon={Package}
+cardBg="bg-blue-100 dark:bg-blue-500/90"
+iconBg="bg-blue-200 dark:bg-blue-500/30"
+iconColor="text-blue-700 dark:text-blue-300"
+/>
 
         <StatCard
-          title="Total Users"
-          value={stats?.totalUsers || 0}
-          change="+18%"
-          isPositive
-          icon={Users}
-          iconBg="bg-purple-500/10"
-          iconColor="text-purple-400"
-        />
+  title="Total Users"
+  value={stats?.totalUsers || 0}
+  change="+18%"
+  isPositive
+  icon={Users}
+cardBg="bg-emerald-100 dark:bg-emerald-500/50"
+iconBg="bg-emerald-200 dark:bg-emerald-500/30"
+iconColor="text-emerald-700 dark:text-emerald-300"
+/>
 
-        <StatCard
-          title="Total Orders"
-          value={stats?.totalOrders || 0}
-          change="+24%"
-          isPositive
-          icon={ShoppingBag}
-          iconBg="bg-emerald-500/10"
-          iconColor="text-emerald-400"
-        />
+<StatCard
+  title="Total Orders"
+  value={stats?.totalOrders || 0}
+  change="+24%"
+  isPositive
+  icon={ShoppingBag}
+cardBg="bg-purple-800 dark:bg-purple-800"
+iconBg="bg-purple-200 dark:bg-purple-500/30"
+iconColor="text-purple-700 dark:text-purple-300"
+/>
 
-        <StatCard
-          title="Revenue"
-          value={`৳ ${stats?.totalRevenue?.toLocaleString("en-US") || 0}`}
-          change="+15%"
-          isPositive
-          icon={DollarSign}
-          iconBg="bg-amber-500/10"
-          iconColor="text-amber-400"
-        />
+<StatCard
+  title="Revenue"
+  value={`৳ ${stats?.totalRevenue?.toLocaleString("en-US") || 0}`}
+  change="+15%"
+  isPositive
+  icon={DollarSign}
+  cardBg="bg-[rgb(219,75,144)] dark:bg-[rgb(225,74,143)]"
+  iconBg="bg-amber-500/80"
+  iconColor="text-amber-900"
+/>
 
-        <StatCard
-          title="Out of Stock"
-          value={stats?.outOfStock || 0}
-          change="-3%"
-          isPositive={false}
-          icon={AlertCircle}
-          iconBg="bg-rose-500/10"
-          iconColor="text-rose-400"
-        />
+<StatCard
+  title="Out of Stock"
+  value={stats?.outOfStock || 0}
+  change="-3%"
+  isPositive={false}
+  icon={AlertCircle}
+    cardBg="bg-[rgb(219,75,144)] dark:bg-[rgb(98,78,189)]"
+  iconBg="bg-amber-500/80"
+  iconColor="text-amber-900"
+
+/>
       </div>
 
       {/* Contact Stats */}
@@ -175,8 +181,8 @@ const AdminDashboard = () => {
   title="Total Messages"
   value={contactStats?.totalMessages || 0}
   icon={MessageSquare}
-  cardBg="bg-cyan-50 dark:bg-cyan-500/10"
-  iconBg="bg-cyan-100 dark:bg-cyan-500/20"
+  cardBg="bg-cyan-500 dark:bg-cyan-500"
+  iconBg="bg-cyan-100 dark:bg-cyan-900"
   iconColor="text-cyan-600 dark:text-cyan-400"
 />
 
@@ -185,8 +191,8 @@ const AdminDashboard = () => {
   title="Unread Messages"
   value={contactStats?.unreadMessages || 0}
   icon={MailOpen}
-  cardBg="bg-red-50 dark:bg-red-500/10"
-  iconBg="bg-red-100 dark:bg-red-500/20"
+  cardBg="bg-red-500 dark:bg-red-500"
+  iconBg="bg-red-100 dark:bg-red-900"
   iconColor="text-red-600 dark:text-red-400"
 />
 
@@ -195,8 +201,8 @@ const AdminDashboard = () => {
   title="Read Messages"
   value={contactStats?.readMessages || 0}
   icon={MailCheck}
-  cardBg="bg-green-50 dark:bg-green-500/10"
-  iconBg="bg-green-100 dark:bg-green-500/20"
+  cardBg="bg-green-500 dark:bg-green-500"
+  iconBg="bg-green-100 dark:bg-green-900"
   iconColor="text-green-600 dark:text-green-400"
 />
       </div>
@@ -217,8 +223,8 @@ gap-6
   title="Total Reviews"
   value={reviewStats?.totalReviews || 0}
   icon={Star}
-  cardBg="bg-yellow-50 dark:bg-yellow-500/10"
-  iconBg="bg-yellow-100 dark:bg-yellow-500/20"
+  cardBg="bg-yellow-500 dark:bg-yellow-500"
+  iconBg="bg-yellow-100 dark:bg-yellow-900"
   iconColor="text-yellow-600 dark:text-yellow-400"
 />
 
@@ -227,8 +233,8 @@ gap-6
   title="Approved Reviews"
   value={reviewStats?.approvedReviews || 0}
   icon={CheckCircle}
-  cardBg="bg-emerald-50 dark:bg-emerald-500/10"
-  iconBg="bg-emerald-100 dark:bg-emerald-500/20"
+  cardBg="bg-emerald-500 dark:bg-emerald-500"
+  iconBg="bg-emerald-100 dark:bg-emerald-900"
   iconColor="text-emerald-600 dark:text-emerald-400"
 />
 
@@ -237,8 +243,8 @@ gap-6
   title="Pending Reviews"
   value={reviewStats?.pendingReviews || 0}
   icon={Clock}
-  cardBg="bg-orange-50 dark:bg-orange-500/10"
-  iconBg="bg-orange-100 dark:bg-orange-500/20"
+  cardBg="bg-orange-500 dark:bg-orange-500"
+  iconBg="bg-orange-100 dark:bg-orange-900"
   iconColor="text-orange-600 dark:text-orange-400"
 />
 
@@ -247,9 +253,9 @@ gap-6
   title="Average Rating"
   value={`⭐ ${reviewStats?.averageRating || 0}`}
   icon={Star}
-  cardBg="bg-purple-50 dark:bg-purple-500/10"
-  iconBg="bg-purple-100 dark:bg-purple-500/20"
-  iconColor="text-purple-600 dark:text-purple-400"
+  cardBg="bg-purple-500 dark:bg-purple-500"
+  iconBg="bg-purple-100 dark:bg-purple-900"
+  iconColor="text-purple-600 dark:text-purple-100"
 />
       </div>
 
