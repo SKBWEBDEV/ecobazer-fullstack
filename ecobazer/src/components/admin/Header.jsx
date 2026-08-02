@@ -12,7 +12,7 @@ import {
 export default function Header({ onMenuClick }) {
   const [notifications, setNotifications] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
-
+  const unreadCount = notifications.filter((item) => !item.isRead).length;
 
 
   const handleNotificationClick = async (id) => {
@@ -144,7 +144,7 @@ hover:bg-gray-800
           >
             <Bell size={20} />
 
-            {notifications.length > 0 && (
+            {unreadCount > 0 && (
               <span
                 className="
       absolute
@@ -162,7 +162,7 @@ hover:bg-gray-800
       text-white
     "
               >
-                {notifications.length}
+                {unreadCount}
               </span>
             )}
           </button>
