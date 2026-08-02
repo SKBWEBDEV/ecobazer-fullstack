@@ -2,7 +2,8 @@ const axios = require("axios");
 
 const Cart = require("../model/cartModel");
 const Order = require("../model/orderModel");
-
+const User = require("../model/userModel");
+const AdminNotification = require("../model/AdminNotification");
 // ================= CREATE PAYMENT =================
 
 const paymentControler = async (req, res) => {
@@ -73,21 +74,32 @@ const paymentControler = async (req, res) => {
     const totalPrice = products.reduce((sum, item) => sum + item.totalPrice, 0);
 
     // ================= CASH ON DELIVERY =================
-
+console.log("Payment Method:", paymentMethod);
     if (paymentMethod === "COD") {
-      const order = await Order.create({
-        user: userId,
+const order = await Order.create({
+  user: userId,
 
-        products,
+  products,
 
-        totalPrice,
+  totalPrice,
 
-        paymentMethod: "COD",
+  paymentMethod: "COD",
 
-        paymentStatus: "pending",
+  paymentStatus: "pending",
 
-        status: "pending",
-      });
+  status: "pending",
+});
+
+
+const user = await User.findById(userId);
+
+
+await AdminNotification.create({
+  title: "New Order Received",
+  message: `New order placed by ${user.firstName} ${user.lastName}`,
+  type: "order",
+  link: "/admin/orders",
+});
 
       await Cart.deleteMany({
         user: userId,
@@ -217,6 +229,13 @@ const paymentSuccess = async (req, res) => {
         message: "Order not found",
       });
     }
+
+    await AdminNotification.create({
+  title: "New Order Received",
+  message: `Payment completed for order #${order._id}`,
+  type: "order",
+  link: "/admin/orders",
+});
 
     await Cart.deleteMany({
       user: order.user,

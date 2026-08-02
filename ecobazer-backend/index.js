@@ -31,6 +31,8 @@ const contactRoute = require("./routes/contactRoute");
 
 const adminReviewRoute = require("./routes/adminReviewRoute");
 
+const adminNotificationRoutes = require("./routes/adminNotificationRoutes");
+
 // Controllers
 
 const {
@@ -164,6 +166,11 @@ app.delete(
   secureMiddleware,
   adminMiddleware,
   deleteUserControler,
+);
+
+app.use(
+  "/api/admin/notifications",
+  adminNotificationRoutes
 );
 
 // ================= ORDERS =================

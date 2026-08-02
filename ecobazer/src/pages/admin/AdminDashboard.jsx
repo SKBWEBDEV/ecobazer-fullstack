@@ -116,9 +116,9 @@ const AdminDashboard = () => {
   change="+12%"
   isPositive
   icon={Package}
-cardBg="bg-blue-100 dark:bg-blue-500/90"
-iconBg="bg-blue-200 dark:bg-blue-500/30"
-iconColor="text-blue-700 dark:text-blue-300"
+cardBg="bg-blue-100 dark:bg-blue-500"
+iconBg="bg-blue-200 dark:bg-blue-900"
+iconColor="text-blue-900 dark:text-blue-800"
 />
 
         <StatCard
@@ -127,8 +127,8 @@ iconColor="text-blue-700 dark:text-blue-300"
   change="+18%"
   isPositive
   icon={Users}
-cardBg="bg-emerald-100 dark:bg-emerald-500/50"
-iconBg="bg-emerald-200 dark:bg-emerald-500/30"
+cardBg="bg-emerald-100 dark:bg-emerald-500"
+iconBg="bg-emerald-200 dark:bg-emerald-900"
 iconColor="text-emerald-700 dark:text-emerald-300"
 />
 
