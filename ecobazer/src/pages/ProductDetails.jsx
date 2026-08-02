@@ -111,12 +111,10 @@ const ProductDetails = () => {
 const handleAdd = async () => {
   setAdding(true);
 
-  const selectedImage = images[activeImage];
-
-await addToCart(
-  product._id || product.id,
-  images[activeImage]
-);
+  await addToCart(
+    product._id || product.id,
+    images[activeImage]
+  );
 
   setAdding(false);
 };

@@ -10,7 +10,11 @@ const createCart = async (req,res)=>{
 try{
 
 
-const {proid,userId}=req.body;
+const {
+  proid,
+  userId,
+  selectedImage
+}=req.body;
 
 
 
@@ -73,15 +77,11 @@ cartItem.quantity += 1;
 
 
 cartItem = new Cart({
-
-product:proid,
-
-user:userId,
-
-quantity:1,
-
-totalPrice:product.price
-
+  product:proid,
+  user:userId,
+  selectedImage,
+  quantity:1,
+  totalPrice:product.price
 });
 
 

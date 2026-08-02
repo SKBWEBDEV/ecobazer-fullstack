@@ -48,8 +48,8 @@ export const CartProvider = ({ children }) => {
     fetchCart();
   }, [fetchCart]);
 
-  const addToCart = useCallback(
-    async (proid, selectedImage) => {
+const addToCart = useCallback(
+  async (proid, selectedImage) => {
       console.log("Product ID:", proid);
       console.log("Selected Image:", selectedImage);
       console.log("User:", user);
@@ -61,7 +61,11 @@ export const CartProvider = ({ children }) => {
       }
 
       try {
-        await addToCartApi(proid, user.id, selectedImage);
+        await addToCartApi(
+  proid,
+  user.id,
+  selectedImage
+)
 
         await fetchCart();
 
