@@ -33,6 +33,8 @@ const adminReviewRoute = require("./routes/adminReviewRoute");
 
 const adminNotificationRoutes = require("./routes/adminNotificationRoutes");
 
+const paymentRoutes = require("./routes/paymentRoutes");
+
 // Controllers
 
 const {
@@ -66,10 +68,7 @@ const {
   getCart,
 } = require("./controlers/cartControler");
 
-const {
-  paymentControler,
-  paymentSuccess,
-} = require("./controlers/paymentControler");
+
 
 // Rate Limit
 
@@ -86,6 +85,7 @@ const limiter = rateLimit({
 // Middleware
 
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 const allowedOrigins = [
   "http://localhost:5173",
@@ -147,9 +147,7 @@ app.delete("/cart/:id", proDelete);
 
 // ================= PAYMENT =================
 
-app.post("/payment", secureMiddleware, paymentControler);
-
-app.post("/payment/success", secureMiddleware, paymentSuccess);
+app.use("/api/payment", paymentRoutes);
 
 // ================= USER =================
 
@@ -160,6 +158,8 @@ app.get("/users", secureMiddleware, adminMiddleware, allUserControler);
 app.get("/users/:id", secureMiddleware, singleUserControler);
 
 app.put("/users/:id", secureMiddleware, updateUserControler);
+
+
 
 app.delete(
   "/users/:id",
@@ -172,6 +172,8 @@ app.use(
   "/api/admin/notifications",
   adminNotificationRoutes
 );
+
+
 
 // ================= ORDERS =================
 
