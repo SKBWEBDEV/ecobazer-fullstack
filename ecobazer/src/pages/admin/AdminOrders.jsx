@@ -252,15 +252,13 @@ space-y-2
   >
 
     <img
-      src={item.image}
-      alt={item.title}
-      className="
-      w-16
-      h-16
-      rounded-lg
-      object-cover
-      "
-    />
+ src={
+   item.image ||
+   item.selectedImage ||
+   "https://via.placeholder.com/60"
+ }
+ alt={item.title}
+/>
 
 
     <div>

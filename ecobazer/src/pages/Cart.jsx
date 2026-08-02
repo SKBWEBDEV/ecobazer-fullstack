@@ -65,10 +65,12 @@ const Cart = () => {
             return (
               <div key={cartId} className="card-surface flex gap-4 p-4">
                 <img
-                  src={image}
-                  alt={product.title || product.name}
-                  className="h-20 w-20 shrink-0 rounded-xl object-cover"
-                  onError={(e) => (e.currentTarget.src = FALLBACK_IMG)}
+                  src={
+                    item.selectedImage ||
+                    item.product?.images?.[0]?.url ||
+                    "https://via.placeholder.com/60"
+                  }
+                  alt={item.product?.title}
                 />
 
                 <div className="flex flex-1 flex-col justify-between">

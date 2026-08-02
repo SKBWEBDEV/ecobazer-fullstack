@@ -43,29 +43,30 @@ const paymentControler = async (req, res) => {
       });
     }
 
-    const products = [];
+const products = [];
 
-    cart.forEach((item) => {
-      if (item.product) {
-        products.push({
-          product: item.product._id,
+cart.forEach((item) => {
+  if (item.product) {
+    products.push({
+      product: item.product._id,
 
-          title: item.product.title,
+      title: item.product.title,
 
-          image:
-            item.product.images?.find((img) => img.isMain)?.url ||
-            item.product.images?.[0]?.url,
+      image:
+        item.selectedImage ||
+        item.product.images?.find((img)=>img.isMain)?.url ||
+        item.product.images?.[0]?.url,
 
-          price: item.product.price,
+      price: item.product.price,
 
-          sku: item.product.sku,
+      sku: item.product.sku,
 
-          quantity: item.quantity,
+      quantity: item.quantity,
 
-          totalPrice: item.product.price * item.quantity,
-        });
-      }
+      totalPrice: item.product.price * item.quantity,
     });
+  }
+});
 
     if (products.length === 0) {
       return res.status(400).json({
