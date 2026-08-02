@@ -50,7 +50,9 @@ const paymentControler = async (req, res) => {
         products.push({
           product: item.product._id,
 
-          title: item.product.title,
+          image:
+             item.product.images?.find((img) => img.isMain)?.url ||
+             item.product.images?.[0]?.url,
 
           price: item.product.price,
 

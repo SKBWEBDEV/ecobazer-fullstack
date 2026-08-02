@@ -25,7 +25,10 @@ const emptyDefaults = {
   brand: "",
   stock: "",
   sku: "",
-  image: "",
+  image1: "",
+  image2: "",
+  image3: "",
+  image4: "",
   shortDescription: "",
   description: "",
 };
@@ -84,7 +87,10 @@ const AdminProducts = () => {
       brand: product.brand || "",
       stock: product.stock ?? "",
       sku: product.sku || "",
-      image: product.images?.[0]?.url || "",
+      image1: product.images?.[0]?.url || "",
+      image2: product.images?.[1]?.url || "",
+      image3: product.images?.[2]?.url || "",
+      image4: product.images?.[3]?.url || "",
       shortDescription: product.shortDescription || "",
       description: product.description || "",
     });
@@ -115,11 +121,26 @@ const AdminProducts = () => {
       description: values.description,
 
       images: [
-        {
-          url: values.image,
+        values.image1 && {
+          url: values.image1,
           isMain: true,
         },
-      ],
+
+        values.image2 && {
+          url: values.image2,
+          isMain: false,
+        },
+
+        values.image3 && {
+          url: values.image3,
+          isMain: false,
+        },
+
+        values.image4 && {
+          url: values.image4,
+          isMain: false,
+        },
+      ].filter(Boolean),
     };
 
     try {
@@ -448,7 +469,13 @@ transition
             <Input label="Brand" {...register("brand")} />
           </div>
 
-          <Input label="Image URL" {...register("image")} />
+          <Input label="Main Image URL" {...register("image1")} />
+
+          <Input label="Image URL 2" {...register("image2")} />
+
+          <Input label="Image URL 3" {...register("image3")} />
+
+          <Input label="Image URL 4" {...register("image4")} />
 
           <textarea
             className="input-field w-full"

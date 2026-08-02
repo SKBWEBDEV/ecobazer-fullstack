@@ -239,10 +239,34 @@ space-y-2
 "
               >
                 {order.products?.map((item, index) => (
-                  <p key={index} className="text-gray-300 text-sm">
-                    {item.title} × {item.quantity}
-                  </p>
-                ))}
+  <div
+    key={index}
+    className="flex items-center gap-4 text-gray-300 text-sm"
+  >
+    <img
+      src={
+        item.image ||
+        "https://via.placeholder.com/60"
+      }
+      alt={item.title}
+      className="w-14 h-14 rounded-lg object-cover border border-gray-700"
+    />
+
+    <div>
+      <p className="text-white font-medium">
+        {item.title}
+      </p>
+
+      <p className="text-gray-400">
+        Quantity: {item.quantity}
+      </p>
+
+      <p className="text-gray-400">
+        Price: ৳ {item.price}
+      </p>
+    </div>
+  </div>
+))}
               </div>
             </div>
           ))

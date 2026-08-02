@@ -173,19 +173,36 @@ const ProductDetails = () => {
             />
           </div>
 
+
           {images.length > 1 && (
-            <div className="mt-3 flex gap-3">
-              {images.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => setActiveImage(index)}
-                  className="h-16 w-16 overflow-hidden rounded-xl"
-                >
-                  <img src={img} className="h-full w-full object-cover" />
-                </button>
-              ))}
-            </div>
-          )}
+  <div className="mt-3 flex gap-3">
+    {images.map((img, index) => (
+      <button
+        key={index}
+        onClick={() => setActiveImage(index)}
+        className={`
+          h-16
+          w-16
+          overflow-hidden
+          rounded-xl
+          border-2
+          transition
+          ${
+            activeImage === index
+              ? "border-moss-600"
+              : "border-transparent"
+          }`}>
+        <img
+          src={img}
+          alt={`${product.title}-${index}`}
+          className="h-full w-full object-cover"
+        />
+      </button>
+    ))}
+  </div>
+)}
+
+          
         </div>
 
         {/* Product Details */}
