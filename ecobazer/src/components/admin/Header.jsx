@@ -5,6 +5,8 @@ import { Search, Bell, Menu, SlidersHorizontal, Grid } from "lucide-react";
 import {
   getAdminNotifications,
   markAdminNotificationRead,
+  deleteAdminNotification,
+  clearAllAdminNotifications,
 } from "../../services/adminNotificationService";
 
 // =========================================================================
@@ -13,8 +15,21 @@ export default function Header({ onMenuClick }) {
   const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
+  const [clearLoading, setClearLoading] = useState(false);
   const unreadCount = notifications.filter((item) => !item.isRead).length;
 
+  const handleDeleteNotification = async (id) => {
+  try {
+    await deleteAdminNotification(id);
+
+    setNotifications((prev) =>
+      prev.filter((item) => item._id !== id)
+    );
+
+  } catch (error) {
+    console.log(error);
+  }
+};
 
 const handleNotificationClick = async (id) => {
   try {
@@ -133,31 +148,7 @@ hover:bg-gray-800
 
         <div className="relative">
           <button
-            onClick={async () => {
-  setShowNotification(!showNotification);
-
-  if (unreadCount > 0) {
-    try {
-      await Promise.all(
-        notifications
-          .filter((item) => !item.isRead)
-          .map((item) =>
-            markAdminNotificationRead(item._id)
-          )
-      );
-
-      setNotifications((prev) =>
-        prev.map((item) => ({
-          ...item,
-          isRead: true,
-        }))
-      );
-
-    } catch (error) {
-      console.log(error);
-    }
-  }
-}}
+          onClick={() => setShowNotification(!showNotification)}
             className="
 relative
 p-2
@@ -223,6 +214,32 @@ hover:bg-gray-800
                   Notifications
                 </h3>
 
+<button
+  onClick={async () => {
+    try {
+      setClearLoading(true);
+
+      await clearAllAdminNotifications();
+
+      setTimeout(() => {
+        setNotifications([]);
+        setClearLoading(false);
+      }, 1000);
+
+    } catch (error) {
+      console.log(error);
+      setClearLoading(false);
+    }
+  }}
+  className="
+  text-xs
+  text-red-500
+  hover:text-red-700
+  "
+>
+  {clearLoading ? "Clearing..." : "Clear All"}
+</button>
+
                 {unreadCount > 0 && (
   <span
     className="
@@ -272,11 +289,26 @@ hover:bg-gray-800
               ${
                 !item.isRead
                   ? "bg-gray-100 dark:bg-gray-800 border-purple-500"
-                  : "border-gray-200 dark:border-gray-700"
-              }
-            `}
-                    >
+                  : "border-gray-200 dark:border-gray-700"}`}>
                       <div className="flex gap-3">
+
+
+                        <button
+  onClick={(e) => {
+    e.stopPropagation();
+    handleDeleteNotification(item._id);
+  }}
+  className="
+    text-red-500
+    hover:text-red-700
+    text-sm
+  "
+>
+  🗑️
+</button>
+
+
+
                         <div
                           className="
                   flex
@@ -295,38 +327,63 @@ hover:bg-gray-800
                         </div>
 
                         <div className="flex-1">
-                          <p
-                            className="
-                    text-sm
-                    font-semibold
-                    text-gray-900
-                    dark:text-white
-                  "
-                          >
-                            {item.title}
-                          </p>
 
-                          <p
-                            className="
-                    mt-1
-                    text-xs
-                    text-gray-600
-                    dark:text-gray-400
-                  "
-                          >
-                            {item.message}
-                          </p>
+  <div className="flex items-center gap-2">
 
-                          <p
-                            className="
-                    mt-2
-                    text-[11px]
-                    text-gray-400
-                  "
-                          >
-                            {new Date(item.createdAt).toLocaleString()}
-                          </p>
-                        </div>
+    <p
+      className="
+      text-sm
+      font-semibold
+      text-gray-900
+      dark:text-white
+      "
+    >
+      {item.title}
+    </p>
+
+    {!item.isRead && (
+      <span
+        className="
+        text-xs
+        bg-red-500
+        text-white
+        px-2
+        py-1
+        rounded-full
+        "
+      >
+        NEW
+      </span>
+    )}
+
+  </div>
+
+
+  <p
+    className="
+    mt-1
+    text-xs
+    text-gray-600
+    dark:text-gray-400
+    "
+  >
+    {item.message}
+  </p>
+
+
+  <p
+    className="
+    mt-2
+    text-[11px]
+    text-gray-400
+    "
+  >
+    {new Date(item.createdAt).toLocaleString()}
+  </p>
+
+
+</div>
+
                       </div>
                     </div>
                   ))}

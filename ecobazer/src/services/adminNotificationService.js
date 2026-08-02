@@ -34,3 +34,13 @@ export const clearAllAdminNotifications = async () => {
 
   return data;
 };
+
+
+// Delete single notification
+export const deleteAdminNotification = async (id) => {
+  const { data } = await api.delete(
+    `/api/admin/notifications/${id}`
+  );
+
+  return data;
+};
