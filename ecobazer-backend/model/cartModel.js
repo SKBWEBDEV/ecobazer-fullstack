@@ -2,56 +2,52 @@ const mongoose = require("mongoose");
 
 const { Schema } = mongoose;
 
-
 const cartSchema = new Schema(
-{
-  product:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"Product",
-    required:true
+  {
+    product: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
+      required: true,
+    },
+
+    // Selected product image
+    selectedImage: {
+      type: String,
+    },
+
+    quantity: {
+      type: Number,
+      min: 1,
+      required: true,
+      default: 1,
+    },
+
+    totalPrice: {
+      type: Number,
+      required: true,
+      default: 0,
+    },
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
-
-
-  quantity:{
-    type:Number,
-    min:1,
-    required:true,
-    default:1
+  {
+    timestamps: true,
   },
-
-
-  totalPrice:{
-    type:Number,
-    required:true,
-    default:0
-  },
-
-
-  user:{
-    type:mongoose.Schema.Types.ObjectId,
-    ref:"User",
-    required:true
-  }
-
-},
-{
-  timestamps:true
-});
-
+);
 
 // Same user same product duplicate prevent
 cartSchema.index(
   {
-    product:1,
-    user:1
+    product: 1,
+    user: 1,
   },
   {
-    unique:true
-  }
+    unique: true,
+  },
 );
 
-
-module.exports = mongoose.model(
-  "Cart",
-  cartSchema
-);
+module.exports = mongoose.model("Cart", cartSchema);

@@ -90,7 +90,9 @@ const Checkout = () => {
 
   return (
     <div className="container-app py-10">
-      <h1 className="mb-8 text-2xl font-semibold text-ink-900 dark:text-white">Checkout</h1>
+      <h1 className="mb-8 text-2xl font-semibold text-ink-900 dark:text-white">
+        Checkout
+      </h1>
 
       <div className="grid gap-8 lg:grid-cols-3">
         <form
@@ -169,7 +171,9 @@ const Checkout = () => {
           {/* Payment Method */}
 
           <div className="mt-6">
-            <h3 className="mb-3 font-semibold text-ink-900 dark:text-white">Payment Method</h3>
+            <h3 className="mb-3 font-semibold text-ink-900 dark:text-white">
+              Payment Method
+            </h3>
 
             <label className="flex items-center gap-2 mb-3 text-ink-900 dark:text-white">
               <input
@@ -208,60 +212,69 @@ const Checkout = () => {
 
         {/* Summary */}
 
-<div className="card-surface h-fit p-6 text-ink-900 dark:text-white">
+        <div className="card-surface h-fit p-6 text-ink-900 dark:text-white">
+          <h2 className="mb-4 text-lg font-semibold text-ink-900 dark:text-white">
+            Order summary
+          </h2>
 
-  <h2 className="mb-4 text-lg font-semibold text-ink-900 dark:text-white">
-    Order summary
-  </h2>
+          <div className="max-h-64 space-y-3 overflow-y-auto ">
+            {items.map((item) => {
+              const product = item.product || item;
 
-  <div className="max-h-64 space-y-3 overflow-y-auto ">
+              const qty = item.quantity || item.qty || 1;
 
-    {items.map((item) => {
-      const product = item.product || item;
+              return (
+                <div
+                  key={item._id || item.id}
+                  className="flex items-center gap-3 text-sm"
+                >
+                  <img
+  src={
+    item.selectedImage ||
+    product.images?.[0]?.url
+  }
+  alt={product.title}
+  className="w-14 h-14 rounded-lg object-cover"
+/>
 
-      const qty = item.quantity || item.qty || 1;
+                  <div
+                    className=" flex items-center justify-between gap-3 text-sm "
+                  >
+                    <div className="flex items-center gap-3">
+                      <img
+                        src={
+                          item.selectedImage ||
+                          product.image ||
+                          product.images?.[0]?.url
+                        }
+                        alt={product.title}
+                        className=" w-14 h-14 rounded-lg object-cover"
+                      />
 
-      return (
-        <div
-  key={item._id || item.id}
-  className="flex items-center gap-3 text-sm"
->
-  <img
-    src={
-      product.images?.[0]?.url ||
-      product.image ||
-      "https://via.placeholder.com/60"
-    }
-    alt={product.title}
-    className="h-14 w-14 rounded-lg object-cover"
-  />
+                      <span>
+                        {product.title || product.name} × {qty}
+                      </span>
+                    </div>
 
-  <div className="flex-1">
-    <p className="text-ink-900 dark:text-white font-medium">
-      {product.title || product.name}
-    </p>
+                    <span>
+                      {formatPrice((product.price ?? item.price ?? 0) * qty)}
+                    </span>
+                  </div>
 
-    <p className="text-gray-500">
-      Qty: {qty}
-    </p>
-  </div>
+                  <span className="text-ink-900 dark:text-white">
+                    {formatPrice((product.price ?? item.price ?? 0) * qty)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
 
-  <span className="text-ink-900 dark:text-white">
-    {formatPrice((product.price ?? item.price ?? 0) * qty)}
-  </span>
-</div>
-      );
-    })}
-  </div>
+          <div className="mt-4 flex justify-between border-t pt-4 font-semibold text-ink-900 dark:text-white">
+            <span>Total</span>
 
-<div className="mt-4 flex justify-between border-t pt-4 font-semibold text-ink-900 dark:text-white">
-  <span>Total</span>
-
-  <span>{formatPrice(totalPrice)}</span>
-</div>
-</div>
-
-        
+            <span>{formatPrice(totalPrice)}</span>
+          </div>
+        </div>
       </div>
     </div>
   );
