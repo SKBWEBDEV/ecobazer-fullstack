@@ -1,4 +1,5 @@
 const User = require("../model/userModel");
+const AdminNotification = require("../model/AdminNotification");
 const { mailVerifycation, resetPasswordEmail } = require("../utils/email");
 const { tokenGenerator } = require("../utils/tokenGenerator");
 
@@ -44,6 +45,13 @@ const registationControler = async (req, res) => {
     });
 
     await user.save();
+
+    await AdminNotification.create({
+  title: "New User Registered",
+  message: `${user.email} created a new account`,
+  type: "user",
+  link: "/admin/users",
+});
 
     const token = tokenGenerator(
       {

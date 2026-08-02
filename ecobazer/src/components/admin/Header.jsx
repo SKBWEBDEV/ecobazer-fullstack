@@ -10,12 +10,13 @@ import {
 // =========================================================================
 
 export default function Header({ onMenuClick }) {
+  const navigate = useNavigate();
   const [notifications, setNotifications] = useState([]);
   const [showNotification, setShowNotification] = useState(false);
   const unreadCount = notifications.filter((item) => !item.isRead).length;
 
 
-  const handleNotificationClick = async (id) => {
+const handleNotificationClick = async (id) => {
   try {
     await markAdminNotificationRead(id);
 
@@ -132,7 +133,31 @@ hover:bg-gray-800
 
         <div className="relative">
           <button
-            onClick={() => setShowNotification(!showNotification)}
+            onClick={async () => {
+  setShowNotification(!showNotification);
+
+  if (unreadCount > 0) {
+    try {
+      await Promise.all(
+        notifications
+          .filter((item) => !item.isRead)
+          .map((item) =>
+            markAdminNotificationRead(item._id)
+          )
+      );
+
+      setNotifications((prev) =>
+        prev.map((item) => ({
+          ...item,
+          isRead: true,
+        }))
+      );
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}}
             className="
 relative
 p-2
@@ -198,20 +223,20 @@ hover:bg-gray-800
                   Notifications
                 </h3>
 
-                {notifications.length > 0 && (
-                  <span
-                    className="
-            text-xs
-            bg-red-500
-            text-white
-            px-2
-            py-1
-            rounded-full
-          "
-                  >
-                    {notifications.length}
-                  </span>
-                )}
+                {unreadCount > 0 && (
+  <span
+    className="
+      text-xs
+      bg-red-500
+      text-white
+      px-2
+      py-1
+      rounded-full
+    "
+  >
+    {unreadCount}
+  </span>
+)}
               </div>
 
               {notifications.length === 0 ? (
@@ -229,7 +254,13 @@ hover:bg-gray-800
                   {notifications.map((item) => (
                     <div
   key={item._id}
-  onClick={() => handleNotificationClick(item._id)}
+  onClick={async () => {
+    await handleNotificationClick(item._id);
+
+    if (item.link) {
+      navigate(item.link);
+    }
+  }}
   className={`
               p-3
               rounded-lg
@@ -237,7 +268,7 @@ hover:bg-gray-800
               transition
               hover:bg-gray-100
               dark:hover:bg-gray-800
-
+              cursor-pointer
               ${
                 !item.isRead
                   ? "bg-gray-100 dark:bg-gray-800 border-purple-500"
