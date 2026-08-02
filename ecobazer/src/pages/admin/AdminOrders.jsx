@@ -241,13 +241,27 @@ space-y-2
 {order.products?.map((item, index) => (
   <div
     key={index}
-    className="flex items-center gap-4"
+    className="
+    flex
+    items-center
+    gap-4
+    bg-[#1a1b1f]
+    rounded-xl
+    p-3
+    "
   >
+
     <img
       src={item.image}
       alt={item.title}
-      className="h-14 w-14 rounded-lg object-cover"
+      className="
+      w-16
+      h-16
+      rounded-lg
+      object-cover
+      "
     />
+
 
     <div>
       <p className="text-white font-medium">
@@ -259,12 +273,17 @@ space-y-2
       </p>
 
       <p className="text-gray-400 text-sm">
-        Price: ৳ {item.totalPrice}
+        Price: ৳ {item.price}
       </p>
+
+      <p className="text-gray-400 text-sm">
+        Total: ৳ {item.totalPrice}
+      </p>
+
     </div>
+
   </div>
 ))}
-
               </div>
             </div>
           ))
