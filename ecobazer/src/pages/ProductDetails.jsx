@@ -108,13 +108,18 @@ const ProductDetails = () => {
 
   const inStock = Number(product.stock) > 0;
 
-  const handleAdd = async () => {
-    setAdding(true);
+const handleAdd = async () => {
+  setAdding(true);
 
-    await addToCart(product._id || product.id);
+  const selectedImage = images[activeImage];
 
-    setAdding(false);
-  };
+await addToCart(
+  product._id || product.id,
+  images[activeImage]
+);
+
+  setAdding(false);
+};
 
   // Submit Review
 

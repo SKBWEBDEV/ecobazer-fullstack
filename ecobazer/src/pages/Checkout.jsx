@@ -223,17 +223,33 @@ const Checkout = () => {
 
       return (
         <div
-          key={item._id || item.id}
-          className="flex justify-between text-sm"
-        >
-          <span className="text-ink-900 dark:text-white">
-            {product.title || product.name} × {qty}
-          </span>
+  key={item._id || item.id}
+  className="flex items-center gap-3 text-sm"
+>
+  <img
+    src={
+      product.images?.[0]?.url ||
+      product.image ||
+      "https://via.placeholder.com/60"
+    }
+    alt={product.title}
+    className="h-14 w-14 rounded-lg object-cover"
+  />
 
-          <span className="text-ink-900 dark:text-white">
-            {formatPrice((product.price ?? item.price ?? 0) * qty)}
-          </span>
-        </div>
+  <div className="flex-1">
+    <p className="text-ink-900 dark:text-white font-medium">
+      {product.title || product.name}
+    </p>
+
+    <p className="text-gray-500">
+      Qty: {qty}
+    </p>
+  </div>
+
+  <span className="text-ink-900 dark:text-white">
+    {formatPrice((product.price ?? item.price ?? 0) * qty)}
+  </span>
+</div>
       );
     })}
   </div>
