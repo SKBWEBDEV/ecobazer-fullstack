@@ -61,7 +61,7 @@ const PaymentResult = ({ status = 'success' }) => {
 
         try {
 
-          await api.post("/payment/success")
+          await api.post("/api/payment/success")
 
         } catch (error) {
 

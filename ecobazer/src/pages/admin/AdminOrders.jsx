@@ -238,18 +238,15 @@ pt-4
 space-y-2
 "
               >
-                {order.products?.map((item, index) => (
+{order.products?.map((item, index) => (
   <div
     key={index}
-    className="flex items-center gap-4 text-gray-300 text-sm"
+    className="flex items-center gap-4"
   >
     <img
-      src={
-        item.image ||
-        "https://via.placeholder.com/60"
-      }
+      src={item.image}
       alt={item.title}
-      className="w-14 h-14 rounded-lg object-cover border border-gray-700"
+      className="h-14 w-14 rounded-lg object-cover"
     />
 
     <div>
@@ -257,16 +254,17 @@ space-y-2
         {item.title}
       </p>
 
-      <p className="text-gray-400">
+      <p className="text-gray-400 text-sm">
         Quantity: {item.quantity}
       </p>
 
-      <p className="text-gray-400">
-        Price: ৳ {item.price}
+      <p className="text-gray-400 text-sm">
+        Price: ৳ {item.totalPrice}
       </p>
     </div>
   </div>
 ))}
+
               </div>
             </div>
           ))

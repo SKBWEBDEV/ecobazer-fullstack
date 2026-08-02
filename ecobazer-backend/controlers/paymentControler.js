@@ -50,9 +50,11 @@ const paymentControler = async (req, res) => {
         products.push({
           product: item.product._id,
 
+          title: item.product.title,
+
           image:
-             item.product.images?.find((img) => img.isMain)?.url ||
-             item.product.images?.[0]?.url,
+            item.product.images?.find((img) => img.isMain)?.url ||
+            item.product.images?.[0]?.url,
 
           price: item.product.price,
 
@@ -76,32 +78,30 @@ const paymentControler = async (req, res) => {
     const totalPrice = products.reduce((sum, item) => sum + item.totalPrice, 0);
 
     // ================= CASH ON DELIVERY =================
-console.log("Payment Method:", paymentMethod);
+    console.log("Payment Method:", paymentMethod);
     if (paymentMethod === "COD") {
-const order = await Order.create({
-  user: userId,
+      const order = await Order.create({
+        user: userId,
 
-  products,
+        products,
 
-  totalPrice,
+        totalPrice,
 
-  paymentMethod: "COD",
+        paymentMethod: "COD",
 
-  paymentStatus: "pending",
+        paymentStatus: "pending",
 
-  status: "pending",
-});
+        status: "pending",
+      });
 
+      const user = await User.findById(userId);
 
-const user = await User.findById(userId);
-
-
-await AdminNotification.create({
-  title: "New Order Received",
-  message: `New order placed by ${user.firstName} ${user.lastName}`,
-  type: "order",
-  link: "/admin/orders",
-});
+      await AdminNotification.create({
+        title: "New Order Received",
+        message: `New order placed by ${user.firstName} ${user.lastName}`,
+        type: "order",
+        link: "/admin/orders",
+      });
 
       await Cart.deleteMany({
         user: userId,
@@ -233,11 +233,11 @@ const paymentSuccess = async (req, res) => {
     }
 
     await AdminNotification.create({
-  title: "New Order Received",
-  message: `Payment completed for order #${order._id}`,
-  type: "order",
-  link: "/admin/orders",
-});
+      title: "New Order Received",
+      message: `Payment completed for order #${order._id}`,
+      type: "order",
+      link: "/admin/orders",
+    });
 
     await Cart.deleteMany({
       user: order.user,

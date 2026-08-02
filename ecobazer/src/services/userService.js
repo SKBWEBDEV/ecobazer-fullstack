@@ -12,4 +12,5 @@ export const deleteUser = (id) => api.delete(`/users/${id}`);
 
 // Payment + COD Order
 
-export const createPayment = (payload) => api.post("/payment", payload);
+export const createPayment = (payload) =>
+  api.post("/api/payment", payload);
