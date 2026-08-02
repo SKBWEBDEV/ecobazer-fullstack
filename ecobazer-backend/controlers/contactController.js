@@ -1,7 +1,7 @@
 const Contact = require("../model/contactModel");
 const User = require("../model/userModel");
 const Notification = require("../model/notificationModel");
-
+const AdminNotification = require("../model/AdminNotification");
 // Create contact message
 const createContact = async (req, res) => {
   try {
@@ -14,30 +14,37 @@ const createContact = async (req, res) => {
       });
     }
 
-    const contact = await Contact.create({
-      name,
+   const contact = await Contact.create({
+  name,
+  email,
+  subject,
+  message,
 
-      email,
+  messages: [
+    {
+      sender: "user",
+      text: message,
+    },
+  ],
+});
 
-      subject,
+await AdminNotification.create({
+  title: "New Contact Message",
 
-      message,
+  message: `New message received from ${contact.name}`,
 
-      messages: [
-        {
-          sender: "user",
-          text: message,
-        },
-      ],
-    });
+  type: "contact",
 
-    res.status(201).json({
-      success: true,
+  link: "/admin/contact",
+});
 
-      message: "Message sent successfully",
+res.status(201).json({
+  success: true,
 
-      contact,
-    });
+  message: "Message sent successfully",
+
+  contact,
+});
   } catch (error) {
     res.status(500).json({
       success: false,
