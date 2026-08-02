@@ -35,7 +35,7 @@ await AdminNotification.create({
 
   type: "contact",
 
-  link: "/admin/contact",
+  link: "/admin/contacts",
 });
 
 res.status(201).json({
