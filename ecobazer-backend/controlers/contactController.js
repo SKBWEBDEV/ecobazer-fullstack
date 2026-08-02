@@ -33,7 +33,7 @@ await AdminNotification.create({
 
   message: `New message received from ${contact.name}`,
 
-  type: "contacts",
+  type: "contact",
 
   link: "/admin/contacts",
 });
