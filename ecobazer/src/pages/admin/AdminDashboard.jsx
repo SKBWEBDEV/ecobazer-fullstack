@@ -116,9 +116,9 @@ const AdminDashboard = () => {
   change="+12%"
   isPositive
   icon={Package}
-cardBg="bg-blue-100 dark:bg-blue-500"
+cardBg="bg-blue-100 dark:bg-blue-500/10"
 iconBg="bg-blue-200 dark:bg-blue-900"
-iconColor="text-blue-900 dark:text-blue-800"
+iconColor="text-blue-900 dark:text-blue-500"
 />
 
         <StatCard
@@ -127,9 +127,9 @@ iconColor="text-blue-900 dark:text-blue-800"
   change="+18%"
   isPositive
   icon={Users}
-cardBg="bg-emerald-100 dark:bg-emerald-500"
-iconBg="bg-emerald-200 dark:bg-emerald-900"
-iconColor="text-emerald-700 dark:text-emerald-300"
+cardBg="bg-blue-100 dark:bg-blue-500/10"
+iconBg="bg-blue-200 dark:bg-blue-900"
+iconColor="text-blue-900 dark:text-blue-500"
 />
 
 <StatCard
@@ -138,9 +138,9 @@ iconColor="text-emerald-700 dark:text-emerald-300"
   change="+24%"
   isPositive
   icon={ShoppingBag}
-cardBg="bg-purple-800 dark:bg-purple-800"
-iconBg="bg-purple-200 dark:bg-purple-500/30"
-iconColor="text-purple-700 dark:text-purple-300"
+cardBg="bg-blue-100 dark:bg-blue-500/10"
+iconBg="bg-blue-200 dark:bg-blue-900"
+iconColor="text-blue-900 dark:text-blue-500"
 />
 
 <StatCard
@@ -149,9 +149,9 @@ iconColor="text-purple-700 dark:text-purple-300"
   change="+15%"
   isPositive
   icon={DollarSign}
-  cardBg="bg-[rgb(219,75,144)] dark:bg-[rgb(225,74,143)]"
-  iconBg="bg-amber-500/80"
-  iconColor="text-amber-900"
+cardBg="bg-blue-100 dark:bg-blue-500/10"
+iconBg="bg-blue-200 dark:bg-blue-900"
+iconColor="text-blue-900 dark:text-blue-500"
 />
 
 <StatCard
@@ -160,9 +160,9 @@ iconColor="text-purple-700 dark:text-purple-300"
   change="-3%"
   isPositive={false}
   icon={AlertCircle}
-    cardBg="bg-[rgb(219,75,144)] dark:bg-[rgb(98,78,189)]"
-  iconBg="bg-amber-500/80"
-  iconColor="text-amber-900"
+cardBg="bg-blue-100 dark:bg-blue-500/10"
+iconBg="bg-blue-200 dark:bg-blue-900"
+iconColor="text-blue-900 dark:text-blue-500"
 
 />
       </div>
@@ -181,7 +181,7 @@ iconColor="text-purple-700 dark:text-purple-300"
   title="Total Messages"
   value={contactStats?.totalMessages || 0}
   icon={MessageSquare}
-  cardBg="bg-cyan-500 dark:bg-cyan-500"
+  cardBg="bg-cyan-500 dark:bg-cyan-500/20"
   iconBg="bg-cyan-100 dark:bg-cyan-900"
   iconColor="text-cyan-600 dark:text-cyan-400"
 />
@@ -191,7 +191,7 @@ iconColor="text-purple-700 dark:text-purple-300"
   title="Unread Messages"
   value={contactStats?.unreadMessages || 0}
   icon={MailOpen}
-  cardBg="bg-red-500 dark:bg-red-500"
+  cardBg="bg-red-500 dark:bg-red-500/20"
   iconBg="bg-red-100 dark:bg-red-900"
   iconColor="text-red-600 dark:text-red-400"
 />
@@ -201,7 +201,7 @@ iconColor="text-purple-700 dark:text-purple-300"
   title="Read Messages"
   value={contactStats?.readMessages || 0}
   icon={MailCheck}
-  cardBg="bg-green-500 dark:bg-green-500"
+  cardBg="bg-green-500 dark:bg-green-500/20"
   iconBg="bg-green-100 dark:bg-green-900"
   iconColor="text-green-600 dark:text-green-400"
 />
@@ -223,7 +223,7 @@ gap-6
   title="Total Reviews"
   value={reviewStats?.totalReviews || 0}
   icon={Star}
-  cardBg="bg-yellow-500 dark:bg-yellow-500"
+  cardBg="bg-yellow-500 dark:bg-yellow-500/20"
   iconBg="bg-yellow-100 dark:bg-yellow-900"
   iconColor="text-yellow-600 dark:text-yellow-400"
 />
@@ -233,7 +233,7 @@ gap-6
   title="Approved Reviews"
   value={reviewStats?.approvedReviews || 0}
   icon={CheckCircle}
-  cardBg="bg-emerald-500 dark:bg-emerald-500"
+  cardBg="bg-emerald-500 dark:bg-emerald-500/20"
   iconBg="bg-emerald-100 dark:bg-emerald-900"
   iconColor="text-emerald-600 dark:text-emerald-400"
 />
@@ -243,7 +243,7 @@ gap-6
   title="Pending Reviews"
   value={reviewStats?.pendingReviews || 0}
   icon={Clock}
-  cardBg="bg-orange-500 dark:bg-orange-500"
+  cardBg="bg-orange-500 dark:bg-orange-500/20"
   iconBg="bg-orange-100 dark:bg-orange-900"
   iconColor="text-orange-600 dark:text-orange-400"
 />
@@ -253,7 +253,7 @@ gap-6
   title="Average Rating"
   value={`⭐ ${reviewStats?.averageRating || 0}`}
   icon={Star}
-  cardBg="bg-purple-500 dark:bg-purple-500"
+  cardBg="bg-purple-500 dark:bg-purple-500/20"
   iconBg="bg-purple-100 dark:bg-purple-900"
   iconColor="text-purple-600 dark:text-purple-100"
 />
