@@ -70,12 +70,17 @@ const Login = () => {
           <div className="flex justify-end">
             <Link
               to="/forgot-password"
-              className="text-sm font-medium text-moss-400 hover:text-moss-600">
+              className="text-sm font-medium text-moss-400 hover:text-moss-600"
+            >
               Forgot password?
             </Link>
           </div>
 
-          <Button type="submit" loading={submitting} className="w-full">
+          <Button
+            type="submit"
+            loading={submitting}
+            className="w-full !bg-[#db4b90] !text-white hover:!bg-[#c83d7f]"
+          >
             Log in
           </Button>
         </form>
@@ -84,7 +89,8 @@ const Login = () => {
           Don't have an account?{" "}
           <Link
             to="/register"
-            className="font-medium text-moss-700 hover:text-moss-800 dark:text-moss-400">
+            className="font-medium text-moss-700 hover:text-moss-800 dark:text-moss-400"
+          >
             Sign up
           </Link>
         </p>

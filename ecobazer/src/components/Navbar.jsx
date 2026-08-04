@@ -355,12 +355,11 @@ const handleDeleteNotification = async (id) => {
                 </>
               ) : (
                 <>
-                  <Link
-                    to="/login"
-                    className="btn-ghost text-ink-900 dark:!text-white/85 hover:bg-gray-100 dark:hover:!bg-white/10"
-                  >
-                    Log in
-                  </Link>
+<Link
+  to="/login"
+  className="btn-ghos text-black dark:text-white/85 hover:bg-gray-100 dark:hover:bg-white/10">
+  Log in
+</Link>
                   <Link
                     to="/register"
                     onClick={() => setOpen(false)}
